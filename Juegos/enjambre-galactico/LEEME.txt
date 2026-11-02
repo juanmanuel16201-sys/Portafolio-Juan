@@ -1,0 +1,13 @@
+ENJAMBRE GALÁCTICO
+==================
+Shooter arcade estilo Galaga en HTML, CSS y JavaScript (sin librerías).
+
+Cómo jugar
+- Abre index.html en el navegador (o usa Live Server en VS Code).
+- Flechas o A/D: mover | Espacio o Z: disparar | P o Esc: pausa | M: sonido
+- En el menú: Arriba/Abajo para elegir, Enter para aceptar (o clic).
+
+Archivos
+- index.html : estructura de la página y botones táctiles
+- style.css  : estilos de la página
+- game.js    : todo el juego (sprites, oleadas, enemigos, Nave Madre, menús, sonido)

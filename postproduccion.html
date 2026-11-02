@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postproducción — Juan Ramírez</title>
+  <meta name="description" content="Muestra de postproducción de Juan Ramírez, Ingeniero Multimedia.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!--
+  CÓMO PERSONALIZAR ESTA PÁGINA
+  1. Pon tu archivo de video dentro de la carpeta video/, por ejemplo
+     video/postproduccion.mp4, y cámbiale el nombre en el <source> de abajo
+     si usaste otro.
+  2. Reemplaza el texto entre corchetes [ ] por tu propio contenido.
+-->
+
+  <header>
+    <nav class="navbar navbar-expand-md border-bottom">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="blog.html">Bitácora</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="postproduccion.html">Postproducción</a></li>
+            <li class="nav-item"><a class="nav-link" href="juegos.html">Juegos</a></li>
+            <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="py-5">
+      <div class="container">
+        <div class="mb-4">
+          <h2>Postproducción</h2>
+         
+        </div>
+
+        <div class="ratio ratio-16x9">
+          <video class="w-100 h-100" controls preload="none" poster="">
+            <source src="videos/Dados_Video.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de video en HTML5.
+          </video>
+        </div>
+
+        <p class="mt-3">Video de Postproduccion en Affter Effects</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-top py-4">
+    <div class="container d-flex justify-content-between flex-wrap gap-2">
+      <span class="text-secondary-emphasis">© 2026 Juan Ramírez. Ingeniería Multimedia.</span>
+      <a href="contacto.html">Escríbeme</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

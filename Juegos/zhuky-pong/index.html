@@ -1,0 +1,2366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Zhuky Pong</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap-grid.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="modo-1p">
+  <main class="juego">
+    <header class="marcador">
+      <div class="lado jugador">
+        <span class="nombre" id="nombreJugador">Jugador</span>
+        <span class="puntos" id="puntosJugador">0</span>
+      </div>
+      <div class="centro">
+        <h1 class="logo">ZHUKY PONG</h1>
+        <div class="intentos">
+          <span class="etiqueta" id="etiquetaIntentos">Intentos</span>
+          <span class="bolas" id="intentos"></span>
+        </div>
+        <div class="controles">
+          <button id="botonPausa" class="ctl" type="button" disabled>⏸ Pausa</button>
+          <button id="botonInicio" class="ctl" type="button" disabled>🏠 Inicio</button>
+          <button id="botonSonido" class="ctl" type="button" aria-label="Activar o silenciar el sonido" aria-pressed="true">🔊</button>
+          <button id="botonPantalla" class="ctl" type="button" aria-label="Pantalla completa" aria-pressed="false" hidden>⛶</button>
+        </div>
+      </div>
+      <div class="lado rival">
+        <span class="puntos" id="puntosMaquina">0</span>
+        <span class="nombre" id="nombreRival">Zhuky</span>
+      </div>
+    </header>
+
+    <p class="giro">📱 Gira el celular para ver el mar más grande</p>
+
+    <section class="dialogos" aria-live="polite">
+      <div class="burla jugador" id="burlaJugador"></div>
+      <div class="burla maquina" id="burlaMaquina"></div>
+    </section>
+
+    <div class="mesa" id="mesa">
+      <span class="deco palmera-izq">🌴</span>
+      <span class="deco palmera-der">🌴</span>
+      <span class="deco concha">🐚</span>
+      <span class="deco cangrejo">🦀</span>
+      <span class="deco estrella">⭐</span>
+
+      <div class="mar" id="mar">
+        <canvas id="canvas" width="1760" height="1100"></canvas>
+        <div class="aviso" id="aviso"></div>
+
+        <div class="capa" id="capa">
+          <h2 id="titulo">Zhuky Pong</h2>
+          <p id="mensaje">Zhuky casi nunca falla y es muy burlona. Cuidado con los remolinos y los objetos de piscina.</p>
+
+          <div class="modos" id="modos" role="radiogroup" aria-label="Modo de juego">
+            <button type="button" class="modo activo" data-modo="1p" role="radio" aria-checked="true">1 jugador<small>contra Zhuky</small></button>
+            <button type="button" class="modo" data-modo="2p" role="radio" aria-checked="false">2 jugadores<small>uno contra otro</small></button>
+            <button type="button" class="modo" data-modo="2v2" role="radio" aria-checked="false">2 vs 2 máquinas<small>en equipo</small></button>
+          </div>
+
+          <div class="campos">
+            <label class="campo">
+              <span id="etiquetaNombre1">Tu nombre</span>
+              <input id="nombre" type="text" maxlength="14" placeholder="Escribe tu nombre" autocomplete="off">
+            </label>
+            <label class="campo" id="campoNombre2" hidden>
+              <span>Jugador 2</span>
+              <input id="nombre2" type="text" maxlength="14" placeholder="Nombre del jugador 2" autocomplete="off">
+            </label>
+            <label class="campo" id="campoTrato">
+              <span>Cómo te trata Zhuky</span>
+              <select id="trato">
+                <option value="f">En femenino</option>
+                <option value="m">En masculino</option>
+                <option value="n" selected>Mezclado</option>
+              </select>
+            </label>
+          </div>
+
+          <button id="boton">Jugar</button>
+          <p class="ayuda" id="ayuda"></p>
+        </div>
+
+        <div class="capa oculta" id="capaPausa">
+          <h2>⏸ Pausa</h2>
+          <p>Zhuky te espera. Cuando quieras seguir, dale.</p>
+          <button id="botonSeguir" type="button">▶ Seguir</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="burlas activa" id="burlas">
+      <p class="burlas-titulo" id="burlasTitulo">Respóndele a Zhuky gratis, sin puntos: teclas 1, 2 o 3 (o R para una al azar)</p>
+      <div class="burlas-botones" id="burlasBotones"></div>
+    </section>
+
+    <section class="poderes row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+      <div class="col">
+        <div class="poder hielo">
+        <b>❄</b>
+        <span><strong>Hielo</strong>Pega la esfera con tu golpe y el equipo rival se queda congelado 3 segundos.</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="poder doble">
+        <b>x2</b>
+        <span><strong>Doble bola</strong>Salen dos pelotas a la vez. Solo se puede devolver una a la vez.</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="poder piscina">
+        <b>🦆</b>
+        <span><strong>Objetos de piscina</strong>Suben y bajan, rebotan la bola y se van a los 5 segundos. Uno solo es fantasma (se ve transparente) y la bola lo atraviesa.</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="poder remolino">
+        <b>🌀</b>
+        <span><strong>Remolinos</strong>Uno se traga la bola. Entonces aparece otro que la escupe en un punto al azar del mar.</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="poder publico">
+        <b>🛟</b>
+        <span><strong>Público</strong>Celebra cada punto. Si un espectador cruza nadando y le pegas, se queja y te lanza la bola. Un salvavidas viene a sacarlo, regañándolo.</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="poder distraida">
+        <b>?</b>
+        <span><strong>Despiste</strong>De vez en cuando las máquinas se distraen y se alejan de la bola. ¡Anota!</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Botones de flecha para el celular -->
+  <div class="mando" id="mando">
+    <div class="pad pad-j1">
+      <button type="button" class="flecha" data-ctl="j1Arriba" aria-label="Jugador 1: subir">▲</button>
+      <button type="button" class="flecha" data-ctl="j1Abajo" aria-label="Jugador 1: bajar">▼</button>
+      <span class="pad-nombre">J1</span>
+    </div>
+    <div class="pad pad-j2">
+      <button type="button" class="flecha" data-ctl="j2Arriba" aria-label="Jugador 2: subir">▲</button>
+      <button type="button" class="flecha" data-ctl="j2Abajo" aria-label="Jugador 2: bajar">▼</button>
+      <span class="pad-nombre">J2</span>
+    </div>
+  </div>
+
+  <button type="button" class="btn-responder" id="botonResponder">💬 Responder</button>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const BANDA = 108;          // franja del público, arriba y abajo
+    const Y0 = BANDA;           // borde superior de la zona de juego
+    const Y1 = H - BANDA;       // borde inferior de la zona de juego
+    const MEDIO = (Y0 + Y1) / 2;
+
+    const mesa = document.getElementById('mesa');
+    const capa = document.getElementById('capa');
+    const titulo = document.getElementById('titulo');
+    const mensaje = document.getElementById('mensaje');
+    const boton = document.getElementById('boton');
+    const aviso = document.getElementById('aviso');
+    const ayuda = document.getElementById('ayuda');
+    const inputNombre = document.getElementById('nombre');
+    const inputNombre2 = document.getElementById('nombre2');
+    const selectTrato = document.getElementById('trato');
+    const campoNombre2 = document.getElementById('campoNombre2');
+    const campoTrato = document.getElementById('campoTrato');
+    const etiquetaNombre1 = document.getElementById('etiquetaNombre1');
+    const elNombreJugador = document.getElementById('nombreJugador');
+    const elNombreRival = document.getElementById('nombreRival');
+    const elPuntosJugador = document.getElementById('puntosJugador');
+    const elPuntosMaquina = document.getElementById('puntosMaquina');
+    const elIntentos = document.getElementById('intentos');
+    const etiquetaIntentos = document.getElementById('etiquetaIntentos');
+    const burbujaJugador = document.getElementById('burlaJugador');
+    const burbujaMaquina = document.getElementById('burlaMaquina');
+    const barraBurlas = document.getElementById('burlas');
+    const tituloBurlas = document.getElementById('burlasTitulo');
+    const botonesBurlas = document.getElementById('burlasBotones');
+    const botonSonido = document.getElementById('botonSonido');
+    const botonPantalla = document.getElementById('botonPantalla');
+    const botonPausa = document.getElementById('botonPausa');
+    const botonInicio = document.getElementById('botonInicio');
+    const botonSeguir = document.getElementById('botonSeguir');
+    const botonResponder = document.getElementById('botonResponder');
+    const capaPausa = document.getElementById('capaPausa');
+    const botonesModo = document.querySelectorAll('.modo');
+
+    const NOMBRE_MAQUINA = 'Zhuky';
+    const NOMBRE_MAQUINA_2 = 'Zhuky 2';
+    const META_JUGADOR = 3;    // puntos para ganarle a las máquinas (pon 99 si quieres que sean imbatibles)
+    const META_MAQUINA = 3;    // puntos de las máquinas para ganar (= tus intentos)
+    const META_2P = 5;         // puntos para ganar en el modo de 2 jugadores
+    const PALA_ALTO = 112;
+    const PALA_ANCHO = 16;
+    const VEL_PALA = 13;
+    const RADIO = 11;
+    const VEL_INICIAL = 9;
+    const VEL_MAX = 22;
+    const PASO = 1000 / 60;     // el juego avanza a 60 pasos por segundo
+    const OBSTACULO_VIDA = 300; // 5 segundos visibles (60 pasos = 1 s)
+    const FANTASMA = 25;        // aviso antes de que algo se vuelva sólido
+    const MAX_OBSTACULOS = 4;
+    const REMOLINO_VIDA = 600;  // 10 segundos
+    const REMOLINO_R = 40;
+    const REMOLINO_RANGO = 210;
+
+    const COLOR_JUGADOR = '#ffd23f';
+    const COLOR_J2 = '#9dff5a';
+    const COLOR_MAQUINA = '#ff4f81';
+    const COLOR_HIELO = '#d9f7ff';
+    const COLOR_DOBLE = '#ff9a2e';
+
+    /* ---------- frases ----------
+       {nombre} = nombre del jugador (o del que pierde). {nombre2} = el otro jugador.
+       {o|a} = según cómo elijas que te trate. */
+    const frasesInicio = [
+      "Mira quién llegó. Ven, {nombre}, que hoy te enseño cómo se juega.",
+      "Uy, qué miedo, {nombre}... de lo mal que vas a jugar.",
+      "Prepárate, {nombre}, que te voy a dejar más hundid{o|a} que el Titanic.",
+      "¿Vienes a jugar o a hacer el oso, {nombre}? Igual vas a perder.",
+      "Qué buen jugador para ganarle. Empecemos, {nombre}.",
+      "Respira hondo, {nombre}. Es lo último tranquilo que vas a hacer hoy.",
+      "Ya te vi los nervios desde acá, {nombre}. Esto va a ser rápido."
+    ];
+    const frasesInicio2P = [
+      "Qué par de rivales. Que gane el menos despistad{o|a}, {nombre} y {nombre2}.",
+      "A ver, {nombre}, a ver, {nombre2}... den lo mejor, aunque no alcance.",
+      "Hoy narro yo y no perdono a nadie. ¡A jugar, par de valientes!"
+    ];
+    const frasesPunto2P = [
+      "¡Qué oso, {nombre}! Ese punto lo regalaste.",
+      "{nombre}, mi abuela atajaba mejor.",
+      "¡Uy, {nombre}! ¿Eso era una pala o un abanico?",
+      "Otro punto que se le va a {nombre}. Qué pereza, qué pena.",
+      "¡Pobre {nombre}! Ni la bola quiere acercársele.",
+      "{nombre}, respira. No sirve de nada, pero respira.",
+      "Se te nota el nervio, {nombre}. Ya viene la derrota, ¿la sientes?"
+    ];
+    const frasesFinal2P = [
+      "Ganó {nombre}. El otro que se vaya a llorar al mar.",
+      "¡Felicidades, {nombre}! Le ganaste a alguien que ni sabe jugar."
+    ];
+    const frasesMaquinaPunto = [
+      "¡Jajaja! Qué mal juegas, {nombre}.",
+      "Otro punto pa' mí. Qué fácil eres de ganar, {nombre}.",
+      "Ni te moviste. ¿Estás dormid{o|a} o qué?",
+      "Pobrecit{o|a}, ¿ya te dio miedo?",
+      "Esas jugadas tímidas no sirven, {nombre}. Juega en serio.",
+      "¡Otro punto pa' la reina del mar, {nombre}!",
+      "Me das pesar... y risa. Más risa.",
+      "¡Chao punto, {nombre}! Qué pereza de rival.",
+      "¡Qué fácil! Ni sudé, {nombre}.",
+      "Mírate, {nombre}: mueves el mouse como si tuvieras guantes de box.",
+      "¡Muévete, {nombre}! Así no me divierto ni un poquito.",
+      "Qué reflejos tan lentos tienes, {nombre}.",
+      "Ay, no llores, que el mar ya tiene mucha sal.",
+      "Esas jugadas lentas no me asustan, {nombre}. Mueve esa mano.",
+      "Qué aburrido es ganarte. Dame un reto, {nombre}.",
+      "¡Otra vez! Ni me despeino, {nombre}."
+    ];
+    const frasesPsico = [
+      "¿Sientes cómo te suda la mano, {nombre}? Es el miedo hablando.",
+      "Tu cerebro ya sabe que vas a perder. Tus manos todavía no se enteran.",
+      "Respira, {nombre}. No sirve de nada, pero respira.",
+      "Mira cómo te tiembla el mouse. Qué ternura, qué lástima.",
+      "Seguro creías que hoy sí ganabas. Qué linda la esperanza.",
+      "Cada punto mío te quita un poquito de confianza, {nombre}. Ya casi no te queda.",
+      "Estás pensando demasiado, {nombre}, y pensar es justo lo que te hace fallar.",
+      "No me mires a mí, mira la bola. Ah, ya es tarde.",
+      "Estás jugando contra mí y contra tus nervios. Y los dos te ganan.",
+      "Esa rabia que sientes, {nombre}, la veo. Úsala... o no, igual pierdes.",
+      "Fíjate cómo respiras, {nombre}. Ya estás perdiendo y todavía no te das cuenta.",
+      "Cada vez que dudas, yo gano un punto. Y dudas mucho.",
+      "¿Escuchas ese silencio? Es el público esperando que falles otra vez.",
+      "Tu mano ya sabe lo que tu cabeza no quiere aceptar.",
+      "Si pensaras la mitad de lo que te quejas, quizá me ganabas.",
+      "Estás sudando frío, {nombre}. Es normal cuando uno sabe que va a perder.",
+      "No es que yo sea buena: es que tú te rindes antes de empezar.",
+      "Mírate, contando cuántos intentos te quedan en vez de jugar. Ahí perdiste.",
+      "Cuanto más te importa ganar, peor juegas. Así de simple, {nombre}.",
+      "¿Y si fallas otra vez? Ya lo estás pensando, ¿verdad? Eso es todo lo que necesito."
+    ];
+    // Lo que Zhuky suelta de vez en cuando mientras juegas
+    const frasesInsulto = [
+      "¡Qué lentitud! Mueve esa pala, {nombre}.",
+      "Qué pereza de partida. Hazme sudar al menos.",
+      "Eres tan {malo|mala} que hasta el remolino te tiene lástima.",
+      "Cuando quieras empiezas a jugar, {nombre}. Mientras tanto me divierto yo.",
+      "Esa cara de concentrad{o|a} te queda graciosa.",
+      "¿Eso es todo? Qué rival tan fácil me tocó.",
+      "Jugar a la defensiva no te va a salvar. Ataca, {nombre}.",
+      "Pobre de mí, jugando con alguien tan {flojo|floja}.",
+      "Dime, {nombre}, ¿tú siempre pierdes así o hoy estás inspirad{o|a}?",
+      "Mírame, {nombre}: ni me muevo y igual te gano."
+    ];
+    const frasesCharla = frasesPsico.concat(frasesInsulto);
+    // Cuando le das a Pausa, Seguir o Inicio
+    const frasesPausa = [
+      "¿Pausa? ¿Ya te cansaste, {nombre}? Qué débil.",
+      "Ve a respirar, {nombre}, a ver si así dejas de jugar tan mal.",
+      "Pausa, claro. Siempre hay una excusa cuando se va perdiendo.",
+      "Aprovecha y piensa cómo vas a perder, que tiempo te sobra.",
+      "Pausa para llorar, ¿cierto? Yo te espero, no me voy a ningún lado."
+    ];
+    const frasesReanudar = [
+      "Por fin volviste, {nombre}. Ya me estaba aburriendo.",
+      "¿Te tomaste tu pausa para llorar? Dale, que sigo ganando.",
+      "Volviste... qué valiente. O qué terc{o|a}.",
+      "Respira, {nombre}. Ya viene otro punto mío y lo sabes."
+    ];
+    const frasesMenu = [
+      "¿Te vas a rendir, {nombre}? Qué cobarde.",
+      "Huyendo al menú, qué predecible. Ladras mucho y no muerdes.",
+      "Vuelve cuando tengas valor. Aquí te espero.",
+      "Eso, vete. Total, ya sabías cómo iba a terminar esto, {nombre}."
+    ];
+    const frasesPausa2P = [
+      "¿Pausa? ¿Ya se cansaron, par de flojos? Qué pereza de público.",
+      "Pausa para llorar, supongo. Yo los espero.",
+      "Aprovechen y piensen cómo van a perder, que tiempo les sobra."
+    ];
+    const frasesReanudar2P = [
+      "Volvieron, qué valientes. O qué tercos.",
+      "Ya me estaba aburriendo. A ver cuál de los dos da más pena."
+    ];
+    const frasesMenu2P = [
+      "¿Se rinden? Qué cobardes, los dos.",
+      "Eso, váyanse. Igual sabían cómo iba a terminar esto."
+    ];
+    const frasesMaquinaGana = [
+      "¡Gané! Como siempre. Vuelve cuando aprendas a jugar, {nombre}.",
+      "Tres intentos y tres fracasos, {nombre}. Eres una leyenda... de la mediocridad.",
+      "Ni con remolinos ni poderes pudiste. Qué oso.",
+      "GG fácil. Sigue practicando, vas a necesitarlo.",
+      "Te lo dije, {nombre}: acá mando yo. Ahora ve a llorar.",
+      "Ganarte fue como quitarle un dulce a un bebé, {nombre}. Qué pereza.",
+      "Y así terminó todo, como tu confianza: en el fondo del mar."
+    ];
+    const frasesRabia = [
+      "¡Eso fue suerte! ¡Pura suerte!",
+      "¡Me distraje un segundo, no vale!",
+      "Disfruta tu puntito, {nombre}, que es el único que vas a ver.",
+      "¡No vale, el sol me dio en los ojos!",
+      "Anotar una vez no te hace bueno.",
+      "¡Uy, qué fastidio! Ya verás, {nombre}, ya verás.",
+      "¡Qué suerte la tuya!",
+      "¡Eso fue un error mío, no tu mérito!",
+      "Anota otra vez y verás lo que te pasa, {nombre}.",
+      "Qué orgullo te da un puntico. Disfrútalo, que se acaba."
+    ];
+    const frasesMaquinaPierde = [
+      "¡Imposible! Seguro hubo lag, esto no cuenta.",
+      "Seguro hiciste trampa con los poderes, {tramposo|tramposa}. ¡Revancha ya!",
+      "Me dejé ganar para que no lloraras, {nombre}. ¡Revancha!",
+      "¡Qué suerte tienes! ¡Revancha ya!"
+    ];
+    const frasesHielo = [
+      "¡Descongélame, que me estoy helando!",
+      "¡Qué frío! Esto es trampa.",
+      "No me gustan esos trucos de hielo, {nombre}."
+    ];
+    const frasesDoble = [
+      "¿Dos pelotas? ¡Eso no se vale!",
+      "¡Dos pelotas, qué {tramposo|tramposa}!",
+      "¡Ay, no! ¡Ahora son dos!"
+    ];
+    const frasesRemolino = [
+      "¡Jajaja! Se la tragó el remolino, {nombre}. Hasta el mar te lleva la contraria.",
+      "¡Ese remolino juega mejor que tú!",
+      "¡Uy, qué remolino! Ojalá no me toque a mí."
+    ];
+    const frasesEspectador = [
+      "¡Jajaja! Hasta el espectador te saca la pelota, {nombre}.",
+      "¡Ese espectador tiene mejor derecha que tú!"
+    ];
+    const frasesRespuesta = [
+      "¿Y tú de dónde sacas valor? Si no sabes ni jugar.",
+      "Cállate y juega, {nombre}, que das pena ajena.",
+      "Ríete ahora, que ya te cobro.",
+      "¡Qué gracioso! Ahora sí te voy a hundir.",
+      "Habla mucho el que va perdiendo.",
+      "Ajá, {nombre}, ¿y tu orgullo sabe que juegas así de mal?",
+      "¿Eso es lo mejor que tienes? Qué respuesta tan floja, {nombre}.",
+      "Habla más, {nombre}, que el que habla mucho es el que más miedo tiene.",
+      "Ya me tienes pensando... en lo fácil que te voy a ganar.",
+      "Qué tierno, {nombre}, creyendo que responder te hace ganar.",
+      "Me encanta cuando te enojas. Juegas peor y yo me divierto."
+    ];
+    const quejasEspectador = [
+      "¡Ay! ¡Mi cabeza!",
+      "¡Oiga, fíjese pues!",
+      "¡Qué golpe, home!",
+      "¡Me dañó el peinado!",
+      "¡Tome su pelota, qué susto!",
+      "¡Auch! ¡Cuidado, parce!"
+    ];
+    const frasesSalvavidas = [
+      "¡Salga de la cancha, que esto no es piscina!",
+      "¡Qué hace ahí! ¡A la orilla ya!",
+      "¡Hágase a un lado, que estorba el partido!",
+      "¡Venga pa' acá, que se va a ahogar!",
+      "¡Silbatazo! A la arena, por favor.",
+      "¡Se metió a nadar en pleno partido!"
+    ];
+    const respuestasEspectador = [
+      "¡Suélteme, que yo pagué boleta!",
+      "¡Qué mal educado, home!",
+      "¡Yo solo quería ver mejor!",
+      "¡Oiga, respete, parce!"
+    ];
+    const frasesJugador = [
+      "¿Eso es todo, Zhuky? Qué oso.",
+      "Zhuky, eres más lenta que internet de pueblo.",
+      "Ay, Zhuky, no llores que se te corre el maquillaje.",
+      "¡Toma, Zhuky! Eso por tanta boca.",
+      "Tanta charla y ni jugar sabes, Zhuky.",
+      "Cállate y nada, Zhuky.",
+      "Te falta actualización y te sobra confianza.",
+      "Tienes más bugs que modales, Zhuky.",
+      "Soy el rey del mar y tú, un atún enlatado."
+    ];
+
+    const ayudas = {
+      '1p': 'Mouse, W / S o flechas ↑ ↓. Pausa: P. Responderle a Zhuky es gratis: teclas 1, 2, 3 o R. En celular: botones ▲ ▼ y 💬. Sonido: M.',
+      '2p': 'Jugador 1: W / S. Jugador 2: ↑ / ↓. Pausa: P. En celular salen dos pares de botones. Zhuky narra y se burla de quien pierde.',
+      '2v2': 'Jugador 1 defiende la mitad de arriba (W / S). Jugador 2, la de abajo (↑ / ↓). Pausa: P. Responderle a las máquinas es gratis: 1, 2, 3 o R.'
+    };
+    const MENSAJE_INICIO = 'Zhuky casi nunca falla y es muy burlona. Cuidado con los remolinos y los objetos de piscina.';
+
+    /* ---------- estado ---------- */
+    let modoSeleccionado = '1p';
+    let modo = '1p';          // '1p' | '2p' | '2v2'
+    let nombre1 = 'Jugador';
+    let nombre2 = 'Jugador 2';
+    let nombreIzq = 'Jugador';
+    let nombreDer = NOMBRE_MAQUINA;
+    let nombreJugador = 'Jugador';  // lo que sale en {nombre} cuando hablan las máquinas
+    let trato = 'n';
+    let metaIzq = META_JUGADOR;
+    let metaDer = META_MAQUINA;
+
+    let palas = [];
+    let bolas = [];
+    let particulas = [];
+    let poder = null;
+    let obstaculos = [];
+    let remolino = null;      // el que absorbe
+    let salida = null;        // el que escupe la bola
+    let espectadores = [];
+    let nadador = null;       // espectador que está cruzando el mar
+    let salvavidas = null;    // salvavidas que viene a sacarlo de la cancha
+    let proxPoder = 300;
+    let proxDistraccion = 480;
+    let proxObstaculo = 150;
+    let proxRemolino = 600;
+    let proxNadador = 900;
+    let pausaSaque = 0;
+    let reloj = 0;
+    let puntosJugador = 0;    // puntos del lado izquierdo
+    let puntosMaquina = 0;    // puntos del lado derecho
+    let corriendo = false;
+    let pausado = false;
+    let proxCharla = 900;
+    const teclas = { j1Arriba: false, j1Abajo: false, j2Arriba: false, j2Abajo: false };
+    let avisoTimer = null;
+    let ultimaFrase = '';
+    let opcionesBurla = [];
+    let ultimaRespuesta = 0;
+    const timersBurbuja = { jugador: null, maquina: null };
+
+    /* ---------- utilidades ---------- */
+    function limitar(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function aleatorio(min, max) { return min + Math.random() * (max - min); }
+    function barajar(lista) { return lista.slice().sort(() => Math.random() - 0.5); }
+
+    function formatear(texto, n1, n2, azar) {
+      const eleccion = (azar || trato === 'n') ? (Math.random() < 0.5 ? 'm' : 'f') : trato;
+      return texto
+        .split('{nombre2}').join(n2 || nombre2)
+        .split('{nombre}').join(n1 || nombreJugador)
+        .replace(/\{([^|}]+)\|([^}]+)\}/g, (_, m, f) => (eleccion === 'm' ? m : f));
+    }
+
+    function elegir(lista) {
+      let frase;
+      do {
+        frase = lista[Math.floor(Math.random() * lista.length)];
+      } while (frase === ultimaFrase && lista.length > 1);
+      ultimaFrase = frase;
+      return frase;
+    }
+
+    function frasePunto() {
+      return elegir(Math.random() < 0.35 ? frasesPsico : frasesMaquinaPunto);
+    }
+
+    function hayIA() { return modo !== '2p'; }
+    function palasIA() { return palas.filter(p => p.ctrl === 'ia'); }
+    function colorDerecha() { return modo === '2p' ? COLOR_J2 : COLOR_MAQUINA; }
+
+    function crearBola(x, y, vx, vy, vel) {
+      return { x, y, vx, vy, vel, estela: [], inmune: 0 };
+    }
+
+    function fijarVelocidad(b, angulo, direccion) {
+      b.vx = Math.cos(angulo) * b.vel * direccion;
+      b.vy = Math.sin(angulo) * b.vel;
+    }
+
+    // Evita que la bola quede rebotando casi en vertical
+    function asegurarHorizontal(b) {
+      const minVx = b.vel * 0.35;
+      if (Math.abs(b.vx) < minVx) {
+        b.vx = (b.vx < 0 ? -1 : 1) * minVx;
+        b.vy = (b.vy < 0 ? -1 : 1) * Math.sqrt(b.vel * b.vel - minVx * minVx);
+      }
+    }
+
+    function mostrarAviso(texto, tipo) {
+      aviso.textContent = texto;
+      aviso.className = 'aviso visible ' + tipo;
+      clearTimeout(avisoTimer);
+      avisoTimer = setTimeout(() => { aviso.classList.remove('visible'); }, 1800);
+    }
+
+    function sacudir() {
+      mesa.classList.remove('sacude');
+      void mesa.offsetWidth;
+      mesa.classList.add('sacude');
+    }
+
+    function explosion(x, y, color, cantidad) {
+      for (let i = 0; i < cantidad; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const v = aleatorio(1, 5);
+        particulas.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vida: aleatorio(20, 40), max: 40, color });
+      }
+    }
+
+    function pintarIntentos() {
+      elIntentos.innerHTML = '';
+      if (modo === '2p') {
+        etiquetaIntentos.textContent = 'Meta';
+        const t = document.createElement('span');
+        t.className = 'meta-texto';
+        t.textContent = 'Primero a ' + metaIzq;
+        elIntentos.appendChild(t);
+        return;
+      }
+      etiquetaIntentos.textContent = 'Intentos';
+      const restantes = metaDer - puntosMaquina;
+      for (let i = 0; i < metaDer; i++) {
+        const b = document.createElement('i');
+        if (i >= restantes) b.className = 'perdida';
+        elIntentos.appendChild(b);
+      }
+    }
+
+    function actualizarMarcador(el) {
+      elNombreJugador.textContent = nombreIzq;
+      elNombreRival.textContent = nombreDer;
+      elPuntosJugador.textContent = puntosJugador;
+      elPuntosMaquina.textContent = puntosMaquina;
+      pintarIntentos();
+      if (el) {
+        el.classList.remove('pop');
+        void el.offsetWidth;
+        el.classList.add('pop');
+      }
+    }
+
+    /* ---------- sonido (Web Audio, sin archivos) ---------- */
+    const sonido = {
+      ac: null,
+      master: null,
+      ruidoBuf: null,
+      activo: true,
+
+      iniciar() {
+        if (this.ac) {
+          if (this.ac.state === 'suspended') this.ac.resume();
+          return;
+        }
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        this.ac = new AC();
+        this.master = this.ac.createGain();
+        this.master.gain.value = this.activo ? 0.8 : 0;
+        this.master.connect(this.ac.destination);
+
+        const largo = this.ac.sampleRate * 2;
+        this.ruidoBuf = this.ac.createBuffer(1, largo, this.ac.sampleRate);
+        const datos = this.ruidoBuf.getChannelData(0);
+        for (let i = 0; i < largo; i++) datos[i] = Math.random() * 2 - 1;
+
+        this.ambiente();
+      },
+
+      alternar() {
+        this.activo = !this.activo;
+        if (this.master) this.master.gain.value = this.activo ? 0.8 : 0;
+      },
+
+      // Olas del mar de fondo
+      ambiente() {
+        const fuente = this.ac.createBufferSource();
+        fuente.buffer = this.ruidoBuf;
+        fuente.loop = true;
+        const filtro = this.ac.createBiquadFilter();
+        filtro.type = 'lowpass';
+        filtro.frequency.value = 500;
+        const ganancia = this.ac.createGain();
+        ganancia.gain.value = 0.05;
+        const lfo = this.ac.createOscillator();
+        lfo.frequency.value = 0.13;
+        const lfoGanancia = this.ac.createGain();
+        lfoGanancia.gain.value = 0.035;
+        lfo.connect(lfoGanancia);
+        lfoGanancia.connect(ganancia.gain);
+        fuente.connect(filtro);
+        filtro.connect(ganancia);
+        ganancia.connect(this.master);
+        fuente.start();
+        lfo.start();
+      },
+
+      tono(freq, dur, tipo, vol, hasta, retraso) {
+        if (!this.ac || !this.activo) return;
+        const t0 = this.ac.currentTime + (retraso || 0);
+        const o = this.ac.createOscillator();
+        const g = this.ac.createGain();
+        o.type = tipo || 'sine';
+        o.frequency.setValueAtTime(freq, t0);
+        if (hasta) o.frequency.exponentialRampToValueAtTime(hasta, t0 + dur);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol || 0.3, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        o.connect(g);
+        g.connect(this.master);
+        o.start(t0);
+        o.stop(t0 + dur + 0.05);
+      },
+
+      ruido(dur, vol, filtro, f0, f1, ataque, retraso) {
+        if (!this.ac || !this.activo) return;
+        const t0 = this.ac.currentTime + (retraso || 0);
+        const fuente = this.ac.createBufferSource();
+        fuente.buffer = this.ruidoBuf;
+        const f = this.ac.createBiquadFilter();
+        f.type = filtro || 'lowpass';
+        f.frequency.setValueAtTime(f0, t0);
+        if (f1) f.frequency.exponentialRampToValueAtTime(f1, t0 + dur);
+        const g = this.ac.createGain();
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol, t0 + (ataque || 0.01));
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        fuente.connect(f);
+        f.connect(g);
+        g.connect(this.master);
+        fuente.start(t0, Math.random());
+        fuente.stop(t0 + dur + 0.05);
+      },
+
+      golpe(quien) { this.tono(quien === 'jugador' ? 620 : 430, 0.07, 'square', 0.16); },
+      pared() { this.tono(260, 0.05, 'sine', 0.14, 180); },
+      rebotePato() { this.tono(520, 0.16, 'sawtooth', 0.12, 300); },
+      reboteGoma() { this.tono(180, 0.14, 'sine', 0.25, 420); },
+      saque() { this.tono(700, 0.08, 'sine', 0.12, 900); },
+      aparece() { this.tono(420, 0.12, 'sine', 0.1, 760); },
+      ding() { this.tono(880, 0.25, 'sine', 0.15); this.tono(1320, 0.3, 'sine', 0.1, null, 0.05); },
+      hielo() {
+        this.tono(1400, 0.25, 'sine', 0.16, 2400);
+        this.tono(1800, 0.3, 'sine', 0.12, 2600, 0.08);
+        this.ruido(0.4, 0.08, 'highpass', 3000, 5000, 0.02);
+      },
+      doble() { this.tono(500, 0.1, 'square', 0.14, 700); this.tono(750, 0.14, 'square', 0.14, 1000, 0.1); },
+      remolinoAparece() { this.ruido(0.6, 0.1, 'lowpass', 300, 900, 0.2); },
+      remolinoTraga() { this.ruido(0.9, 0.26, 'lowpass', 2000, 150, 0.05); this.tono(500, 0.9, 'sine', 0.18, 70); },
+      remolinoEscupe() { this.ruido(0.5, 0.2, 'lowpass', 200, 3000, 0.05); this.tono(120, 0.45, 'sine', 0.2, 700); },
+      auch() { this.tono(330, 0.22, 'square', 0.14, 160); this.ruido(0.35, 0.18, 'lowpass', 2500, 300, 0.01); },
+      distraida() { this.tono(330, 0.2, 'sawtooth', 0.12, 250); this.tono(250, 0.3, 'sawtooth', 0.12, 180, 0.18); },
+
+      silbato() {
+        for (let b = 0; b < 2; b++) {
+          for (let i = 0; i < 7; i++) {
+            this.tono(i % 2 ? 2500 : 2200, 0.05, 'sine', 0.12, null, b * 0.5 + i * 0.045);
+          }
+        }
+      },
+
+      ovacion(vol) {
+        this.ruido(1.2, 0.18 * vol, 'bandpass', 800, 1400, 0.25);
+        this.ruido(1.0, 0.12 * vol, 'bandpass', 1200, 900, 0.2, 0.1);
+      },
+
+      punto(quien, fin) {
+        if (!fin) {
+          if (quien === 'jugador') {
+            [523, 659, 784, 1047].forEach((f, i) => this.tono(f, 0.16, 'triangle', 0.2, null, i * 0.09));
+          } else {
+            this.tono(330, 0.2, 'triangle', 0.2);
+            this.tono(247, 0.3, 'triangle', 0.2, null, 0.16);
+          }
+        }
+        this.ovacion(quien === 'jugador' ? 1 : 0.6);
+      },
+
+      ganar(retraso) {
+        [523, 659, 784, 1047, 1319].forEach((f, i) => this.tono(f, 0.22, 'square', 0.14, null, (retraso || 0) + i * 0.12));
+      },
+
+      perder(retraso) {
+        [392, 330, 262, 196].forEach((f, i) => this.tono(f, 0.3, 'sawtooth', 0.12, null, (retraso || 0) + i * 0.2));
+      },
+
+      // Murmullo corto mientras alguien habla
+      voz(quien) {
+        const n = 4 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < n; i++) {
+          const f = quien === 'maquina' ? aleatorio(170, 300) : aleatorio(380, 560);
+          this.tono(f, 0.06, quien === 'maquina' ? 'sawtooth' : 'square', 0.07, f * aleatorio(0.8, 1.25), i * 0.075);
+        }
+      }
+    };
+
+    function actualizarBotonSonido() {
+      botonSonido.textContent = sonido.activo ? '🔊' : '🔇';
+      botonSonido.setAttribute('aria-pressed', sonido.activo ? 'true' : 'false');
+    }
+
+    function alternarSonido() {
+      sonido.iniciar();
+      sonido.alternar();
+      actualizarBotonSonido();
+      try { localStorage.setItem('pp_sonido', sonido.activo ? '1' : '0'); } catch (e) { /* nada */ }
+    }
+
+    /* ---------- burlas y diálogos ---------- */
+    function etiquetaMaquina() {
+      if (modo === '2v2') return Math.random() < 0.5 ? NOMBRE_MAQUINA : NOMBRE_MAQUINA_2;
+      return NOMBRE_MAQUINA;
+    }
+
+    function decir(quien, texto, ms, n1, n2) {
+      const el = quien === 'maquina' ? burbujaMaquina : burbujaJugador;
+      el.textContent = '';
+      const nombre = document.createElement('strong');
+      nombre.textContent = quien === 'maquina' ? etiquetaMaquina() : nombreIzq;
+      el.appendChild(nombre);
+      el.appendChild(document.createTextNode(formatear(texto, n1, n2)));
+      el.classList.add('visible');
+      sonido.voz(quien);
+      clearTimeout(timersBurbuja[quien]);
+      timersBurbuja[quien] = setTimeout(() => el.classList.remove('visible'), ms || 3200);
+    }
+
+    function pintarBotonesBurla() {
+      botonesBurlas.innerHTML = '';
+      opcionesBurla.forEach((frase, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn-burla';
+        const tecla = document.createElement('span');
+        tecla.className = 'tecla';
+        tecla.textContent = i + 1;
+        b.appendChild(tecla);
+        b.appendChild(document.createTextNode(frase));
+        b.addEventListener('click', () => burlarse(i));
+        botonesBurlas.appendChild(b);
+      });
+    }
+
+    function nuevasOpciones() {
+      opcionesBurla = barajar(frasesJugador).slice(0, 3);
+      pintarBotonesBurla();
+    }
+
+    // Responderle a las máquinas es gratis: no cuesta puntos ni hay que ganarse el derecho
+    function burlarse(i) {
+      if (!hayIA() || pausado || !corriendo) return;
+      const ahora = performance.now();
+      if (ahora - ultimaRespuesta < 700) return;
+      const frase = i === undefined
+        ? opcionesBurla[Math.floor(Math.random() * opcionesBurla.length)]
+        : opcionesBurla[i];
+      if (!frase) return;
+      ultimaRespuesta = ahora;
+      decir('jugador', frase, 3000);
+      setTimeout(() => {
+        if (Math.random() < 0.85) decir('maquina', elegir(frasesRespuesta), 3400);
+      }, 1000);
+      setTimeout(nuevasOpciones, 400);
+    }
+
+    /* ---------- palas ---------- */
+    function crearPalas() {
+      const xi = 30;
+      const xd = W - 30 - PALA_ANCHO;
+      const arriba = [Y0, MEDIO - PALA_ALTO / 2];
+      const abajo = [MEDIO - PALA_ALTO / 2, Y1 - PALA_ALTO];
+      const completa = [Y0, Y1 - PALA_ALTO];
+      const nueva = (lado, x, zona, ctrl, color) => ({
+        lado, x, ctrl, color,
+        y: (zona[0] + zona[1]) / 2,
+        zMin: zona[0], zMax: zona[1],
+        congelada: 0, distraida: 0
+      });
+
+      if (modo === '1p') {
+        palas = [
+          nueva('izq', xi, completa, 'j1', COLOR_JUGADOR),
+          nueva('der', xd, completa, 'ia', COLOR_MAQUINA)
+        ];
+      } else if (modo === '2p') {
+        palas = [
+          nueva('izq', xi, completa, 'j1', COLOR_JUGADOR),
+          nueva('der', xd, completa, 'j2', COLOR_J2)
+        ];
+      } else {
+        palas = [
+          nueva('izq', xi, arriba, 'j1', COLOR_JUGADOR),
+          nueva('izq', xi, abajo, 'j2', COLOR_J2),
+          nueva('der', xd, arriba, 'ia', COLOR_MAQUINA),
+          nueva('der', xd, abajo, 'ia', COLOR_MAQUINA)
+        ];
+      }
+    }
+
+    function bolaMasCercanaALaIA() {
+      let elegida = null;
+      for (const b of bolas) {
+        if (b.vx > 0 && (!elegida || b.x > elegida.x)) elegida = b;
+      }
+      return elegida;
+    }
+
+    function moverIA(p) {
+      // Distraída: se aleja lo más posible de la bola
+      if (p.distraida > 0) {
+        p.distraida--;
+        const ref = bolas[0];
+        if (ref) {
+          const dMin = Math.abs(p.zMin + PALA_ALTO / 2 - ref.y);
+          const dMax = Math.abs(p.zMax + PALA_ALTO / 2 - ref.y);
+          p.y += limitar((dMin > dMax ? p.zMin : p.zMax) - p.y, -6, 6);
+        }
+        return;
+      }
+
+      // Modo normal: sigue la bola exacta
+      const b = bolaMasCercanaALaIA();
+      if (b) {
+        p.y = limitar(b.y - PALA_ALTO / 2, p.zMin, p.zMax);
+      } else {
+        p.y += limitar((p.zMin + p.zMax) / 2 - p.y, -6, 6);
+      }
+    }
+
+    function gestionarDistraccion() {
+      const ias = palasIA();
+      if (ias.length === 0) return;
+      if (ias.some(p => p.congelada > 0 || p.distraida > 0)) return;
+      if (proxDistraccion > 0) { proxDistraccion--; return; }
+      // Solo cuando la bola ya se alejó de ellas
+      if (pausaSaque === 0 && !salida && bolas.length === 1 && bolas[0].vx < 0 && bolas[0].x < W * 0.6) {
+        ias.forEach(p => { p.distraida = 140; }); // sin cuadro de diálogo: solo se ve el 😵
+        sonido.distraida();
+      }
+    }
+
+    function actualizarPalas() {
+      for (const p of palas) {
+        if (p.congelada > 0) { p.congelada--; continue; }
+        if (p.ctrl === 'ia') {
+          moverIA(p);
+        } else {
+          const sube = p.ctrl === 'j1' ? teclas.j1Arriba : teclas.j2Arriba;
+          const baja = p.ctrl === 'j1' ? teclas.j1Abajo : teclas.j2Abajo;
+          if (sube) p.y -= VEL_PALA;
+          if (baja) p.y += VEL_PALA;
+          p.y = limitar(p.y, p.zMin, p.zMax);
+        }
+      }
+    }
+
+    function golpear(b, p) {
+      const dir = p.lado === 'izq' ? 1 : -1;
+      b.vel = Math.min(b.vel + 0.5, VEL_MAX);
+      const angulo = p.ctrl === 'ia'
+        ? aleatorio(-0.6, 0.6)
+        : limitar((b.y - (p.y + PALA_ALTO / 2)) / (PALA_ALTO / 2), -1, 1);
+      fijarVelocidad(b, angulo, dir);
+      b.x = p.lado === 'izq' ? p.x + PALA_ANCHO + RADIO : p.x - RADIO;
+      explosion(b.x, b.y, p.color, 8);
+      sonido.golpe(p.lado === 'izq' ? 'jugador' : 'maquina');
+    }
+
+    /* ---------- espectadores ---------- */
+    function crearEspectadores() {
+      const pieles = ['#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#ffdbac'];
+      const pelos = ['#2b1b0e', '#6b3e1a', '#d9a441', '#1a1a1a', '#a83232', '#8e44ad'];
+      const camisas = ['#ff4f81', '#4cc9f0', '#ffd23f', '#8ac926', '#ff9a2e', '#ffffff'];
+      const flotadores = ['#ff6b9d', '#ffd23f', '#ff9a2e', '#ffffff', '#9bf6ff', '#b8f35d', '#ff4f5a'];
+      const pick = lista => lista[Math.floor(Math.random() * lista.length)];
+      const porFila = 15;
+
+      espectadores = [];
+      for (const fila of ['sup', 'inf']) {
+        // nivel 0 = fila de atrás, nivel 1 = fila de adelante (junto a la cancha)
+        for (let nivel = 0; nivel < 2; nivel++) {
+          for (let i = 0; i < porFila; i++) {
+            const hx = (i + (nivel === 0 ? 0.25 : 0.75)) * W / porFila + aleatorio(-10, 10);
+            const adelante = fila === 'sup' ? Y0 - 24 : Y1 + 38;
+            const hy = nivel === 1 ? adelante : (fila === 'sup' ? adelante - 40 : adelante + 40);
+            espectadores.push({
+              fila, nivel, hx, hy, x: hx, y: hy,
+              piel: pick(pieles), pelo: pick(pelos), camisa: pick(camisas), flot: pick(flotadores),
+              gafas: Math.random() < 0.4,
+              semilla: Math.random() * 10,
+              celebra: 0, golpe: 0, queja: '', quejaT: 0, ausente: 0,
+              nada: null
+            });
+          }
+        }
+      }
+    }
+
+    function celebrarEspectadores() {
+      for (const s of espectadores) s.celebra = 80 + Math.floor(Math.random() * 50);
+      for (let i = 0; i < 7; i++) {
+        const s = espectadores[Math.floor(Math.random() * espectadores.length)];
+        explosion(s.x, s.y - 30, s.camisa, 10);
+      }
+    }
+
+    function actualizarEspectadores() {
+      for (const s of espectadores) {
+        if (s.celebra > 0) s.celebra--;
+        if (s.quejaT > 0) s.quejaT--;
+        if (s.golpe > 0) s.golpe--;
+        if (s.ausente > 0) s.ausente--;
+      }
+    }
+
+    function gestionarNadador() {
+      if (!nadador) {
+        proxNadador--;
+        if (proxNadador <= 0 && pausaSaque === 0 && !salvavidas) {
+          const presentes = espectadores.filter(e => e.ausente === 0 && e.nivel === 1);
+          if (presentes.length === 0) return;
+          const s = presentes[Math.floor(Math.random() * presentes.length)];
+          s.nada = {
+            fase: 'ida',
+            tx: limitar(s.hx + aleatorio(-220, 220), 90, W - 90),
+            ty: s.fila === 'sup' ? Y1 + 38 : Y0 - 24,
+            vel: aleatorio(1.1, 1.7),
+            pausa: 0,
+            t: 0,
+            salvaEn: aleatorio(240, 360), // cuándo sale el salvavidas (4 a 6 segundos)
+            rescatado: false
+          };
+          nadador = s;
+        }
+        return;
+      }
+
+      const s = nadador;
+      const m = s.nada;
+      if (m.rescatado) return; // el salvavidas se lo lleva
+      m.t++;
+      if (!salvavidas && m.t >= m.salvaEn) crearSalvavidas();
+      if (m.pausa > 0) { m.pausa--; return; }
+
+      const dx = m.tx - s.x;
+      const dy = m.ty - s.y;
+      const d = Math.hypot(dx, dy);
+      if (d < m.vel + 1) {
+        if (m.fase === 'ida') {
+          m.fase = 'vuelta';
+          m.tx = s.hx;
+          m.ty = s.hy;
+          m.pausa = 60;
+        } else {
+          s.x = s.hx;
+          s.y = s.hy;
+          s.nada = null;
+          nadador = null;
+          proxNadador = aleatorio(900, 1500);
+          if (salvavidas) salvavidas.fase = 'sale';
+        }
+        return;
+      }
+      s.x += dx / d * m.vel;
+      s.y += dy / d * m.vel;
+    }
+
+    function crearSalvavidas() {
+      const lado = nadador.x < W / 2 ? -1 : 1;
+      salvavidas = {
+        x: lado < 0 ? -50 : W + 50,
+        y: nadador.y,
+        fase: 'llega',
+        mira: -lado,
+        dir: lado,
+        queja: formatear(elegir(frasesSalvavidas), null, null, true),
+        quejaT: 140
+      };
+      sonido.silbato();
+    }
+
+    function gestionarSalvavidas() {
+      if (!salvavidas) return;
+      const v = salvavidas;
+      if (v.quejaT > 0) v.quejaT--;
+
+      if (v.fase === 'llega') {
+        if (!nadador) { v.fase = 'sale'; return; }
+        const dx = nadador.x - v.x;
+        const dy = nadador.y - v.y;
+        const d = Math.hypot(dx, dy);
+        v.mira = dx < 0 ? -1 : 1;
+        if (d < 44) {
+          // Lo agarra, lo regaña y se lo lleva a la orilla más cercana
+          v.fase = 'lleva';
+          v.dir = nadador.x < W / 2 ? -1 : 1;
+          v.mira = v.dir;
+          nadador.nada.rescatado = true;
+          v.queja = formatear(elegir(frasesSalvavidas), null, null, true);
+          v.quejaT = 150;
+          nadador.queja = elegir(respuestasEspectador);
+          nadador.quejaT = 150;
+          sonido.silbato();
+        } else {
+          v.x += dx / d * 5.5;
+          v.y += dy / d * 5.5;
+        }
+      } else if (v.fase === 'lleva') {
+        const s = nadador;
+        if (!s) { v.fase = 'sale'; return; }
+        s.x += v.dir * 3.6;
+        v.x = s.x + v.dir * 44;
+        v.y = s.y;
+        if (s.x < -60 || s.x > W + 60) {
+          // Ya salieron de la cancha: el espectador vuelve a su sitio más tarde
+          s.x = s.hx;
+          s.y = s.hy;
+          s.nada = null;
+          s.ausente = 420;
+          nadador = null;
+          salvavidas = null;
+          proxNadador = aleatorio(900, 1500);
+        }
+      } else {
+        const d = v.x < W / 2 ? -1 : 1;
+        v.mira = d;
+        v.x += d * 5;
+        if (v.x < -80 || v.x > W + 80) salvavidas = null;
+      }
+    }
+
+    function chocarNadador(b) {
+      if (!nadador || b.inmune > 0) return;
+      const s = nadador;
+      const cx = s.x;
+      const cy = s.y - 4;
+      const rr = 28;
+      const dx = b.x - cx;
+      const dy = b.y - cy;
+      const d = Math.hypot(dx, dy);
+      if (d >= RADIO + rr) return;
+
+      // Rebota...
+      const nx = d === 0 ? 1 : dx / d;
+      const ny = d === 0 ? 0 : dy / d;
+      b.x = cx + nx * (RADIO + rr);
+      b.y = cy + ny * (RADIO + rr);
+
+      // ...se queja y la lanza a cualquier parte del mapa
+      s.queja = elegir(quejasEspectador);
+      s.quejaT = 120;
+      s.golpe = 35;
+      const tx = aleatorio(W * 0.1, W * 0.9);
+      const ty = aleatorio(Y0 + 30, Y1 - 30);
+      const ang = Math.atan2(ty - b.y, tx - b.x);
+      b.vel = Math.min(b.vel + 0.3, VEL_MAX);
+      b.vx = Math.cos(ang) * b.vel;
+      b.vy = Math.sin(ang) * b.vel;
+      asegurarHorizontal(b);
+      b.inmune = 25;
+
+      explosion(b.x, b.y, '#ffffff', 12);
+      sonido.auch();
+      if (hayIA() && Math.random() < 0.6) decir('maquina', elegir(frasesEspectador), 3200);
+    }
+
+    /* ---------- flujo del juego ---------- */
+    function sacar() {
+      const ang = aleatorio(-0.4, 0.4);
+      const dir = modo === '2p' ? (Math.random() < 0.5 ? 1 : -1) : 1;
+      const b = crearBola(W / 2, MEDIO, 0, 0, VEL_INICIAL);
+      fijarVelocidad(b, ang, dir);
+      bolas = [b];
+      pausaSaque = 45;
+      sonido.saque();
+    }
+
+    function reiniciar() {
+      puntosJugador = 0;
+      puntosMaquina = 0;
+      crearPalas();
+      poder = null;
+      proxPoder = 300;
+      proxDistraccion = 480;
+      obstaculos = [];
+      proxObstaculo = 150;
+      remolino = null;
+      salida = null;
+      proxRemolino = 600;
+      if (nadador) {
+        nadador.x = nadador.hx;
+        nadador.y = nadador.hy;
+        nadador.nada = null;
+        nadador = null;
+      }
+      proxNadador = 900;
+      salvavidas = null;
+      for (const e of espectadores) e.ausente = 0;
+      particulas = [];
+      pausado = false;
+      proxCharla = aleatorio(600, 900);
+      burbujaJugador.classList.remove('visible');
+      burbujaMaquina.classList.remove('visible');
+      actualizarMarcador();
+      sacar();
+    }
+
+    function ponerClasesModo() {
+      document.body.classList.remove('modo-1p', 'modo-2p', 'modo-2v2');
+      document.body.classList.add('modo-' + modoSeleccionado);
+    }
+
+    function elegirModo(m) {
+      modoSeleccionado = m;
+      botonesModo.forEach(b => {
+        const activo = b.dataset.modo === m;
+        b.classList.toggle('activo', activo);
+        b.setAttribute('aria-checked', activo ? 'true' : 'false');
+      });
+      campoNombre2.hidden = m === '1p';
+      campoTrato.hidden = m === '2p';
+      etiquetaNombre1.textContent = m === '1p' ? 'Tu nombre' : 'Jugador 1';
+      ayuda.textContent = ayudas[m];
+      ponerClasesModo();
+    }
+
+    function empezar() {
+      modo = modoSeleccionado;
+      const limpio = t => t.trim().slice(0, 14);
+      nombre1 = limpio(inputNombre.value) || (modo === '1p' ? 'Jugador' : 'Jugador 1');
+      nombre2 = limpio(inputNombre2.value) || 'Jugador 2';
+      trato = modo === '2p' ? 'n' : selectTrato.value;
+
+      if (modo === '1p') {
+        nombreIzq = nombre1;
+        nombreDer = NOMBRE_MAQUINA;
+        nombreJugador = nombre1;
+        metaIzq = META_JUGADOR;
+        metaDer = META_MAQUINA;
+      } else if (modo === '2p') {
+        nombreIzq = nombre1;
+        nombreDer = nombre2;
+        nombreJugador = nombre1;
+        metaIzq = META_2P;
+        metaDer = META_2P;
+      } else {
+        nombreIzq = nombre1 + ' y ' + nombre2;
+        nombreDer = NOMBRE_MAQUINA + ' y ' + NOMBRE_MAQUINA_2;
+        nombreJugador = nombreIzq;
+        metaIzq = META_JUGADOR;
+        metaDer = META_MAQUINA;
+      }
+
+      try {
+        localStorage.setItem('pp_nombre', inputNombre.value.trim().slice(0, 14));
+        localStorage.setItem('pp_nombre2', inputNombre2.value.trim().slice(0, 14));
+        localStorage.setItem('pp_trato', selectTrato.value);
+        localStorage.setItem('pp_modo', modo);
+      } catch (e) { /* sin almacenamiento: no pasa nada */ }
+
+      sonido.iniciar();
+      ponerClasesModo();
+      barraBurlas.hidden = modo === '2p';
+      reiniciar();
+      capa.classList.add('oculta');
+      corriendo = true;
+      document.body.classList.add('jugando');
+      capaPausa.classList.add('oculta');
+      actualizarControles();
+
+      if (modo === '2p') decir('maquina', elegir(frasesInicio2P), 3600, nombre1, nombre2);
+      else decir('maquina', elegir(frasesInicio), 3600);
+    }
+
+    function terminar(ganador) {
+      corriendo = false;
+      pausado = false;
+      capaPausa.classList.add('oculta');
+      document.body.classList.remove('jugando');
+      teclas.j1Arriba = teclas.j1Abajo = teclas.j2Arriba = teclas.j2Abajo = false;
+
+      if (modo === '2p') {
+        const nom = ganador === 'jugador' ? nombreIzq : nombreDer;
+        titulo.textContent = '¡Gana ' + nom + '!';
+        mensaje.textContent = nombreIzq + ' ' + puntosJugador + ' - ' + puntosMaquina + ' ' + nombreDer + '. ¿Revancha?';
+        sonido.ganar(0.6);
+        decir('maquina', elegir(frasesFinal2P), 4500, nom);
+      } else if (ganador === 'jugador') {
+        titulo.textContent = modo === '2v2' ? '¡Ganaron!' : '¡Ganaste, ' + nombreIzq + '!';
+        mensaje.textContent = 'Le ganaron a ' + nombreDer + ' por ' + puntosJugador + ' a ' + puntosMaquina + '. ¡Ahora búrlense con las teclas 1, 2 o 3!';
+        sonido.ganar(0.6);
+        decir('maquina', elegir(frasesMaquinaPierde), 4500);
+      } else {
+        titulo.textContent = modo === '2v2' ? 'Ganan las máquinas' : 'Gana ' + NOMBRE_MAQUINA;
+        sonido.perder(0.6);
+        mensaje.textContent = 'Se acabaron los ' + metaDer + ' intentos, ' + nombreIzq + '. Hicieron ' + puntosJugador + (puntosJugador === 1 ? ' punto.' : ' puntos.');
+        decir('maquina', elegir(frasesMaquinaGana), 4500);
+      }
+      boton.textContent = 'Jugar otra vez';
+      capa.classList.remove('oculta');
+      actualizarControles();
+    }
+
+    function actualizarControles() {
+      botonPausa.disabled = !corriendo;
+      botonInicio.disabled = !corriendo;
+      botonPausa.textContent = pausado ? '▶ Seguir' : '⏸ Pausa';
+    }
+
+    function hablarControl(tipo) {
+      const listas = hayIA()
+        ? { pausa: frasesPausa, sigue: frasesReanudar, menu: frasesMenu }
+        : { pausa: frasesPausa2P, sigue: frasesReanudar2P, menu: frasesMenu2P };
+      decir('maquina', elegir(listas[tipo]), 3600, hayIA() ? null : nombre1, nombre2);
+    }
+
+    function alternarPausa() {
+      if (!corriendo) return;
+      pausado = !pausado;
+      capaPausa.classList.toggle('oculta', !pausado);
+      teclas.j1Arriba = teclas.j1Abajo = teclas.j2Arriba = teclas.j2Abajo = false;
+      actualizarControles();
+      hablarControl(pausado ? 'pausa' : 'sigue');
+    }
+
+    // Vuelve a la pantalla de inicio (para cambiar de modo o de nombre)
+    function irAlInicio() {
+      if (!corriendo) return;
+      hablarControl('menu');
+      corriendo = false;
+      pausado = false;
+      capaPausa.classList.add('oculta');
+      document.body.classList.remove('jugando');
+      teclas.j1Arriba = teclas.j1Abajo = teclas.j2Arriba = teclas.j2Abajo = false;
+      titulo.textContent = 'Zhuky Pong';
+      mensaje.textContent = MENSAJE_INICIO;
+      boton.textContent = 'Jugar';
+      capa.classList.remove('oculta');
+      actualizarControles();
+    }
+
+    // Anota el lado derecho
+    function anotarMaquina() {
+      if (!corriendo) return;
+      puntosMaquina++;
+      palasIA().forEach(p => { p.distraida = 0; });
+      proxDistraccion = aleatorio(480, 780);
+      explosion(8, MEDIO, colorDerecha(), 30);
+      sacudir();
+      celebrarEspectadores();
+      actualizarMarcador(elPuntosMaquina);
+      const fin = puntosMaquina >= metaDer;
+      sonido.punto('maquina', fin);
+      if (fin) { terminar('maquina'); return; }
+
+      if (modo === '2p') {
+        mostrarAviso('¡Punto para ' + nombreDer + '!', 'punto');
+        decir('maquina', elegir(frasesPunto2P), 3600, nombreIzq);
+      } else {
+        mostrarAviso(modo === '2v2' ? 'Punto de las máquinas' : 'Punto de ' + NOMBRE_MAQUINA, 'punto');
+        decir('maquina', frasePunto(), 3600);
+      }
+    }
+
+    // Anota el lado izquierdo
+    function anotarJugador() {
+      if (!corriendo) return;
+      puntosJugador++;
+      palasIA().forEach(p => { p.distraida = 0; });
+      proxDistraccion = aleatorio(480, 780);
+      explosion(W - 8, MEDIO, COLOR_JUGADOR, 40);
+      sacudir();
+      celebrarEspectadores();
+      actualizarMarcador(elPuntosJugador);
+      const fin = puntosJugador >= metaIzq;
+      sonido.punto('jugador', fin);
+      if (fin) { terminar('jugador'); return; }
+
+      if (modo === '2p') {
+        mostrarAviso('¡Punto para ' + nombreIzq + '!', 'gol');
+        decir('maquina', elegir(frasesPunto2P), 3600, nombreDer);
+      } else {
+        mostrarAviso(modo === '2v2' ? '¡PUNTO PARA USTEDES!' : '¡PUNTO PARA TI!', 'gol');
+        decir('maquina', elegir(frasesRabia), 3400);
+      }
+    }
+
+    /* ---------- poderes ---------- */
+    function gestionarPoder() {
+      if (poder) {
+        poder.t++;
+        poder.vida--;
+        if (poder.vida <= 0) {
+          poder = null;
+          proxPoder = aleatorio(300, 540);
+        }
+      } else if (pausaSaque === 0) {
+        proxPoder--;
+        if (proxPoder <= 0) {
+          poder = {
+            tipo: Math.random() < 0.5 ? 'hielo' : 'doble',
+            x: W / 2,
+            y: Y0 + (Y1 - Y0) * aleatorio(0.3, 0.7),
+            r: 24,
+            t: 0,
+            vida: 480,
+            vidaMax: 480
+          };
+          sonido.ding();
+        }
+      }
+    }
+
+    function recogerPoder(b) {
+      const tipo = poder.tipo;
+      explosion(poder.x, poder.y, tipo === 'hielo' ? COLOR_HIELO : COLOR_DOBLE, 30);
+      poder = null;
+      proxPoder = aleatorio(420, 720);
+
+      if (tipo === 'hielo') {
+        // Se congela el equipo contrario a quien le pegó a la bola
+        const objetivo = b.vx > 0 ? 'der' : 'izq';
+        for (const p of palas) if (p.lado === objetivo) p.congelada = 180;
+        const nom = objetivo === 'der' ? nombreDer : nombreIzq;
+        mostrarAviso('❄ ¡Hielo para ' + nom + '! 3 segundos sin moverse', 'hielo');
+        sonido.hielo();
+        if (hayIA()) decir('maquina', elegir(frasesHielo), 3000);
+      } else {
+        if (bolas.length < 3) {
+          const vy = Math.abs(b.vy) < 1 ? 2.5 : -b.vy;
+          bolas.push(crearBola(b.x, b.y, b.vx, vy, b.vel));
+        }
+        mostrarAviso('¡Doble bola!', 'doble');
+        sonido.doble();
+        if (hayIA()) decir('maquina', elegir(frasesDoble), 3000);
+      }
+    }
+
+    /* ---------- objetos de piscina ---------- */
+    function crearObstaculo() {
+      const tipos = [
+        { tipo: 'pato', r: 28 },
+        { tipo: 'flotador', r: 32 },
+        { tipo: 'pelota', r: 29 }
+      ];
+      const base = tipos[Math.floor(Math.random() * tipos.length)];
+
+      for (let intento = 0; intento < 14; intento++) {
+        const x = aleatorio(190, W - 190);
+        const y = aleatorio(Y0 + base.r + 16, Y1 - base.r - 16);
+
+        if (Math.abs(x - W / 2) < 80) continue; // lejos de las boyas y del poder
+        if (bolas.some(b => Math.hypot(b.x - x, b.y - y) < base.r + 100)) continue;
+        // Misma columna que otro objeto: se cruzarían al moverse
+        if (obstaculos.some(o => Math.abs(o.x - x) < o.r + base.r + 25)) continue;
+        if (remolino && Math.abs(remolino.x - x) < remolino.r + base.r + 40) continue;
+
+        // Solo uno a la vez puede ser fantasma (sin colisión)
+        const hayFantasma = obstaculos.some(o => o.fantasma);
+        const fantasma = !hayFantasma && (Math.random() < 0.5 || obstaculos.length >= 2);
+
+        obstaculos.push({
+          tipo: base.tipo,
+          r: base.r,
+          x, y,
+          vy: (Math.random() < 0.5 ? -1 : 1) * aleatorio(0.8, 1.8),
+          t: 0,
+          fantasma
+        });
+        sonido.aparece();
+        return;
+      }
+    }
+
+    function gestionarObstaculos() {
+      for (let i = obstaculos.length - 1; i >= 0; i--) {
+        const o = obstaculos[i];
+        o.t++;
+
+        // Suben y bajan flotando
+        o.y += o.vy;
+        const yMin = Y0 + o.r + 16;
+        const yMax = Y1 - o.r - 16;
+        if (o.y < yMin) { o.y = yMin; o.vy = Math.abs(o.vy); }
+        if (o.y > yMax) { o.y = yMax; o.vy = -Math.abs(o.vy); }
+
+        if (o.t >= FANTASMA + OBSTACULO_VIDA) {
+          explosion(o.x, o.y, '#e6fbff', 14);
+          obstaculos.splice(i, 1);
+        }
+      }
+
+      proxObstaculo--;
+      if (proxObstaculo <= 0) {
+        if (pausaSaque === 0 && obstaculos.length < MAX_OBSTACULOS) crearObstaculo();
+        proxObstaculo = aleatorio(90, 200); // entre 1,5 y 3,3 segundos
+      }
+    }
+
+    function chocarObstaculos(b) {
+      for (const o of obstaculos) {
+        if (o.t < FANTASMA || o.fantasma) continue; // aviso todavía, o es el fantasma
+
+        const dx = b.x - o.x;
+        const dy = b.y - o.y;
+        const d = Math.hypot(dx, dy);
+        const minimo = RADIO + o.r;
+        if (d >= minimo) continue;
+
+        const nx = d === 0 ? 1 : dx / d;
+        const ny = d === 0 ? 0 : dy / d;
+        b.x = o.x + nx * minimo;
+        b.y = o.y + ny * minimo;
+
+        const punto = b.vx * nx + b.vy * ny;
+        if (punto < 0) {
+          b.vx -= 2 * punto * nx;
+          b.vy -= 2 * punto * ny;
+        }
+        asegurarHorizontal(b);
+
+        explosion(b.x, b.y, '#e6fbff', 8);
+        if (o.tipo === 'pato') sonido.rebotePato(); else sonido.reboteGoma();
+        return;
+      }
+    }
+
+    /* ---------- remolinos ---------- */
+    function crearRemolino() {
+      for (let intento = 0; intento < 14; intento++) {
+        const x = aleatorio(W * 0.22, W * 0.78);
+        const y = aleatorio(Y0 + 80, Y1 - 80);
+
+        if (Math.abs(x - W / 2) < 90) continue;
+        if (bolas.some(b => Math.hypot(b.x - x, b.y - y) < 160)) continue;
+        if (obstaculos.some(o => Math.abs(o.x - x) < o.r + REMOLINO_R + 30)) continue;
+
+        remolino = { x, y, r: REMOLINO_R, rango: REMOLINO_RANGO, t: 0 };
+        sonido.remolinoAparece();
+        return;
+      }
+    }
+
+    function absorber(b) {
+      explosion(remolino.x, remolino.y, '#b9a7ff', 22);
+      sonido.remolinoTraga();
+      remolino = null;
+      proxRemolino = aleatorio(600, 1000);
+
+      // El otro remolino aparece en un punto al azar y escupirá la bola
+      let x = W / 2;
+      let y = MEDIO;
+      for (let intento = 0; intento < 14; intento++) {
+        x = aleatorio(W * 0.2, W * 0.8);
+        y = aleatorio(Y0 + 60, Y1 - 60);
+        if (!obstaculos.some(o => Math.hypot(o.x - x, o.y - y) < o.r + REMOLINO_R + 20)) break;
+      }
+      salida = { x, y, r: REMOLINO_R, t: 0, espera: 75, lanzada: false, tLanz: 0, vel: b.vel };
+
+      mostrarAviso('🌀 ¡Se la tragó el remolino!', 'remolino');
+      if (hayIA()) decir('maquina', elegir(frasesRemolino), 3400);
+    }
+
+    function gestionarRemolinos() {
+      if (salida) {
+        salida.t++;
+        if (!salida.lanzada && salida.t >= salida.espera) {
+          const dir = Math.random() < 0.5 ? -1 : 1;
+          const nb = crearBola(salida.x, salida.y, 0, 0, Math.min(salida.vel + 0.5, VEL_MAX));
+          fijarVelocidad(nb, aleatorio(-0.9, 0.9), dir);
+          nb.inmune = 20;
+          bolas.push(nb);
+          explosion(salida.x, salida.y, '#9bf6ff', 24);
+          sonido.remolinoEscupe();
+          mostrarAviso('🌀 ¡La bola salió disparada!', 'remolino');
+          salida.lanzada = true;
+          salida.tLanz = salida.t;
+        } else if (salida.lanzada && salida.t - salida.tLanz > 30) {
+          salida = null;
+          proxRemolino = aleatorio(600, 1000);
+        }
+        return;
+      }
+
+      if (remolino) {
+        remolino.t++;
+        if (remolino.t >= FANTASMA + REMOLINO_VIDA) {
+          explosion(remolino.x, remolino.y, '#b9a7ff', 14);
+          remolino = null;
+          proxRemolino = aleatorio(400, 800);
+        }
+      } else {
+        proxRemolino--;
+        if (proxRemolino <= 0 && pausaSaque === 0) crearRemolino();
+      }
+    }
+
+    // Devuelve true si el remolino se tragó la bola
+    function atraerBola(b) {
+      if (!remolino || remolino.t < FANTASMA) return false;
+      const dx = remolino.x - b.x;
+      const dy = remolino.y - b.y;
+      const d = Math.hypot(dx, dy);
+
+      if (d < remolino.r * 0.7) {
+        absorber(b);
+        return true;
+      }
+      if (d < remolino.rango) {
+        const fuerza = 0.9 * Math.pow(1 - d / remolino.rango, 1.2);
+        b.vx += dx / d * fuerza;
+        b.vy += dy / d * fuerza;
+        const m = Math.hypot(b.vx, b.vy);
+        b.vx = b.vx / m * b.vel;
+        b.vy = b.vy / m * b.vel;
+      }
+      return false;
+    }
+
+    /* ---------- física ---------- */
+    function moverBola(b) {
+      if (b.inmune > 0) b.inmune--;
+      b.estela.push({ x: b.x, y: b.y });
+      if (b.estela.length > 10) b.estela.shift();
+
+      b.x += b.vx;
+      b.y += b.vy;
+
+      if (b.y - RADIO < Y0) { b.y = Y0 + RADIO; b.vy *= -1; sonido.pared(); explosion(b.x, Y0 + 2, '#ffffff', 5); }
+      if (b.y + RADIO > Y1) { b.y = Y1 - RADIO; b.vy *= -1; sonido.pared(); explosion(b.x, Y1 - 2, '#ffffff', 5); }
+
+      // Palas (de cualquier lado, humanas o máquinas)
+      for (const p of palas) {
+        const enAltura = b.y >= p.y - RADIO && b.y <= p.y + PALA_ALTO + RADIO;
+        if (p.lado === 'izq' && b.vx < 0 &&
+            b.x - RADIO <= p.x + PALA_ANCHO && b.x + RADIO >= p.x && enAltura) {
+          golpear(b, p);
+          break;
+        }
+        if (p.lado === 'der' && b.vx > 0 &&
+            b.x + RADIO >= p.x && b.x - RADIO <= p.x + PALA_ANCHO && enAltura) {
+          golpear(b, p);
+          break;
+        }
+      }
+
+      chocarObstaculos(b);
+      chocarNadador(b);
+      if (atraerBola(b)) return false;
+
+      // Poder en el centro. Contra las máquinas solo lo toma quien viene de tu lado;
+      // en 2 jugadores lo toma la bola en cualquier dirección.
+      if (poder && (b.vx > 0 || modo === '2p')) {
+        const dx = b.x - poder.x;
+        const dy = b.y - poder.y;
+        if (Math.hypot(dx, dy) < RADIO + poder.r) recogerPoder(b);
+      }
+
+      // Puntos
+      if (b.x + RADIO < 0) { anotarMaquina(); return false; }
+      if (b.x - RADIO > W) { anotarJugador(); return false; }
+      return true;
+    }
+
+    function actualizarParticulas() {
+      for (let i = particulas.length - 1; i >= 0; i--) {
+        const p = particulas[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05;
+        p.vida--;
+        if (p.vida <= 0) particulas.splice(i, 1);
+      }
+    }
+
+    function actualizarAmbiente() {
+      actualizarParticulas();
+      actualizarEspectadores();
+    }
+
+    // Zhuky suelta algo de vez en cuando, aunque no pase nada
+    function gestionarCharla() {
+      if (!hayIA()) return;
+      proxCharla--;
+      if (proxCharla <= 0) {
+        proxCharla = aleatorio(900, 1500);
+        decir('maquina', elegir(frasesCharla), 3800);
+      }
+    }
+
+    function actualizar() {
+      reloj++;
+
+      gestionarPoder();
+      gestionarObstaculos();
+      gestionarRemolinos();
+      gestionarNadador();
+      gestionarSalvavidas();
+      gestionarDistraccion();
+      gestionarCharla();
+      actualizarPalas();
+
+      if (pausaSaque > 0) {
+        pausaSaque--;
+      } else {
+        for (let i = bolas.length - 1; i >= 0; i--) {
+          if (!moverBola(bolas[i])) bolas.splice(i, 1);
+        }
+        // Si la bola está dentro del remolino, todavía no se saca otra
+        if (corriendo && bolas.length === 0 && !salida) sacar();
+      }
+      actualizarAmbiente();
+    }
+
+    /* ---------- dibujo ---------- */
+    function pala(x, y, color, brillo) {
+      ctx.shadowColor = color;
+      ctx.shadowBlur = brillo;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, y, PALA_ANCHO, PALA_ALTO, 7);
+      else ctx.rect(x, y, PALA_ANCHO, PALA_ALTO);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function dibujarOlas() {
+      const t = performance.now() / 1000;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      for (let i = 0; i < 8; i++) {
+        const y0 = H * (i + 0.5) / 8;
+        ctx.beginPath();
+        for (let x = 0; x <= W; x += 10) {
+          const y = y0 + Math.sin(x * 0.02 + t * 1.2 + i * 1.3) * 6;
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    }
+
+    const arrecife = { sup: [], inf: [] };
+
+    function crearArrecife() {
+      const rocas = ['#5f7a94', '#4f6a85', '#6f8aa3', '#7b8fa0'];
+      const corales = ['#ff7a59', '#ff4f81', '#ffd23f', '#b57bff', '#5ee6c8'];
+      for (const lado of ['sup', 'inf']) {
+        arrecife[lado] = [];
+        for (let x = 10; x < W; x += 28) {
+          arrecife[lado].push({
+            x: x + aleatorio(-6, 6),
+            rx: aleatorio(15, 24),
+            ry: aleatorio(8, 13),
+            roca: rocas[Math.floor(Math.random() * rocas.length)],
+            coral: Math.random() < 0.45 ? corales[Math.floor(Math.random() * corales.length)] : null,
+            alto: aleatorio(10, 22),
+            fase: Math.random() * 6
+          });
+        }
+      }
+    }
+
+    function dibujarLimites() {
+      const t = performance.now() / 1000;
+
+      // Franjas del público: agua un poco más oscura
+      ctx.fillStyle = 'rgba(8, 60, 110, 0.22)';
+      ctx.fillRect(0, 0, W, Y0);
+      ctx.fillRect(0, Y1, W, H - Y1);
+
+      for (const lado of ['sup', 'inf']) {
+        const y = lado === 'sup' ? Y0 : Y1;
+        const fuera = lado === 'sup' ? -1 : 1; // hacia el público
+        const desfase = lado === 'sup' ? 0 : 2;
+
+        // Arrecife de rocas y corales
+        ctx.lineCap = 'round';
+        for (const r of arrecife[lado]) {
+          if (r.coral) {
+            ctx.strokeStyle = r.coral;
+            ctx.lineWidth = 5;
+            const sway = Math.sin(t * 1.5 + r.fase) * 3;
+            for (const dx of [-6, 0, 6]) {
+              ctx.beginPath();
+              ctx.moveTo(r.x + dx, y + fuera * 4);
+              ctx.lineTo(r.x + dx + sway + dx * 0.3, y + fuera * (4 + r.alto + Math.abs(dx)));
+              ctx.stroke();
+            }
+          }
+          ctx.fillStyle = r.roca;
+          ctx.beginPath();
+          ctx.ellipse(r.x, y + fuera * 3, r.rx, r.ry, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Espuma de la ola que rompe en el borde de la cancha
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        for (let x = 0; x <= W; x += 8) {
+          const ola = Math.sin(x * 0.045 + t * 2.2 + desfase) * 4;
+          const yy = y - fuera * (7 + ola);
+          if (x === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+        }
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+        for (let x = 12; x < W; x += 46) {
+          const yy = y - fuera * (10 + Math.sin(x * 0.045 + t * 2.2 + desfase) * 4);
+          ctx.beginPath();
+          ctx.arc(x + Math.sin(t + x) * 3, yy, 4 + (x % 3), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Línea central: columna de burbujas
+      for (let y = Y0 + 12; y < Y1; y += 26) {
+        const sway = Math.sin(t * 2 + y * 0.03) * 6;
+        const r = 4 + (Math.sin(y * 0.7) + 1) * 2.2;
+        ctx.beginPath();
+        ctx.arc(W / 2 + sway, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(W / 2 + sway - r * 0.35, y - r * 0.35, r * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function globo(texto, x, y) {
+      ctx.font = 'bold 19px "Nunito", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const ancho = ctx.measureText(texto).width + 24;
+      const alto = 34;
+      const bx = limitar(x - ancho / 2, 6, W - ancho - 6);
+      const by = Math.max(6, y - alto);
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(bx, by, ancho, alto, 12);
+      else ctx.rect(bx, by, ancho, alto);
+      ctx.fill();
+      ctx.fillStyle = '#10213a';
+      ctx.fillText(texto, bx + ancho / 2, by + alto / 2 + 1);
+    }
+
+    function dibujarEspectador(s) {
+      const t = performance.now() / 1000;
+      const celebra = s.celebra > 0;
+      const alza = celebra || s.golpe > 0;
+      const bob = Math.sin(t * 2 + s.semilla) * 2 + (celebra ? -Math.abs(Math.sin(t * 9 + s.semilla)) * 8 : 0);
+      const x = s.x;
+      const y = s.y + bob;
+      const ola = Math.sin(t * 14 + s.semilla) * 6;
+
+      // Espuma bajo el flotador
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.beginPath();
+      ctx.ellipse(x, y + 18, 32, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Brazos
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = s.piel;
+      ctx.beginPath();
+      ctx.moveTo(x - 9, y - 8);
+      ctx.lineTo(alza ? x - 18 : x - 16, alza ? y - 32 + ola : y + 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x + 9, y - 8);
+      ctx.lineTo(alza ? x + 18 : x + 16, alza ? y - 32 - ola : y + 2);
+      ctx.stroke();
+
+      // Torso y cabeza
+      ctx.fillStyle = s.camisa;
+      ctx.beginPath();
+      ctx.ellipse(x, y - 4, 12, 14, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = s.piel;
+      ctx.beginPath();
+      ctx.arc(x, y - 22, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = s.pelo;
+      ctx.beginPath();
+      ctx.arc(x, y - 24, 9.5, Math.PI, 0);
+      ctx.fill();
+
+      // Gafas u ojos
+      if (s.gafas) {
+        ctx.fillStyle = '#10213a';
+        ctx.fillRect(x - 7, y - 25, 14, 4);
+      } else {
+        ctx.fillStyle = '#10213a';
+        ctx.beginPath();
+        ctx.arc(x - 3.5, y - 23, 1.3, 0, Math.PI * 2);
+        ctx.arc(x + 3.5, y - 23, 1.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Boca: abierta si celebra o se queja
+      if (alza) {
+        ctx.fillStyle = '#7a1f2b';
+        ctx.beginPath();
+        ctx.arc(x, y - 17, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Flotador (por delante)
+      ctx.lineWidth = 8;
+      ctx.strokeStyle = s.flot;
+      ctx.beginPath();
+      ctx.ellipse(x, y + 8, 26, 9, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.beginPath();
+      ctx.ellipse(x, y + 8, 26, 9, 0, Math.PI * 1.1, Math.PI * 1.6);
+      ctx.stroke();
+    }
+
+    function dibujarSalvavidas(v) {
+      const t = performance.now() / 1000;
+      const x = v.x;
+      const y = v.y + Math.sin(t * 5) * 1.5;
+      const d = v.mira || 1;
+
+      // Estela
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(x - d * 34, y + 16, 40, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Boya torpedo de rescate
+      ctx.fillStyle = '#e63946';
+      ctx.beginPath();
+      ctx.ellipse(x + d * 22, y + 10, 28, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(x + d * 22 - 4, y + 2, 8, 16);
+
+      // Brazo hacia la boya
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = '#e0ac69';
+      ctx.beginPath();
+      ctx.moveTo(x + d * 6, y - 6);
+      ctx.lineTo(x + d * 20, y + 4);
+      ctx.stroke();
+
+      // Torso rojo con cruz
+      ctx.fillStyle = '#e63946';
+      ctx.beginPath();
+      ctx.ellipse(x, y - 4, 12, 14, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(x - 1.5, y - 10, 3, 10);
+      ctx.fillRect(x - 5, y - 6, 10, 3);
+
+      // Cabeza, gorra y gafas
+      ctx.fillStyle = '#e0ac69';
+      ctx.beginPath();
+      ctx.arc(x, y - 22, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(x, y - 24, 9.5, Math.PI, 0);
+      ctx.fill();
+      ctx.fillRect(Math.min(x, x + d * 13), y - 26, 13, 3);
+      ctx.fillStyle = '#10213a';
+      ctx.fillRect(x - 7, y - 23, 14, 3);
+
+      // Silbato
+      ctx.fillStyle = '#ffd23f';
+      ctx.beginPath();
+      ctx.arc(x + d * 6, y - 16, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function dibujarEspiral(x, y, R, giro, sentido, color, ancho) {
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = color;
+      ctx.lineWidth = ancho;
+      for (let brazo = 0; brazo < 3; brazo++) {
+        ctx.beginPath();
+        for (let i = 0; i <= 36; i++) {
+          const f = i / 36;
+          const ang = sentido * (giro + f * 3.4) + brazo * (Math.PI * 2 / 3);
+          const rr = R * f;
+          const px = x + Math.cos(ang) * rr;
+          const py = y + Math.sin(ang) * rr;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      }
+    }
+
+    function dibujarRemolinos() {
+      const t = performance.now() / 1000;
+
+      if (remolino) {
+        const r = remolino;
+        const solido = r.t >= FANTASMA;
+        const restante = FANTASMA + REMOLINO_VIDA - r.t;
+        if (!(solido && restante < 60 && Math.floor(r.t / 5) % 2 === 0)) {
+          ctx.save();
+          if (!solido) {
+            ctx.globalAlpha = 0.45 + 0.25 * Math.sin(r.t * 0.5);
+            ctx.setLineDash([6, 6]);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(r.x, r.y, r.r * 1.4, 0, Math.PI * 2);
+            ctx.stroke();
+          } else {
+            const escala = Math.min(1, (r.t - FANTASMA) / 20);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.setLineDash([8, 10]);
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(r.x, r.y, r.rango * escala, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            const g = ctx.createRadialGradient(r.x, r.y, 2, r.x, r.y, r.r * 1.5 * escala + 1);
+            g.addColorStop(0, '#050b3a');
+            g.addColorStop(0.6, 'rgba(30, 20, 120, 0.85)');
+            g.addColorStop(1, 'rgba(30, 20, 120, 0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(r.x, r.y, r.r * 1.5 * escala, 0, Math.PI * 2);
+            ctx.fill();
+            dibujarEspiral(r.x, r.y, r.r * 1.4 * escala, t * 5, 1, 'rgba(255, 255, 255, 0.85)', 4);
+          }
+          ctx.restore();
+        }
+      }
+
+      if (salida) {
+        const s = salida;
+        const escala = s.lanzada ? Math.max(0, 1 - (s.t - s.tLanz) / 30) : Math.min(1, s.t / 15);
+        ctx.save();
+        const g = ctx.createRadialGradient(s.x, s.y, 2, s.x, s.y, s.r * 1.5 * escala + 1);
+        g.addColorStop(0, '#ffffff');
+        g.addColorStop(0.6, 'rgba(60, 220, 230, 0.85)');
+        g.addColorStop(1, 'rgba(60, 220, 230, 0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r * 1.5 * escala, 0, Math.PI * 2);
+        ctx.fill();
+        dibujarEspiral(s.x, s.y, s.r * 1.4 * escala, t * 5, -1, 'rgba(255, 255, 255, 0.9)', 4);
+
+        // La bola va asomando antes de salir disparada
+        if (!s.lanzada) {
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, RADIO * Math.min(1, s.t / s.espera), 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    function dibujarPato(x, y, r) {
+      ctx.fillStyle = '#ffd23f';
+      ctx.beginPath();
+      ctx.ellipse(x - r * 0.1, y + r * 0.25, r * 0.9, r * 0.62, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(x - r * 0.8, y + r * 0.1);
+      ctx.lineTo(x - r * 1.15, y - r * 0.2);
+      ctx.lineTo(x - r * 0.55, y + r * 0.4);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + r * 0.45, y - r * 0.4, r * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ff8a1f';
+      ctx.beginPath();
+      ctx.ellipse(x + r * 1.0, y - r * 0.35, r * 0.3, r * 0.16, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffb300';
+      ctx.beginPath();
+      ctx.ellipse(x - r * 0.2, y + r * 0.3, r * 0.42, r * 0.28, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#10213a';
+      ctx.beginPath();
+      ctx.arc(x + r * 0.58, y - r * 0.52, r * 0.09, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function dibujarFlotador(x, y, r, giro) {
+      const radio = r * 0.65;
+      ctx.lineWidth = r * 0.7;
+      ctx.strokeStyle = '#ff4f5a';
+      ctx.beginPath();
+      ctx.arc(x, y, radio, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = '#ffffff';
+      for (let k = 0; k < 4; k++) {
+        const a = giro + k * Math.PI / 2;
+        ctx.beginPath();
+        ctx.arc(x, y, radio, a, a + Math.PI / 4);
+        ctx.stroke();
+      }
+    }
+
+    function dibujarPelota(x, y, r, giro) {
+      const colores = ['#ff4f5a', '#ffffff', '#ffd23f', '#ffffff', '#3a86ff', '#ffffff'];
+      const parte = Math.PI * 2 / colores.length;
+      for (let k = 0; k < colores.length; k++) {
+        ctx.fillStyle = colores[k];
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, r, giro + k * parte, giro + (k + 1) * parte);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(x, y, r * 0.18, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(16, 33, 58, 0.35)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    function dibujarObstaculos() {
+      for (const o of obstaculos) {
+        const solido = o.t >= FANTASMA;
+        const restante = FANTASMA + OBSTACULO_VIDA - o.t;
+
+        // Parpadea en el último segundo para avisar que se va
+        if (solido && restante < 60 && Math.floor(o.t / 5) % 2 === 0) continue;
+
+        ctx.save();
+        if (!solido) {
+          ctx.globalAlpha = 0.45 + 0.25 * Math.sin(o.t * 0.5);
+          ctx.setLineDash([6, 6]);
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+          ctx.fill();
+        } else {
+          // El fantasma se ve transparente: la bola lo atraviesa
+          if (o.fantasma) ctx.globalAlpha = 0.45;
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+          ctx.beginPath();
+          ctx.ellipse(o.x, o.y + o.r * 0.95, o.r * 1.15, o.r * 0.28, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          const flota = Math.sin(o.t * 0.08) * 1.5;
+          if (o.tipo === 'pato') dibujarPato(o.x, o.y + flota, o.r);
+          else if (o.tipo === 'flotador') dibujarFlotador(o.x, o.y + flota, o.r, o.t * 0.02);
+          else dibujarPelota(o.x, o.y + flota, o.r, o.t * 0.05);
+
+          if (o.fantasma) {
+            ctx.globalAlpha = 0.7;
+            ctx.setLineDash([4, 6]);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+    }
+
+    function dibujarPoder() {
+      if (!poder) return;
+      const color = poder.tipo === 'hielo' ? COLOR_HIELO : COLOR_DOBLE;
+      const r = poder.r + Math.sin(poder.t * 0.12) * 3;
+
+      ctx.shadowColor = poder.tipo === 'hielo' ? '#6be7ff' : COLOR_DOBLE;
+      ctx.shadowBlur = 28;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(poder.x, poder.y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(poder.x, poder.y, r + 8, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (poder.vida / poder.vidaMax));
+      ctx.stroke();
+
+      ctx.fillStyle = '#10213a';
+      ctx.font = 'bold 20px "Bungee", Impact, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(poder.tipo === 'hielo' ? '❄' : 'x2', poder.x, poder.y + 1);
+    }
+
+    function dibujarPalas() {
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (const p of palas) {
+        let color = p.color;
+        let temblor = 0;
+        if (p.congelada > 0) color = '#b8f4ff';
+        if (p.distraida > 0) temblor = Math.sin(reloj * 0.9) * 3;
+        pala(p.x + temblor, p.y, color, 18);
+
+        const sx = p.x + PALA_ANCHO / 2;
+        const sy = Math.max(Y0 + 18, p.y - 16);
+        if (p.congelada > 0) {
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 16px "Nunito", sans-serif';
+          ctx.fillText('❄ ' + (p.congelada / 60).toFixed(1) + ' s', sx + (p.lado === 'der' ? -20 : 20), sy);
+        } else if (p.distraida > 0) {
+          ctx.font = '24px sans-serif';
+          ctx.fillText('😵', sx - 18, sy + Math.sin(reloj * 0.2) * 4);
+        } else if (p.ctrl !== 'ia' && modo !== '1p') {
+          ctx.fillStyle = p.color;
+          ctx.font = 'bold 15px "Bungee", Impact, sans-serif';
+          ctx.fillText(p.ctrl === 'j1' ? 'J1' : 'J2', sx, sy);
+        }
+      }
+    }
+
+    function dibujar() {
+      ctx.clearRect(0, 0, W, H);
+
+      dibujarOlas();
+      dibujarLimites();
+
+      for (const nivel of [0, 1]) {
+        for (const s of espectadores) {
+          if (s.nivel === nivel && s !== nadador && s.ausente === 0) dibujarEspectador(s);
+        }
+      }
+
+      dibujarRemolinos();
+      dibujarObstaculos();
+      dibujarPoder();
+
+      // Espectador que cruza nadando, con su queja
+      if (nadador) {
+        dibujarEspectador(nadador);
+        if (nadador.quejaT > 0) globo(nadador.queja, nadador.x, nadador.y - 50);
+      }
+
+      // Salvavidas que viene a sacarlo de la cancha
+      if (salvavidas) {
+        dibujarSalvavidas(salvavidas);
+        if (salvavidas.quejaT > 0) globo(salvavidas.queja, salvavidas.x, salvavidas.y - 52);
+      }
+
+      dibujarPalas();
+
+      // Bolas con estela
+      for (const b of bolas) {
+        for (let i = 0; i < b.estela.length; i++) {
+          const e = b.estela[i];
+          ctx.fillStyle = 'rgba(255, 255, 255, ' + ((i + 1) / b.estela.length * 0.35) + ')';
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, RADIO * (i + 1) / b.estela.length, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 16;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, RADIO, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // Partículas
+      for (const p of particulas) {
+        ctx.globalAlpha = Math.max(0, p.vida / p.max);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    /* ---------- bucle con paso fijo ---------- */
+    let ultimo = performance.now();
+    let acumulado = 0;
+
+    function bucle(ahora) {
+      acumulado += Math.min(ahora - ultimo, 100);
+      ultimo = ahora;
+      while (acumulado >= PASO) {
+        if (corriendo) {
+          if (!pausado) actualizar();
+        } else {
+          actualizarAmbiente();
+        }
+        acumulado -= PASO;
+      }
+      dibujar();
+      requestAnimationFrame(bucle);
+    }
+
+    /* ---------- controles ---------- */
+    function moverConPuntero(clientY) {
+      if (modo !== '1p' || pausado) return; // en los modos de 2 jugadores se usan teclas o botones
+      const p1 = palas.find(p => p.ctrl === 'j1');
+      if (!p1 || p1.congelada > 0) return;
+      const caja = canvas.getBoundingClientRect();
+      const y = (clientY - caja.top) * (H / caja.height);
+      p1.y = limitar(y - PALA_ALTO / 2, p1.zMin, p1.zMax);
+    }
+
+    canvas.addEventListener('mousemove', e => moverConPuntero(e.clientY));
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      moverConPuntero(e.touches[0].clientY);
+    }, { passive: false });
+
+    function controlDeTecla(tecla) {
+      if (tecla === 'w' || tecla === 'W') return 'j1Arriba';
+      if (tecla === 's' || tecla === 'S') return 'j1Abajo';
+      if (tecla === 'ArrowUp') return modo === '1p' ? 'j1Arriba' : 'j2Arriba';
+      if (tecla === 'ArrowDown') return modo === '1p' ? 'j1Abajo' : 'j2Abajo';
+      return null;
+    }
+
+    function escribiendo(e) {
+      const tag = e.target && e.target.tagName;
+      return tag === 'INPUT' || tag === 'SELECT';
+    }
+
+    window.addEventListener('keydown', e => {
+      if (escribiendo(e)) return;
+      const ctl = controlDeTecla(e.key);
+      if (ctl) {
+        teclas[ctl] = true;
+        if (corriendo && e.key.startsWith('Arrow')) e.preventDefault();
+      }
+      if (e.key === '1' || e.key === '2' || e.key === '3') burlarse(Number(e.key) - 1);
+      if (e.key === 'm' || e.key === 'M') alternarSonido();
+      if (e.key === 'r' || e.key === 'R') burlarse();
+      if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') alternarPausa();
+    });
+    window.addEventListener('keyup', e => {
+      const ctl = controlDeTecla(e.key);
+      if (ctl) teclas[ctl] = false;
+    });
+
+    // Botones de flecha (celular)
+    document.querySelectorAll('.flecha').forEach(btn => {
+      const ctl = btn.dataset.ctl;
+      const pulsar = e => { e.preventDefault(); teclas[ctl] = true; btn.classList.add('pulsado'); };
+      const soltar = () => { teclas[ctl] = false; btn.classList.remove('pulsado'); };
+      btn.addEventListener('pointerdown', pulsar);
+      btn.addEventListener('pointerup', soltar);
+      btn.addEventListener('pointercancel', soltar);
+      btn.addEventListener('pointerleave', soltar);
+      btn.addEventListener('contextmenu', e => e.preventDefault());
+    });
+
+    botonesModo.forEach(b => b.addEventListener('click', () => elegirModo(b.dataset.modo)));
+    boton.addEventListener('click', empezar);
+    botonSonido.addEventListener('click', e => { alternarSonido(); e.currentTarget.blur(); });
+    // Pantalla completa (en celular libera casi toda la altura) y giro horizontal
+    botonPantalla.hidden = !(document.fullscreenEnabled && document.documentElement.requestFullscreen);
+    botonPantalla.addEventListener('click', async e => {
+      e.currentTarget.blur();
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else {
+          await document.documentElement.requestFullscreen();
+          try { await screen.orientation.lock('landscape'); } catch (err) { /* no soportado */ }
+        }
+      } catch (err) { /* el navegador no lo permite */ }
+    });
+    document.addEventListener('fullscreenchange', () => {
+      botonPantalla.setAttribute('aria-pressed', document.fullscreenElement ? 'true' : 'false');
+    });
+    botonPausa.addEventListener('click', e => { alternarPausa(); e.currentTarget.blur(); });
+    botonSeguir.addEventListener('click', e => { alternarPausa(); e.currentTarget.blur(); });
+    botonInicio.addEventListener('click', e => { irAlInicio(); e.currentTarget.blur(); });
+    botonResponder.addEventListener('click', e => { burlarse(); e.currentTarget.blur(); });
+    inputNombre.addEventListener('keydown', e => {
+      if (e.key === 'Enter') empezar();
+    });
+    inputNombre2.addEventListener('keydown', e => {
+      if (e.key === 'Enter') empezar();
+    });
+
+    /* ---------- arranque ---------- */
+    let modoGuardado = '1p';
+    try {
+      const guardado = localStorage.getItem('pp_nombre');
+      const guardado2 = localStorage.getItem('pp_nombre2');
+      const tratoGuardado = localStorage.getItem('pp_trato');
+      const m = localStorage.getItem('pp_modo');
+      if (guardado) inputNombre.value = guardado;
+      if (guardado2) inputNombre2.value = guardado2;
+      if (tratoGuardado) selectTrato.value = tratoGuardado;
+      if (m === '1p' || m === '2p' || m === '2v2') modoGuardado = m;
+      if (localStorage.getItem('pp_sonido') === '0') sonido.activo = false;
+    } catch (e) { /* sin almacenamiento: no pasa nada */ }
+
+    elegirModo(modoGuardado);
+    modo = modoSeleccionado;
+    actualizarBotonSonido();
+    crearEspectadores();
+    crearPalas();
+    nuevasOpciones();
+    crearArrecife();
+    actualizarControles();
+    actualizarMarcador();
+    sacar();
+    requestAnimationFrame(bucle);
+  </script>
+</body>
+</html>

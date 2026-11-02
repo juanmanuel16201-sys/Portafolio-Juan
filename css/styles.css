@@ -1,0 +1,270 @@
+/* ============================================================
+   Portafolio — Ingeniería Multimedia
+   Tema "Puerta Secreta": mezcla de Coraline y Alicia en el País
+   de las Maravillas. Bootstrap 5 hace el diseño responsivo; este
+   archivo solo cambia colores, tipografía y detalles por encima.
+   La mayoría de los cambios de color se hacen en el bloque :root.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito:wght@400;600;700&display=swap');
+
+/* -----------------------------------------------------------
+   1. COLORES — edita estas variables para cambiar la paleta
+   ----------------------------------------------------------- */
+:root,
+[data-bs-theme="dark"] {
+  --ink: #17102b;            /* noche morada (fondo) */
+  --ink-2: #221845;          /* tarjetas */
+  --cream: #f6ecd2;          /* texto, papel envejecido */
+  --raincoat: #f2c230;       /* amarillo impermeable de Coraline */
+  --cheshire: #e0449b;       /* magenta del gato de Cheshire */
+  --turquoise: #46c6bd;      /* azul-verde de la puerta secreta */
+  --queen: #c8283c;          /* rojo de la Reina de Corazones */
+
+  --bs-primary: var(--raincoat);
+  --bs-primary-rgb: 242, 194, 48;
+  --bs-link-color: var(--turquoise);
+  --bs-link-color-rgb: 70, 198, 189;
+  --bs-link-hover-color: #7fe0d8;
+
+  --bs-body-bg: var(--ink);
+  --bs-body-color: var(--cream);
+  --bs-secondary-bg: var(--ink-2);
+  --bs-tertiary-bg: var(--ink-2);
+  --bs-border-color: #4a3a82;
+  --bs-secondary-color: #cfc3e6;
+  --bs-tertiary-color: #cfc3e6;
+}
+
+/* -----------------------------------------------------------
+   2. BASE
+   ----------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(224, 68, 155, 0.18), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(70, 198, 189, 0.14), transparent 45%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .navbar-brand {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Subrayado "cosido" bajo cada título de sección */
+h2 {
+  display: inline-block;
+  padding-bottom: 0.35rem;
+  border-bottom: 3px dashed var(--raincoat);
+}
+
+a { text-underline-offset: 3px; }
+
+:focus-visible {
+  outline: 3px solid var(--cheshire);
+  outline-offset: 3px;
+}
+
+/* -----------------------------------------------------------
+   3. AYUDAS PROPIAS
+   ----------------------------------------------------------- */
+.accent { color: var(--raincoat); }
+
+/* Etiqueta de categoría: papelito crema ladeado */
+.card-tag {
+  display: inline-block;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 0.25rem;
+  transform: rotate(-1.5deg);
+  margin-bottom: 0.5rem;
+}
+
+.ratio img,
+.ratio video { object-fit: cover; }
+
+.contact-label { min-width: 6rem; }
+.contact-value { min-width: 0; overflow-wrap: anywhere; }
+
+.blog-card { flex: 1 1 300px; }
+
+/* -----------------------------------------------------------
+   4. NAVEGACIÓN — franja de tablero de ajedrez (Alicia)
+   y botón de 4 huecos (Coraline) en la marca
+   ----------------------------------------------------------- */
+.navbar {
+  --bs-navbar-color: var(--cream);
+  --bs-navbar-hover-color: var(--raincoat);
+  --bs-navbar-active-color: var(--raincoat);
+  background: rgba(23, 16, 43, 0.92);
+  border-bottom: 0 !important;
+  position: relative;
+}
+
+.navbar::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 8px;
+  background: repeating-conic-gradient(var(--cream) 0 25%, var(--ink) 0 50%) 0 0 / 16px 16px;
+}
+
+.navbar-brand::before {
+  content: "";
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.5rem;
+  vertical-align: -0.1rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--ink) 0 1.5px, transparent 2px) 3px 3px / 7px 7px,
+    var(--raincoat);
+}
+
+.nav-link { font-weight: 700; }
+.nav-link.active { border-bottom: 2px dashed var(--raincoat); }
+
+/* -----------------------------------------------------------
+   5. TARJETAS — borde "cosido" con sombra desplazada
+   ----------------------------------------------------------- */
+.card {
+  --bs-card-bg: var(--ink-2);
+  --bs-card-border-color: var(--cheshire);
+  border: 2px dashed var(--cheshire);
+  border-radius: 0.75rem;
+  box-shadow: 5px 5px 0 rgba(224, 68, 155, 0.35);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 rgba(70, 198, 189, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .card, .card:hover { transition: none; transform: none; }
+}
+
+/* Barra, pie y separadores: línea cosida en vez de línea lisa */
+footer {
+  --bs-border-width: 3px;
+  --bs-border-style: dashed;
+  --bs-border-color: var(--turquoise);
+}
+
+/* -----------------------------------------------------------
+   6. BOTONES Y FORMULARIOS
+   ----------------------------------------------------------- */
+.btn { font-weight: 700; border-radius: 2rem; }
+
+.btn-primary {
+  --bs-btn-color: var(--ink);
+  --bs-btn-bg: var(--raincoat);
+  --bs-btn-border-color: var(--raincoat);
+  --bs-btn-hover-color: var(--ink);
+  --bs-btn-hover-bg: #ffd95a;
+  --bs-btn-hover-border-color: #ffd95a;
+  --bs-btn-active-color: var(--ink);
+  --bs-btn-active-bg: #ffd95a;
+  --bs-btn-active-border-color: #ffd95a;
+  --bs-btn-disabled-color: var(--ink);
+  --bs-btn-disabled-bg: var(--raincoat);
+  --bs-btn-disabled-border-color: var(--raincoat);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--turquoise);
+  --bs-btn-border-color: var(--turquoise);
+  --bs-btn-hover-color: var(--ink);
+  --bs-btn-hover-bg: var(--turquoise);
+  --bs-btn-hover-border-color: var(--turquoise);
+  --bs-btn-active-color: var(--ink);
+  --bs-btn-active-bg: var(--turquoise);
+  --bs-btn-active-border-color: var(--turquoise);
+}
+
+.form-control,
+.form-select { background-color: #1d1438; border-color: #4a3a82; }
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--raincoat);
+  box-shadow: 0 0 0 0.25rem rgba(242, 194, 48, 0.3);
+}
+
+.form-check-input:checked {
+  background-color: var(--raincoat);
+  border-color: var(--raincoat);
+}
+
+.form-check-input:focus {
+  border-color: var(--raincoat);
+  box-shadow: 0 0 0 0.25rem rgba(242, 194, 48, 0.3);
+}
+
+/* -----------------------------------------------------------
+   7. SECCIÓN JUEGOS
+   ----------------------------------------------------------- */
+.game { --bs-card-border-color: var(--turquoise); border-color: var(--turquoise); box-shadow: 5px 5px 0 rgba(70, 198, 189, 0.3); }
+.game:hover { box-shadow: 8px 8px 0 rgba(224, 68, 155, 0.45); }
+
+.game-tags {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.game-tags li {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--turquoise);
+  padding: 0.1rem 0.55rem;
+  border-radius: 2rem;
+}
+
+/* Lista de controles: tecla (kbd) a la izquierda, acción a la derecha */
+.controls {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 0.9rem;
+  align-items: center;
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.controls dt { margin: 0; }
+.controls dd { margin: 0; }
+
+kbd {
+  background: var(--cream);
+  color: var(--ink);
+  border-bottom: 3px solid var(--raincoat);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.5rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.controls-title {
+  font-size: 1rem;
+  color: var(--raincoat);
+  margin-bottom: 0.6rem;
+}

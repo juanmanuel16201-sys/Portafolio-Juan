@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juan Ramírez — Ingeniero Multimedia</title>
+  <meta name="description" content="Portafolio de Juan Ramírez, Ingeniero Multimedia: diseño 3D, ilustración digital, animación 2D, diseño gráfico, fotografía e IA.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!--
+  CÓMO PERSONALIZAR ESTA PÁGINA
+  1. Reemplaza cada img/placeholder.svg por tu propia imagen: usa el
+     mismo nombre de archivo o cambia el atributo "src" del <img>.
+  2. Reemplaza el texto entre corchetes [ ] por tu propio contenido.
+  3. Los colores y tipografías se cambian en css/styles.css.
+  4. Todo el layout usa clases de Bootstrap (container, row, col-*,
+     card...) — la documentación oficial es getbootstrap.com/docs.
+-->
+
+  <header>
+    <nav class="navbar navbar-expand-md border-bottom">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="blog.html">Bitácora</a></li>
+           <li class="nav-item"><a class="nav-link" href="postproduccion.html">Postproducción</a></li>
+            <li class="nav-item"><a class="nav-link" href="juegos.html">Juegos</a></li>
+            <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-md-6">
+            <h1 class="display-5">Hola, soy Juan <span class="accent">Ramírez</span></h1>
+            <p class="lead">Ingeniero Multimedia especializado en convertir ideas en piezas visuales — desde el modelado 3D hasta la animación y la ilustración digital.</p>
+            <div class="d-flex gap-3 flex-wrap mt-3">
+              <a href="blog.html" class="btn btn-primary">Ver mi bitácora</a>
+              <a href="contacto.html" class="btn btn-outline-light">Hablemos de un proyecto</a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="ratio ratio-4x3">
+              <img src="imagenes/imageen_principal.jpg" loading="lazy" class="rounded w-100 h-100" alt="Reemplaza esta imagen con una foto o pieza de tu trabajo">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERFIL -->
+    <section class="py-5 border-top" id="perfil">
+      <div class="container">
+        <div class="row g-4 align-items-start">
+          <div class="col-md-4">
+            <div class="ratio ratio-1x1">
+              <img src="imagenes/Imageen.jpg" loading="lazy" class="rounded w-100 h-100" alt="Reemplaza esta imagen con tu foto de perfil">
+            </div>
+          </div>
+          <div class="col-md-8">
+            <h2>Perfil</h2>
+            <p>Soy Juan Ramírez, Ingeniero Multimedia egresado de la Universidad Simón Bolívar. Me interesa todo lo que tiene que ver con contar historias a través de imágenes: desde un boceto rápido hasta un render terminado, pasando por la fotografía y la animación.</p>
+            <p>Disfruto explorar cómo las herramientas de inteligencia artificial pueden acelerar procesos creativos sin reemplazar el criterio y el detalle que aporta el diseñador. Mi meta es seguir creciendo en estas disciplinas y, en los próximos años, formar parte de una compañía de tecnología o entretenimiento con proyección internacional.</p>
+
+            <ol class="list-unstyled mt-4 mb-0">
+              <li class="d-flex gap-3 py-2 border-top"><span class="accent fw-semibold">01</span><span>Investigar referencias visuales y definir el objetivo del proyecto.</span></li>
+              <li class="d-flex gap-3 py-2 border-top"><span class="accent fw-semibold">02</span><span>Bocetar y prototipar rápidamente en 2D o 3D para validar la idea.</span></li>
+              <li class="d-flex gap-3 py-2 border-top"><span class="accent fw-semibold">03</span><span>Producir la pieza final: modelado, animación, ilustración o fotografía.</span></li>
+              <li class="d-flex gap-3 py-2 border-top"><span class="accent fw-semibold">04</span><span>Revisar, ajustar y entregar el proyecto terminado.</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÁREAS DE TRABAJO: 6 tarjetas iguales con la rejilla de Bootstrap.
+         Cada .col es una tarjeta; para agregar o quitar una, copia o
+         borra un bloque <div class="col">...</div> completo. -->
+    <section class="py-5 border-top" id="areas">
+      <div class="container">
+        <div class="mb-4">
+          <h2>Áreas de trabajo</h2>
+          <p>Tres disciplinas que se apoyan entre sí en cada proyecto.</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+
+          <div class="col">
+            <div class="card h-100">
+              <div class="ratio ratio-1x1">
+                <img src="imagenes/robot.png" loading="lazy" class="w-100 h-100" alt="Reemplaza esta imagen con un ejemplo de tu trabajo en Diseño 3D">
+              </div>
+              <div class="card-body">
+                <p class="card-tag">Diseño 3D</p>
+                <h3 class="h5">Modelado</h3>
+                <p class="card-text">Modelado de piezas y escenas, pensadas tanto para animación como para presentación estática.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card h-100">
+              <div class="ratio ratio-1x1">
+                <img src="imagenes/ROBAPAGINA_CAJA_FELIZ.jpg" loading="lazy" class="w-100 h-100" alt="Reemplaza esta imagen con un ejemplo de tu trabajo en Ilustración Digital">
+              </div>
+              <div class="card-body">
+                <p class="card-tag">Ilustración digital</p>
+                <h3 class="h5">Concepto y color</h3>
+                <p class="card-text">Arte conceptual y piezas terminadas, cuidando la paleta de color, la luz y la composición.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card h-100">
+              <div class="ratio ratio-1x1">
+                <img src="imagenes/LOGO_CON_FONDO.jpg" loading="lazy" class="w-100 h-100" alt="Reemplaza esta imagen con un ejemplo de tu trabajo en Ilustración Digital">
+              </div>
+              <div class="card-body">
+                <p class="card-tag">Diseño grafico</p>
+                <h3 class="h5">Identidad visual</h3>
+                <p class="card-text">Tipografía y piezas gráficas para proyectos propios y de terceros.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="ratio ratio-4x3">
+  <video class="w-100 h-100" controls loading="lazy" preload="metadata" >
+    <source src="videos/animacion-2d-lightstick.mp4" type="video/mp4">
+    
+  </video>
+         </div>
+              <div class="card-body">
+                <p class="card-tag">Animación 2D</p>
+                <h3 class="h5">Movimiento y ritmo</h3>
+                <p class="card-text">Secuencias cortas y motion graphics, con atención especial al timing y al ritmo.</p>
+              </div>
+            </div>
+          </div>
+
+
+        
+      
+    </section>
+  </main>
+
+  <footer class="border-top py-4">
+    <div class="container d-flex justify-content-between flex-wrap gap-2">
+      <span class="text-secondary-emphasis">© 2026 Juan Ramírez. Ingeniero Multimedia.</span>
+      <a href="contacto.html">Escríbeme</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

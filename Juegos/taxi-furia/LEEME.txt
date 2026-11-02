@@ -1,0 +1,4 @@
+Taxi Furia 3D
+Abre index.html en el navegador (necesita internet para cargar Three.js r128 desde cdnjs).
+Archivos: index.html (estructura), style.css (estilos), game.js (juego).
+Controles: WASD mover, ratón mirar, clic disparar, 1-3 armas, R recargar, V cambiar vista, F taxi, E invocar compañeros, H claxon.

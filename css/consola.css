@@ -1,0 +1,938 @@
+/* ============================================================
+   Sección Juegos — consola con discos en carrusel
+   Todo se dibuja con CSS 3D. Las medidas están en "em" para que la
+   escena entera escale junta en cualquier pantalla: cambia el
+   font-size de .scene y todo crece o se encoge.
+
+   Ambiente: cuarto de la era PS2 (años 2000): torres azules de
+   arranque, estrellas, pósters, orbes Y2K, control, memory card,
+   cajas de juegos y líneas de pantalla CRT.
+
+   Fases (las pone el script en data-phase del .stage):
+   select → fly → open → drop → spin → close → read → play
+   y al volver: ejectA → ejectB → ejectC → select
+   ============================================================ */
+
+/* Portadas de los discos (captura de la pantalla de inicio de cada juego).
+   Para cambiar una, reemplaza el archivo en imagenes/portadas/ (420 × 420 px). */
+:root {
+  --cv-van-helsing: url("../imagenes/portadas/van-helsing.webp");
+  --cv-super-gol: url("../imagenes/portadas/super-gol.webp");
+  --cv-ace-combat: url("../imagenes/portadas/ace-combat.webp");
+  --cv-zhuky-pong: url("../imagenes/portadas/zhuky-pong.webp");
+  --cv-enjambre-galactico: url("../imagenes/portadas/enjambre-galactico.webp");
+  --cv-taxi-furia: url("../imagenes/portadas/taxi-furia.webp");
+}
+
+/* Sin JavaScript: se oculta la consola y se muestran todas las fichas */
+html:not(.js) .scene,
+html:not(.js) .stage-bar,
+html:not(.js) .stage-title { display: none; }
+
+html.js .game-info:not(.is-current) { display: none; }
+
+/* -----------------------------------------------------------
+   1. ESCENA
+   ----------------------------------------------------------- */
+.scene {
+  --R: 16em;          /* radio del carrusel */
+  --Rf: 18em;         /* radio del disco que está al frente */
+  --disc-d: 11em;     /* diámetro de cada disco */
+  font-size: max(6px, min(1.4rem, calc((100vw - 2rem) / 46), calc(76vh / 44)));
+  position: relative;
+  height: 44em;
+  perspective: 75em;
+  perspective-origin: 50% 30%;
+  overflow: hidden;
+  border: 2px dashed var(--bs-border-color);
+  border-radius: 1rem;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(40, 110, 255, 0.4), transparent 62%),
+    radial-gradient(ellipse at 50% 0%, rgba(120, 60, 255, 0.28), transparent 58%),
+    #050a24;
+  touch-action: pan-y;
+}
+
+.scene.is-away { display: none; }
+
+.world {
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-22deg);
+}
+
+.world > *,
+.ps2 > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.ps2 { transform-style: preserve-3d; }
+
+/* Suelo: rejilla azul de la época + sombra bajo la consola */
+.floor {
+  width: 72em;
+  height: 48em;
+  margin: -24em 0 0 -36em;
+  transform: rotateX(90deg);
+  background:
+    linear-gradient(rgba(110, 190, 255, 0.55) 0.09em, transparent 0.09em) 0 0 / 4em 4em,
+    linear-gradient(90deg, rgba(110, 190, 255, 0.55) 0.09em, transparent 0.09em) 0 0 / 4em 4em,
+    linear-gradient(180deg, rgba(30, 70, 200, 0.1), rgba(30, 70, 200, 0.4));
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+}
+
+.floor-shadow {
+  width: 38em;
+  height: 27em;
+  margin: -13.5em 0 0 -19em;
+  transform: translate3d(0, -0.05em, 0) rotateX(90deg);
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), transparent);
+}
+
+/* -----------------------------------------------------------
+   2. FONDO RETRO (detrás de la consola)
+   ----------------------------------------------------------- */
+.bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Torres azules translúcidas, como en el arranque de la consola */
+.towers {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 40%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.7em;
+}
+
+.towers > span {
+  flex: none;
+  width: 2.6em;
+  height: 12em;
+  background: linear-gradient(180deg, rgba(140, 210, 255, 0), rgba(90, 170, 255, 0.5) 45%, rgba(40, 90, 230, 0.8));
+  box-shadow: 0 0 1.4em rgba(90, 170, 255, 0.45), inset 0.12em 0 0 rgba(200, 235, 255, 0.5), inset -0.12em 0 0 rgba(200, 235, 255, 0.25);
+  animation: tower-pulse 4.2s ease-in-out infinite;
+}
+
+.towers > span:nth-child(6n + 1) { height: 10em; }
+.towers > span:nth-child(6n + 2) { height: 17em; width: 3.2em; }
+.towers > span:nth-child(6n + 3) { height: 7em; }
+.towers > span:nth-child(6n + 4) { height: 21em; width: 2.2em; }
+.towers > span:nth-child(6n + 5) { height: 14em; width: 3em; }
+.towers > span:nth-child(6n) { height: 9em; }
+.towers > span:nth-child(3n) { animation-delay: -1.4s; }
+.towers > span:nth-child(3n + 1) { animation-delay: -2.8s; }
+
+@keyframes tower-pulse {
+  50% { opacity: 0.45; }
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  font-size: inherit;
+}
+
+.stars::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.18em;
+  height: 0.18em;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    6em 3em #fff, 12em 8em #bfe0ff, 19em 2em #fff, 25em 6em #fff, 31em 3em #bfe0ff, 38em 9em #fff,
+    43em 4em #fff, 3em 12em #bfe0ff, 9em 15em #fff, 33em 13em #fff, 41em 15em #bfe0ff, 15em 5em #fff,
+    28em 11em #fff, 22em 14em #bfe0ff, 36em 6em #fff, 1em 7em #fff, 45em 11em #fff, 17em 10em #bfe0ff;
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  50% { opacity: 0.35; }
+}
+
+/* Pósters en la pared */
+.poster {
+  position: absolute;
+  width: 8.5em;
+  height: 11.5em;
+  border: 0.4em solid #10163a;
+  box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.55), inset 0 0 0 0.1em rgba(255, 255, 255, 0.15);
+}
+
+.poster::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.7em;
+  text-align: center;
+  font: 800 0.62em/1 'Nunito', sans-serif;
+  letter-spacing: 0.3em;
+  color: #fff;
+  text-shadow: 0 0 0.6em rgba(255, 255, 255, 0.6);
+}
+
+.poster.left {
+  left: 3em;
+  top: 3.5em;
+  transform: rotate(-3deg);
+  background:
+    radial-gradient(circle at 50% 56%, #ffc15a 0 2.6em, transparent 2.7em),
+    repeating-linear-gradient(180deg, transparent 0 0.5em, rgba(5, 10, 36, 0.55) 0.5em 0.65em) 0 62% / 100% 38% no-repeat,
+    linear-gradient(180deg, #2a0f5e, #c92f7a 70%, #ff9e4d);
+}
+
+.poster.left::after { content: "PLAYER ONE"; }
+
+.poster.right {
+  right: 3em;
+  top: 5em;
+  transform: rotate(2.5deg);
+  background:
+    repeating-conic-gradient(from 0deg at 50% 45%, rgba(255, 255, 255, 0.22) 0 7deg, transparent 7deg 15deg),
+    radial-gradient(circle at 50% 45%, #fff 0 0.8em, #5ab4ff 1.6em, #1b3fb8 70%);
+}
+
+.poster.right::after { content: "NEW GAME"; }
+
+/* Orbes brillantes estilo Y2K */
+.orb {
+  position: absolute;
+  width: 4.6em;
+  height: 4.6em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 26%, #fff 0 7%, #a9d8ff 18%, #2f6bff 58%, #0a1a6a 100%);
+  box-shadow: 0 0 2.2em rgba(80, 160, 255, 0.6);
+  animation: orb-float 6s ease-in-out infinite;
+}
+
+.orb.o1 { left: 9%; top: 36%; }
+.orb.o2 { right: 11%; top: 30%; width: 3.2em; height: 3.2em; animation-delay: -2s; background: radial-gradient(circle at 30% 26%, #fff 0 8%, #e5e9f5 22%, #8d97b8 62%, #3a4166 100%); }
+.orb.o3 { right: 24%; top: 12%; width: 2.2em; height: 2.2em; animation-delay: -4s; }
+
+@keyframes orb-float {
+  50% { transform: translateY(-0.9em); }
+}
+
+/* "Presiona start" parpadeante, al estilo de los menús de la época */
+.start-text {
+  position: absolute;
+  left: 3em;
+  top: 1.2em;
+  font: 800 0.8em/1 'Nunito', sans-serif;
+  letter-spacing: 0.35em;
+  color: #9fd4ff;
+  text-shadow: 0 0 0.8em rgba(90, 170, 255, 0.8);
+  animation: blink 1.6s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.25; }
+}
+
+/* Líneas de pantalla CRT y viñeta sobre toda la escena */
+.crt {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* -----------------------------------------------------------
+   3. LA CONSOLA (caja de 30 × 20 × 6.5 em)
+   ----------------------------------------------------------- */
+.ps2-top {
+  width: 30em;
+  height: 20em;
+  margin: -10em 0 0 -15em;
+  transform: translate3d(0, -6.5em, 0) rotateX(90deg);
+  transform-style: preserve-3d;
+  border-radius: 0.9em 0.9em 0.5em 0.5em;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%, rgba(255, 255, 255, 0.07)),
+    linear-gradient(180deg, #23232f, #101017 60%, #181822);
+  box-shadow: inset 0 0 0 0.12em #34344a, 0 0 0 rgba(74, 168, 255, 0);
+  transition: box-shadow 0.6s ease;
+}
+
+.ps2-front {
+  width: 30em;
+  height: 6.5em;
+  margin: -3.25em 0 0 -15em;
+  transform: translate3d(0, -3.25em, 10em);
+  border-radius: 0 0 0.9em 0.9em;
+  background:
+    linear-gradient(180deg, #2a2a38 0 0.18em, #181822 0.18em 40%, #0c0c12);
+  box-shadow: inset 0 -0.2em 0.6em rgba(0, 0, 0, 0.6);
+}
+
+.well {
+  left: 7.5em;
+  top: 2.5em;
+  width: 15em;
+  height: 15em;
+  border-radius: 50%;
+  background: radial-gradient(circle, #8d93a8 0 3%, #07070b 3.5% 14%, #1d1d29 15% 19%, #0b0b11 20% 100%);
+  box-shadow: inset 0 0 1.2em #000, 0 0 0 0.3em #2d2d40;
+  transform: translateZ(0.05em);
+  transition: box-shadow 0.5s ease;
+}
+
+.stage[data-phase="spin"] .well {
+  box-shadow: inset 0 0 1.4em #000, 0 0 0 0.3em #2d2d40, 0 0 2.6em 0.4em rgba(74, 168, 255, 0.75);
+}
+
+.ps2-top > span { position: absolute; }
+
+.glow {
+  left: 1.2em;
+  top: 1.2em;
+  width: 0.5em;
+  height: 17.6em;
+  border-radius: 1em;
+  background: #25324a;
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+  transform: translateZ(0.03em);
+}
+
+.vents {
+  left: 26.8em;
+  top: 3em;
+  width: 2.4em;
+  height: 14em;
+  background: repeating-linear-gradient(180deg, #05050a 0 0.25em, transparent 0.25em 0.7em);
+  transform: translateZ(0.03em);
+}
+
+/* La tapa: bisagra en el borde de atrás. Tiene cara de arriba y cara de abajo. */
+.lid {
+  left: 4em;
+  top: 1.2em;
+  width: 22em;
+  height: 17.6em;
+  transform-style: preserve-3d;
+  transform-origin: 50% 0;
+  transform: translateZ(0.6em) rotateX(0deg);
+  transition: transform 0.75s cubic-bezier(0.45, 0, 0.25, 1);
+}
+
+.lid > span {
+  position: absolute;
+  inset: 0;
+  border-radius: 1em;
+  backface-visibility: hidden;
+}
+
+.lid-top {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 0.2em, transparent 0.2em 0.5em),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent 40%),
+    linear-gradient(180deg, #2f2f42, #17171f);
+  box-shadow: inset 0 0 0 0.14em #4a4a64, 0 0.35em 0.6em rgba(0, 0, 0, 0.5);
+}
+
+.lid-top::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 12.5em;
+  height: 12.5em;
+  margin: -6.25em 0 0 -6.25em;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 0 20%, rgba(255, 255, 255, 0.06) 21% 22%, transparent 23%);
+  box-shadow: inset 0 0 0 0.12em rgba(255, 255, 255, 0.1);
+}
+
+.lid-top::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  top: 0;
+  width: 60%;
+  height: 0.5em;
+  border-radius: 0 0 0.4em 0.4em;
+  background: #0b0b12;
+}
+
+.lid-under {
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, #1c1c27, #0c0c12);
+  box-shadow: inset 0 0 0 0.14em #3a3a50;
+}
+
+/* Logo de la consola sobre la tapa: "JR·STATION" con el 2 azul */
+.logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.1em;
+  text-align: center;
+  font: 800 0.8em/1 'Nunito', sans-serif;
+  letter-spacing: 0.45em;
+  color: #cfd8f2;
+  text-shadow: 0 0.08em 0 rgba(0, 0, 0, 0.7);
+}
+
+.logo b {
+  margin-left: 0.5em;
+  font-size: 2em;
+  letter-spacing: 0;
+  font-style: italic;
+  color: #4aa8ff;
+  text-shadow: 0 0 0.5em rgba(74, 168, 255, 0.8);
+  vertical-align: -0.12em;
+}
+
+/* Frente: botones, bandeja, puertos y luz de encendido */
+.ps2-front > span { position: absolute; }
+
+.pwr {
+  left: 2.3em;
+  top: 1.7em;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #d6dbea, #6d738c 60%, #2b2f40);
+  box-shadow: 0 0 0 0.14em #05050a, inset 0 0 0 0.25em rgba(5, 5, 10, 0.55);
+}
+
+.led {
+  left: 2.75em;
+  top: 2.15em;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  background: #1c2742;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.rst {
+  left: 5em;
+  top: 2.2em;
+  width: 1.3em;
+  height: 0.8em;
+  border-radius: 0.4em;
+  background: linear-gradient(180deg, #8c92aa, #3f4458);
+  box-shadow: 0 0 0 0.12em #05050a;
+}
+
+/* Bandeja del disco, al centro */
+.tray {
+  left: 9em;
+  top: 1.3em;
+  width: 11.5em;
+  height: 3.4em;
+  border-radius: 0.5em;
+  background: linear-gradient(180deg, #232331, #141420);
+  box-shadow: inset 0 0 0 0.12em #3a3a52, 0 0 0 0.1em #05050a;
+}
+
+.tray > span {
+  position: absolute;
+  left: 1em;
+  right: 1em;
+  top: 1.35em;
+  height: 0.55em;
+  border-radius: 0.3em;
+  background: #030306;
+  box-shadow: inset 0 0.1em 0.2em #000;
+}
+
+.eject {
+  left: 21.2em;
+  top: 2.2em;
+  width: 1.6em;
+  height: 0.9em;
+  border-radius: 0.45em;
+  background: linear-gradient(180deg, #8c92aa, #3f4458);
+  box-shadow: 0 0 0 0.12em #05050a;
+}
+
+.mem {
+  top: 1.2em;
+  width: 2.8em;
+  height: 0.65em;
+  border-radius: 0.2em;
+  background: #030306;
+  box-shadow: 0 0 0 0.09em #3a3a52;
+}
+
+.mem.m1 { left: 23.3em; }
+.mem.m2 { left: 26.6em; }
+
+.port {
+  top: 2.7em;
+  width: 2.8em;
+  height: 1.9em;
+  border-radius: 0.35em;
+  background: #030306;
+  box-shadow: inset 0 0 0.4em #000, 0 0 0 0.1em #3a3a52;
+}
+
+.port.p1 { left: 23.3em; }
+.port.p2 { left: 26.6em; }
+
+/* Consola encendida */
+.stage:not([data-phase="select"]) .led {
+  background: #7cc4ff;
+  box-shadow: 0 0 0.8em #4aa8ff, 0 0 2.2em #2a7bff;
+}
+
+.stage:not([data-phase="select"]) .glow {
+  background: #4aa8ff;
+  box-shadow: 0 0 1em #4aa8ff, 0 0 2.4em rgba(74, 168, 255, 0.7);
+}
+
+.stage:not([data-phase="select"]) .ps2-top {
+  box-shadow: inset 0 0 0 0.12em #34344a, 0 0 3em rgba(74, 168, 255, 0.35);
+}
+
+.stage[data-phase="read"] .led { animation: led-read 0.22s steps(2) infinite; }
+
+@keyframes led-read {
+  50% { background: #1c2742; box-shadow: none; }
+}
+
+/* Tapa abierta (también mientras el disco gira) */
+.stage[data-phase="open"] .lid,
+.stage[data-phase="drop"] .lid,
+.stage[data-phase="spin"] .lid,
+.stage[data-phase="ejectA"] .lid,
+.stage[data-phase="ejectB"] .lid {
+  transform: translateZ(0.6em) rotateX(108deg);
+}
+
+.stage[data-phase="close"] .lid { transition-timing-function: cubic-bezier(0.55, 0, 0.7, 1.2); }
+
+/* -----------------------------------------------------------
+   4. DECORACIÓN SOBRE EL SUELO
+   ----------------------------------------------------------- */
+.pad {
+  width: 10em;
+  height: 6.6em;
+  margin: -3.3em 0 0 -5em;
+  transform: translate3d(-19.5em, -0.08em, 9em) rotateX(90deg) rotateZ(-13deg);
+}
+
+.pad > span,
+.pad::before { position: absolute; }
+
+.pad::before {
+  content: "";
+  left: 0.9em;
+  right: 0.9em;
+  top: 0;
+  height: 4.6em;
+  border-radius: 2.2em 2.2em 1.4em 1.4em;
+  background: linear-gradient(180deg, #3a4058, #151824);
+  box-shadow: 0 0 0 0.1em #05060c;
+}
+
+.pad .gl,
+.pad .gr {
+  top: 1.7em;
+  width: 3.4em;
+  height: 4.9em;
+  border-radius: 1.7em 1.7em 2em 2em;
+  background: linear-gradient(180deg, #2c3248, #11141f);
+  box-shadow: 0 0 0 0.1em #05060c;
+}
+
+.pad .gl { left: 0; transform: rotate(8deg); }
+.pad .gr { right: 0; transform: rotate(-8deg); }
+
+.pad .dp {
+  left: 2em;
+  top: 1.1em;
+  width: 1.9em;
+  height: 1.9em;
+  background:
+    linear-gradient(#aab2d0, #aab2d0) center / 100% 34% no-repeat,
+    linear-gradient(#aab2d0, #aab2d0) center / 34% 100% no-repeat;
+}
+
+.pad .bt {
+  right: 1.8em;
+  top: 0.9em;
+  width: 2.4em;
+  height: 2.4em;
+  background:
+    radial-gradient(circle at 50% 14%, #3fd18a 0 0.42em, transparent 0.45em),
+    radial-gradient(circle at 86% 50%, #ff4b5c 0 0.42em, transparent 0.45em),
+    radial-gradient(circle at 50% 86%, #4a8bff 0 0.42em, transparent 0.45em),
+    radial-gradient(circle at 14% 50%, #ff7bd0 0 0.42em, transparent 0.45em);
+}
+
+.pad .st {
+  top: 3.2em;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0a0c14 0 40%, #474e6c 45% 100%);
+}
+
+.pad .st.s1 { left: 3.4em; }
+.pad .st.s2 { right: 3.4em; }
+
+.memcard {
+  width: 4em;
+  height: 5.6em;
+  margin: -2.8em 0 0 -2em;
+  transform: translate3d(20em, -0.08em, 9em) rotateX(90deg) rotateZ(12deg);
+  clip-path: polygon(0 0, 78% 0, 100% 20%, 100% 100%, 0 100%);
+  background:
+    repeating-linear-gradient(90deg, #d8b04a 0 0.28em, #7a5d16 0.28em 0.34em) 50% 100% / 80% 1.1em no-repeat,
+    linear-gradient(160deg, #7cb8ff, #2a4fb8);
+}
+
+/* Cajas de juegos apoyadas en el fondo (usan las portadas de los discos) */
+.case {
+  position: absolute;
+  width: 5em;
+  height: 7em;
+  border: 0.22em solid #0b0b12;
+  border-left-width: 0.7em;
+  background: center / cover no-repeat;
+  box-shadow: 0 0.3em 0.8em rgba(0, 0, 0, 0.6);
+}
+
+.case.c1 { left: 14%; bottom: 25.5%; transform: rotate(-5deg); background-image: var(--cv-taxi-furia); }
+.case.c2 { left: 18.5%; bottom: 32.5%; transform: rotate(2deg); background-image: var(--cv-ace-combat); }
+.case.c3 { left: 77%; bottom: 27%; transform: rotate(6deg); background-image: var(--cv-zhuky-pong); }
+
+/* -----------------------------------------------------------
+   5. DISCOS EN CARRUSEL
+   ----------------------------------------------------------- */
+.ring {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transform-style: preserve-3d;
+}
+
+.disc {
+  --a: 0deg;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--disc-d);
+  height: var(--disc-d);
+  margin: calc(var(--disc-d) / -2) 0 0 calc(var(--disc-d) / -2);
+  transform-style: preserve-3d;
+  transform: translate3d(0, -23em, 0) rotateY(var(--a)) translateZ(var(--R)) rotateX(22deg);
+  transition: transform 0.85s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.disc.is-front {
+  transform: translate3d(0, -23em, 0) rotateY(var(--a)) translateZ(var(--Rf)) rotateX(22deg);
+}
+
+/* Disco elegido: vuela encima de la consola, luego baja al compartimento */
+.stage[data-phase="fly"] .disc.is-picked,
+.stage[data-phase="open"] .disc.is-picked,
+.stage[data-phase="ejectB"] .disc.is-picked {
+  transform: translate3d(0, -23em, 0) rotateY(0deg) translateZ(0em) rotateX(90deg);
+}
+
+.stage[data-phase="drop"] .disc.is-picked,
+.stage[data-phase="spin"] .disc.is-picked,
+.stage[data-phase="close"] .disc.is-picked,
+.stage[data-phase="read"] .disc.is-picked,
+.stage[data-phase="play"] .disc.is-picked,
+.stage[data-phase="ejectA"] .disc.is-picked {
+  transform: translate3d(0, -6.75em, 0) rotateY(0deg) translateZ(0em) rotateX(90deg);
+}
+
+.stage[data-phase="drop"] .disc.is-picked {
+  transition-duration: 0.8s;
+  transition-timing-function: cubic-bezier(0.55, 0, 0.35, 1);
+}
+
+/* Los demás discos se desvanecen mientras se carga el elegido */
+.disc-btn,
+.disc-rear { transition: opacity 0.5s ease; }
+
+.stage:not([data-phase="select"]):not([data-phase="ejectC"]) .disc:not(.is-picked) .disc-btn,
+.stage:not([data-phase="select"]):not([data-phase="ejectC"]) .disc:not(.is-picked) .disc-rear {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.disc-btn {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  backface-visibility: hidden;
+  color: var(--cream);
+}
+
+.disc-btn:focus-visible {
+  outline: 0.25em solid var(--cheshire);
+  outline-offset: 0.3em;
+}
+
+.disc:not(.is-front) .disc-btn { filter: brightness(0.7); }
+
+.disc-rear {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  background: conic-gradient(from 40deg, #e4e8f5, #b9c2dd, #f6f1ff, #c6d4ee, #eee4f8, #b9c2dd, #e4e8f5);
+  -webkit-mask-image: radial-gradient(circle, transparent 0 7%, #000 7.5%);
+  mask-image: radial-gradient(circle, transparent 0 7%, #000 7.5%);
+}
+
+/* Cara del disco: brillo arcoíris + portada */
+.disc-art {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, rgba(255, 255, 255, 0) 0 0.25em, rgba(0, 0, 0, 0.06) 0.3em 0.35em),
+    conic-gradient(from 20deg, #dfe6ff, #ffd9f2, #cfffee, #fff6c9, #d7e3ff, #ffd9f2, #cfffee, #dfe6ff);
+  -webkit-mask-image: radial-gradient(circle, transparent 0 7%, #000 7.5%);
+  mask-image: radial-gradient(circle, transparent 0 7%, #000 7.5%);
+  animation: disc-bob 3.4s ease-in-out infinite;
+}
+
+.disc:nth-child(2n) .disc-art { animation-delay: -1.3s; }
+.disc:nth-child(3n) .disc-art { animation-delay: -2.2s; }
+
+.stage:not([data-phase="select"]) .disc.is-picked .disc-art { animation-name: none; }
+
+/* El disco gira: arranca despacio y se acelera */
+.stage[data-phase="spin"] .disc.is-picked .disc-art {
+  animation: disc-spinup 1.4s cubic-bezier(0.5, 0, 1, 1) forwards, disc-spin 0.38s linear 1.4s infinite;
+}
+
+.stage[data-phase="close"] .disc.is-picked .disc-art,
+.stage[data-phase="read"] .disc.is-picked .disc-art {
+  animation: disc-spin 0.38s linear infinite;
+}
+
+@keyframes disc-bob {
+  50% { transform: translateY(-0.4em); }
+}
+
+@keyframes disc-spin { to { transform: rotate(360deg); } }
+
+@keyframes disc-spinup { to { transform: rotate(900deg); } }
+
+.disc-art::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: #14101f center / cover no-repeat;
+  -webkit-mask-image: radial-gradient(circle, transparent 0 9%, #000 9.5%);
+  mask-image: radial-gradient(circle, transparent 0 9%, #000 9.5%);
+}
+
+.disc[data-game="van-helsing"] .disc-art::before { background-image: var(--cv-van-helsing); }
+.disc[data-game="super-gol"] .disc-art::before { background-image: var(--cv-super-gol); }
+.disc[data-game="ace-combat"] .disc-art::before { background-image: var(--cv-ace-combat); }
+.disc[data-game="zhuky-pong"] .disc-art::before { background-image: var(--cv-zhuky-pong); }
+.disc[data-game="enjambre-galactico"] .disc-art::before { background-image: var(--cv-enjambre-galactico); }
+.disc[data-game="taxi-furia"] .disc-art::before { background-image: var(--cv-taxi-furia); }
+
+.disc-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.5) 50%, transparent 62%);
+  mix-blend-mode: soft-light;
+}
+
+/* -----------------------------------------------------------
+   6. BARRA DE CONTROLES Y TEXTOS
+   ----------------------------------------------------------- */
+.stage-title {
+  margin: 1rem 0 0.25rem;
+  text-align: center;
+  font: 400 1.5rem/1.2 'DM Serif Display', serif;
+}
+
+.stage-status {
+  min-height: 1.5em;
+  margin: 0 0 0.75rem;
+  text-align: center;
+  color: var(--bs-secondary-color);
+}
+
+.stage-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stage-bar .btn[hidden] { display: none; }
+
+/* -----------------------------------------------------------
+   7. PANTALLA DE JUEGO
+   ----------------------------------------------------------- */
+.screen-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 0 0.75rem;
+}
+
+.screen-name {
+  margin: 0;
+  font: 400 1.4rem/1.2 'DM Serif Display', serif;
+}
+
+.screen-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.screen-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 3px dashed var(--turquoise);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.screen-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.screen:fullscreen {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  background: var(--ink);
+}
+
+.screen:fullscreen .screen-frame {
+  flex: 1;
+  aspect-ratio: auto;
+}
+
+@media (max-width: 575.98px) {
+  .screen-frame { aspect-ratio: 4 / 3; }
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -----------------------------------------------------------
+   9. CELULARES Y TABLETS
+   ----------------------------------------------------------- */
+
+/* Celular vertical: carrusel más compacto para que la consola se vea más grande */
+@media (max-width: 575.98px) {
+  .scene {
+    --R: 11.5em;
+    --Rf: 13.5em;
+    --disc-d: 9.5em;
+    font-size: max(6px, min(1.1rem, calc((100vw - 2rem) / 36), calc(76vh / 44)));
+  }
+
+  .poster { width: 6.5em; height: 9em; }
+  .poster.left { left: 1em; top: 3em; }
+  .poster.right { right: 1em; top: 4em; }
+  .poster::after { font-size: 0.5em; }
+  .start-text { left: 1.5em; font-size: 0.7em; }
+  .stage-title { font-size: 1.3rem; }
+  .screen-name { font-size: 1.2rem; }
+}
+
+/* Celular de lado: la escena se ajusta a la altura de la pantalla */
+@media (orientation: landscape) and (max-height: 520px) {
+  .scene { font-size: max(7px, calc(86vh / 44)); }
+  .stage-title { margin-top: 0.5rem; }
+
+  .screen-frame {
+    aspect-ratio: auto;
+    height: calc(100vh - 6rem);
+    height: calc(100dvh - 6rem);
+    min-height: 14rem;
+  }
+}
+
+/* Pantallas táctiles: botones cómodos de tocar */
+@media (pointer: coarse) {
+  .stage-bar .btn,
+  .screen-tools .btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+}
+
+.screen-hint {
+  display: none;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color);
+}
+
+@media (max-width: 767.98px) and (orientation: portrait) {
+  .screen-hint { display: block; }
+}
+
+/* -----------------------------------------------------------
+   8. MOVIMIENTO REDUCIDO
+   ----------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .disc,
+  .lid,
+  .disc-btn,
+  .disc-rear { transition-duration: 0.01s !important; }
+
+  .disc-art,
+  .towers > span,
+  .stars::before,
+  .orb,
+  .start-text,
+  .stage[data-phase="read"] .led { animation: none !important; }
+}

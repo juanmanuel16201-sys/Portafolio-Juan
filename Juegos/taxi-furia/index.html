@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TAXI FURIA 3D · Sin groserías</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="hud" class="hidden">
+  <div id="tl">
+    <div id="waveTxt">OLEADA 1</div>
+    <div id="killTxt">Bajas 0 · Puntos 0</div>
+    <div id="leftTxt"></div>
+  </div>
+  <canvas id="radar" width="150" height="150"></canvas>
+  <div id="bossWrap" class="hidden"><div id="bossName"></div><div class="bar"><div id="bossBar"></div></div></div>
+  <div id="objective" class="hidden"></div>
+  <div id="allyBox">
+    <div>COMPAÑEROS <span id="allyTxt">0/20</span></div>
+    <div class="bar" style="position:relative"><div id="allyBar" style="width:0%"></div><div style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:#000"></div></div>
+    <div id="allyHint"></div>
+    <div id="allyList"></div>
+  </div>
+  <div id="banner"></div>
+  <div id="crosshair"></div>
+  <div id="hitmark"></div>
+  <div id="subtitle"></div>
+  <div id="allyLine"></div>
+  <div id="honkTxt" class="hidden">¡PIIIIIII!</div>
+  <div id="bl">
+    <div id="hpLabel">VIDA <span id="hpNum">200</span></div>
+    <div class="bar"><div id="hpBar"></div></div>
+    <div id="buffs"></div>
+  </div>
+  <div id="br">
+    <div id="reloadTxt"></div>
+    <div id="wName">PISTOLA</div>
+    <div id="ammo">12<small> / 60</small></div>
+    <div id="wkeys">[1] Pistola · [2] Revólver · [3] Escopeta · [R] Recargar · [V] Cámara</div>
+  </div>
+  <div id="toasts"></div>
+  <div id="shieldfx"></div>
+  <div id="vignette"></div>
+</div>
+
+<div id="touch" class="hidden">
+  <div id="lookZone"></div>
+  <div id="joyZone"></div>
+  <div id="joyBase"><div id="joyKnob"></div></div>
+  <button class="tb" id="tFire">FUEGO</button>
+  <button class="tb" id="tAim">MIRA</button>
+  <button class="tb" id="tJump">SALTAR</button>
+  <button class="tb" id="tReload">RECARGA</button>
+  <button class="tb" id="tWeapon">ARMA</button>
+  <button class="tb" id="tRun">CORRER</button>
+  <button class="tb" id="tCam">CÁMARA</button>
+  <button class="tb hidden" id="tTaxi">TAXI</button>
+  <button class="tb hidden" id="tHorn">CLAXON</button>
+  <button class="tb hidden" id="tAlly">COMPAÑEROS</button>
+  <button class="tb" id="tPause">II</button>
+  <div id="rotateMsg">Gira el celular en horizontal para jugar</div>
+</div>
+
+<div id="menu" class="overlay">
+  <h1>TAXI<br>FURIA</h1>
+  <p class="sub">Te chocaron el taxi. Hoy nadie se salva.</p>
+  <p>Sobrevive a oleadas infinitas de civiles, taxistas, policías y, más adelante, demonios y monstruos del infierno. Cada 3 oleadas aparece un <b>JEFE GIGANTE</b>.
+     Recoge munición, curación y poderes de los caídos, y con la barra de bajas llena invoca hasta <b>dos compañeros</b> que te ayudan, incluso desde el taxi.<br>Al terminar cada oleada <b>sube al taxi</b> y maneja a la siguiente zona: en el camino te atacan y puedes <b>atropellarlos</b>. Si chocas fuerte contra un <b>edificio</b>, el viaje termina y la siguiente oleada empieza ahí. Los policías sueltan <b>armas especiales</b>.</p>
+  <div class="keys deskOnly">
+    <div><b>W A S D</b> moverse</div>
+    <div><b>Mouse</b> apuntar</div>
+    <div><b>Clic izq.</b> disparar</div>
+    <div><b>Shift</b> correr</div>
+    <div><b>Espacio</b> saltar</div>
+    <div><b>1 - 7</b> arma (o rueda)</div>
+    <div><b>Clic der.</b> apuntar (zoom)</div>
+    <div><b>F</b> subir al taxi</div>
+    <div><b>R</b> recargar</div>
+    <div><b>V</b> 1ª / 3ª persona</div>
+    <div><b>E</b> invocar compañeros</div>
+    <div><b>H</b> claxon (o clic al manejar)</div>
+    <div><b>Esc</b> pausa</div>
+  </div>
+  <div class="tkeys"><b>Joystick izquierdo</b>: moverte y manejar · <b>Arrastra a la derecha</b>: apuntar · <b>FUEGO</b>: disparar y claxon · <b>TAXI</b> aparece al terminar cada oleada.</div>
+  <p class="sub deskOnly">Teclado y mouse, o toca «Jugar en celular» si usas pantalla táctil.</p>
+  <div><button class="btn" id="btnStart">¡A DISPARAR!</button><button class="btn alt" id="btnStartTouch">JUGAR EN CELULAR</button></div>
+</div>
+
+<div id="pause" class="overlay hidden">
+  <h2>PAUSA</h2>
+  <p>Toca CONTINUAR para volver a la acción.</p>
+  <button class="btn" id="btnResume">CONTINUAR</button>
+</div>
+
+<div id="over" class="overlay hidden">
+  <h2>¡SE ACABÓ LA CARRERA!</h2>
+  <p id="overStats"></p>
+  <p class="sub" id="overLine"></p>
+  <button class="btn" id="btnRetry">OTRA VEZ</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

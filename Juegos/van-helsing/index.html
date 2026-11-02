@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Van Helsing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Barlow+Condensed:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="hud" hidden>
+  <div class="ov" id="vign"></div><div class="ov" id="inv"></div><div class="ov" id="stone"></div>
+  <div class="shade t"></div><div class="shade b"></div>
+  <div class="hz" id="hSoul">
+    <div class="kills"><b id="killsTxt">0</b>almas</div>
+    <div class="lbl"><span>Chamán</span><b id="chargeTxt">0/12</b></div>
+    <div class="bar charge" id="chargeBar"><i id="chargeFill" style="width:0"></i></div>
+    <div id="summonHint"></div>
+  </div>
+  <div class="hz" id="hWave">
+    <div id="waveTxt">Oleada 1</div>
+    <div id="waveSub"></div>
+    <div id="boss" hidden><div id="bossName"></div><div class="bar"><i id="bossFill"></i></div></div>
+    <div id="toasts"></div>
+  </div>
+  <div class="hz" id="hVit">
+    <div id="powers"></div>
+    <div id="allies"></div>
+    <div class="vitHp"><div class="lbl"><span>Van Helsing</span><b id="hpTxt">200 / 200</b></div><div class="bar"><i id="hpFill"></i></div></div>
+  </div>
+  <div class="hz" id="hWep">
+    <div id="wName"></div>
+    <div class="wrow"><span id="gren"></span><span id="wAmmo"></span></div>
+    <div id="slots"></div>
+  </div>
+  <canvas id="radar" width="140" height="140"></canvas>
+  <div id="dmgDir"></div>
+  <div id="cross"></div><div id="hitm"></div>
+  <div id="banner"></div>
+</div>
+
+<div id="touch" hidden>
+  <div id="lookZone"></div>
+  <div id="joyZone"><div id="joyBase"><span class="joyRun">Corriendo</span><div id="joyKnob"></div></div></div>
+  <button class="tb sm" id="bPause" type="button" aria-label="Pausa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg></button>
+  <button class="tb sm" id="bView" type="button" aria-label="Cambiar cámara"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+  <div id="btns">
+    <button class="tb" id="bFire" type="button" aria-label="Disparar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></svg></button>
+    <button class="tb" id="bAgua" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4.5 6 8 6 11a6 6 0 0 1-12 0c0-3 3-6.5 6-11z"/></svg><small>Agua</small><span class="badge" id="bAguaN">3</span></button>
+    <button class="tb" id="bJump" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6M6 19l6-6 6 6"/></svg><small>Saltar</small></button>
+    <button class="tb" id="bWeap" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h14l-3-3M20 15H6l3 3"/></svg><small>Arma</small></button>
+    <button class="tb" id="bSummon" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6L3.3 9.2l6.1-.6z"/></svg><small>Chamán</small></button>
+  </div>
+</div>
+
+<div id="rotate" hidden><div><i></i><b>Gira el teléfono</b><p>Van Helsing se juega con el celular en horizontal.</p></div></div>
+
+<div class="screen" id="menu">
+  <div class="plaque">
+    <div class="mhead">
+      <div class="eyebrow">Cazador de monstruos · desde 1897</div>
+      <h1>Van <em>Helsing</em></h1>
+      <p>Drácula reunió a los monstruos de todas las leyendas. Escoge el campo de batalla, aguanta las oleadas y tumba a un jefe cada tres rondas.</p>
+    </div>
+    <div class="cols">
+      <section>
+        <h3>Escoge el mapa</h3>
+        <div class="maps" id="maps"></div>
+      </section>
+      <aside>
+        <div class="optg"><h3>Cámara</h3><div class="seg" id="segCam"><button type="button" data-v="1">Primera persona</button><button type="button" data-v="3">Tercera persona</button></div></div>
+        <div class="optg"><h3>Gráficos</h3><div class="seg" id="segQ"><button type="button" data-v="alta">Alta</button><button type="button" data-v="media">Media</button><button type="button" data-v="baja">Baja</button></div></div>
+        <div class="optg"><h3>Sensibilidad de la mira</h3><label class="sens"><input type="range" id="sens" min="0.4" max="2.2" step="0.1" value="1"><output id="sensO">1.0</output></label></div>
+        <details class="ctl" id="ctl" open>
+          <summary>Controles</summary>
+          <div class="keys desk">
+            <kbd>WASD</kbd><span>Moverse · Shift corre · Espacio salta</span>
+            <kbd>Ratón</kbd><span>Apuntar y disparar (clic para fijar el ratón)</span>
+            <kbd>1 a 8</kbd><span>Revólver, escopeta y ballesta desde el inicio. Las armas 4 a 8 las sueltan monstruos y jefes</span>
+            <kbd>G</kbd><span>Lanzar agua bendita</span>
+            <kbd>Q</kbd><span>Invocar chamán aliado (barra llena, máximo dos)</span>
+            <kbd>V</kbd><span>Cambiar cámara · Esc pausa</span>
+          </div>
+          <div class="keys mob">
+            <kbd>Izquierda</kbd><span>Joystick (empuja al borde para correr)</span>
+            <kbd>Derecha</kbd><span>Arrastra para apuntar</span>
+            <kbd>Botones</kbd><span>Fuego (también apunta al arrastrar), Saltar, Agua, Arma, Chamán y Vista</span>
+            <kbd>Armas</kbd><span>Toca los números de abajo para cambiar de arma</span>
+            <kbd>Puntería</kbd><span>Al disparar, la mira se pega un poco al monstruo más cercano</span>
+          </div>
+        </details>
+      </aside>
+    </div>
+    <div class="startbar">
+      <div><small>Mapa elegido</small><b id="selMap"></b></div>
+      <button class="go" id="startBtn" type="button">Empezar la cacería</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="over" hidden>
+  <div class="plaque" style="max-width:620px">
+    <div class="eyebrow" id="oMap">Descansa en paz</div>
+    <h1 style="font-size:clamp(46px,10vw,88px)">Van Helsing <em>cayó</em></h1>
+    <div class="stats">
+      <div><b id="oWave">0</b><small>Oleada</small></div>
+      <div><b id="oKills">0</b><small>Almas cazadas</small></div>
+      <div><b id="oBoss">0</b><small>Jefes</small></div>
+      <div><b id="oBest">0</b><small>Mejor oleada</small></div>
+    </div>
+    <p id="oLine"></p>
+    <div class="row"><button class="go" id="againBtn" type="button">Volver a cazar</button><button class="ghost" id="mapBtn" type="button">Cambiar de mapa</button></div>
+  </div>
+</div>
+
+<div id="loading" hidden>
+  <canvas id="loadArt"></canvas>
+  <div class="ldInner">
+    <div id="ldEyebrow">Van Helsing · cargando mapa</div>
+    <h2 id="ldName"></h2>
+    <div id="ldSub"></div>
+    <div id="ldBoss"></div>
+    <div id="ldTip"></div>
+    <div class="ldBar"><i id="ldBar"></i></div>
+    <div id="ldStep"></div>
+    <button class="go" id="ldGo" type="button" hidden>Entrar a cazar</button>
+  </div>
+</div>
+
+<div class="screen" id="pause" hidden>
+  <div class="plaque" style="max-width:560px">
+    <div class="eyebrow">Pausa</div>
+    <h2>Los monstruos esperan.</h2>
+    <div class="row"><button class="go" id="resumeBtn" type="button">Seguir cazando</button><button class="ghost" id="quitBtn" type="button">Salir al menú</button></div>
+  </div>
+</div>
+
+<!-- Three.js r128 y post-procesado (copias locales) -->
+<script src="lib/three.min.js"></script>
+<script src="lib/shaders/CopyShader.js"></script>
+<script src="lib/shaders/LuminosityHighPassShader.js"></script>
+<script src="lib/shaders/FXAAShader.js"></script>
+<script src="lib/postprocessing/EffectComposer.js"></script>
+<script src="lib/postprocessing/RenderPass.js"></script>
+<script src="lib/postprocessing/ShaderPass.js"></script>
+<script src="lib/postprocessing/UnrealBloomPass.js"></script>
+
+<!-- Juego, en orden de carga -->
+<script src="js/00-config.js"></script>
+<script src="js/01-renderer.js"></script>
+<script src="js/02-utilidades.js"></script>
+<script src="js/03-audio.js"></script>
+<script src="js/04-mundo.js"></script>
+<script src="js/05-decoracion.js"></script>
+<script src="js/06-mapas.js"></script>
+<script src="js/07-personajes.js"></script>
+<script src="js/08-monstruos.js"></script>
+<script src="js/09-armas.js"></script>
+<script src="js/10-cazador.js"></script>
+<script src="js/11-estado.js"></script>
+<script src="js/12-interfaz.js"></script>
+<script src="js/13-combate.js"></script>
+<script src="js/14-oleadas.js"></script>
+<script src="js/15-botin.js"></script>
+<script src="js/16-aliados.js"></script>
+<script src="js/17-acciones.js"></script>
+<script src="js/18-transformaciones.js"></script>
+<script src="js/19-actualizacion.js"></script>
+<script src="js/20-hud.js"></script>
+<script src="js/21-menu.js"></script>
+<script src="js/22-flujo.js"></script>
+<script src="js/23-controles.js"></script>
+<script src="js/24-bucle.js"></script>
+</body>
+</html>

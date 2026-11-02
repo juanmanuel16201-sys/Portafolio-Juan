@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Super Gol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game" aria-label="Cancha de fútbol callejero en 3D"></canvas>
+  <canvas id="hud" aria-hidden="true"></canvas>
+
+  <div class="topbar">
+    <button id="btnPause" class="icon-btn" aria-label="Pausa" hidden><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button>
+    <button id="btnMusic" class="icon-btn" aria-label="Música" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <button id="btnFull" class="icon-btn" aria-label="Pantalla completa" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+  </div>
+
+  <section id="scrTitle" class="screen">
+    <div class="title-wrap">
+      <p class="kicker">Fútbol callejero · 4 contra 4 · trucos, poderes y combos</p>
+      <h1 class="logo"><span>SUPER</span><span>GOL</span></h1>
+      <nav class="menu" aria-label="Menú principal">
+        <button class="btn hot" data-go="1p">1 Jugador</button>
+        <button class="btn" data-go="2p">2 Jugadores</button>
+        <button class="btn ghost" data-go="controls">Controles</button>
+      </nav>
+      <p class="hint" id="audioHint">Haz clic o presiona una tecla para activar la música</p>
+      <p class="err" id="errMsg" hidden>No se pudo cargar el motor 3D. Revisa tu conexión a internet y recarga la página.</p>
+    </div>
+  </section>
+
+  <section id="scrSelect" class="screen" hidden>
+    <div class="panel select">
+      <h2>Elige tus equipos</h2>
+      <div class="cards">
+        <article class="card">
+          <header><span class="tag p1" id="tag0">Jugador 1</span><span class="keys">A / D</span></header>
+          <div class="pick">
+            <button class="arrow" data-side="0" data-d="-1" aria-label="Equipo anterior">‹</button>
+            <canvas class="prev" id="prev0" width="440" height="440"></canvas>
+            <button class="arrow" data-side="0" data-d="1" aria-label="Equipo siguiente">›</button>
+          </div>
+          <h3 class="tname" id="tname0"></h3>
+          <p class="tkind" id="tkind0"></p>
+          <div class="power" id="tpow0"></div>
+          <dl class="stats" id="tstat0"></dl>
+        </article>
+        <div class="vs">VS</div>
+        <article class="card">
+          <header><span class="tag cpu" id="tag1">CPU</span><span class="keys">← / →</span></header>
+          <div class="pick">
+            <button class="arrow" data-side="1" data-d="-1" aria-label="Equipo anterior">‹</button>
+            <canvas class="prev" id="prev1" width="440" height="440"></canvas>
+            <button class="arrow" data-side="1" data-d="1" aria-label="Equipo siguiente">›</button>
+          </div>
+          <h3 class="tname" id="tname1"></h3>
+          <p class="tkind" id="tkind1"></p>
+          <div class="power" id="tpow1"></div>
+          <dl class="stats" id="tstat1"></dl>
+        </article>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="olabel">Cancha</span><div class="chips" id="optArena"></div></div>
+        <div class="opt"><span class="olabel">Duración</span><div class="chips" id="optTime"></div></div>
+        <div class="opt" id="optDiffWrap"><span class="olabel">Dificultad CPU</span><div class="chips" id="optDiff"></div></div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="btnBack">Volver</button>
+        <button class="btn hot" id="btnPlay">¡A jugar!</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrControls" class="screen" hidden>
+    <div class="sheet">
+      <h2>Controles</h2>
+      <div class="wrapx">
+        <table class="ctable">
+          <thead><tr><th>Acción</th><th>Jugador 1</th><th>Jugador 2</th><th>Control</th></tr></thead>
+          <tbody>
+            <tr><td>Mover</td><td><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></td><td>Flechas</td><td>Stick / cruceta</td></tr>
+            <tr><td>Pase · cambiar jugador</td><td><kbd>C</kbd></td><td><kbd>K</kbd> o <kbd>Num1</kbd></td><td>A</td></tr>
+            <tr><td>Tiro · barrida</td><td><kbd>V</kbd></td><td><kbd>L</kbd> o <kbd>Num2</kbd></td><td>B</td></tr>
+            <tr><td>Truco · sprint</td><td><kbd>B</kbd></td><td><kbd>Ñ</kbd> o <kbd>Num3</kbd></td><td>X</td></tr>
+            <tr><td>Poder del equipo</td><td><kbd>X</kbd></td><td><kbd>O</kbd> o <kbd>Num0</kbd></td><td>Y</td></tr>
+            <tr class="star"><td>Combo · estrella</td><td><kbd>Z</kbd></td><td><kbd>U</kbd> o <kbd>Num+</kbd></td><td>RB</td></tr>
+            <tr><td>Pausa</td><td colspan="2"><kbd>Esc</kbd> o <kbd>P</kbd></td><td>Start</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="tips">
+        <li>La barra <b>COMBO</b> se llena sola con el tiempo. Cuando esté llena, actívala y aparece una <b>estrella</b> en el centro de la cancha.</li>
+        <li>Pasa por la estrella con el balón: sale un <b>Súper Cañonazo</b>. O es gol, o noquea al arquero unos segundos.</li>
+        <li>Los <b>trucos</b> cerca de un rival dan puntos de <b>ESTILO</b>, esquivan entradas y llenan la barra de PODER.</li>
+        <li>Mantén <b>Tiro</b> para cargar. Mantén <b>Pase</b> para un pase elevado.</li>
+        <li>Sin balón, <b>Tiro</b> es barrida y <b>Truco</b> es sprint. Las paredes rebotan. Empate al final = gol de oro.</li>
+      </ul>
+      <button class="btn" id="btnCtlBack">Volver</button>
+    </div>
+  </section>
+
+  <section id="scrPause" class="screen" hidden>
+    <div class="sheet stack" style="width:min(100%,380px)">
+      <h2>Pausa</h2>
+      <button class="btn hot" id="btnResume">Seguir</button>
+      <button class="btn" id="btnRestart">Reiniciar</button>
+      <button class="btn ghost" id="btnPauseCtl">Controles</button>
+      <button class="btn ghost" id="btnQuit">Menú principal</button>
+    </div>
+  </section>
+
+  <section id="scrEnd" class="screen" hidden>
+    <div class="sheet" style="width:min(100%,520px)">
+      <p class="result" id="endTitle"></p>
+      <p class="final" id="endScore"></p>
+      <div class="wrapx"><table class="ctable" id="endStats"></table></div>
+      <div class="stack">
+        <button class="btn hot" id="btnRematch">Revancha</button>
+        <button class="btn" id="btnChange">Cambiar equipos</button>
+        <button class="btn ghost" id="btnMenu">Menú principal</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="touch" hidden>
+    <div id="stickZone"><div id="stick"><div id="knob"></div></div></div>
+    <p id="rotHint">↻ Gira el celular para verlo más grande</p>
+    <div id="tbtns">
+      <button class="tb sp" data-a="combo"><span class="ic"></span><b>COMBO</b></button>
+      <button class="tb sp" data-a="power"><span class="ic"></span><b>PODER</b></button>
+      <button class="tb md" data-a="trick"><span class="ic"></span><b>TRUCO</b></button>
+      <button class="tb md" data-a="pass"><span class="ic"></span><b>PASE</b></button>
+      <button class="tb lg" data-a="shoot"><span class="ic"></span><b>TIRO</b></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

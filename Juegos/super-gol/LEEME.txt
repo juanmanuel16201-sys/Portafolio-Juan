@@ -1,0 +1,18 @@
+SUPER GOL - Futbol callejero 3D
+
+Estructura:
+  index.html      Estructura de la pagina: menus, pantallas y controles tactiles
+  css/styles.css  Estilos: menus, botones, HUD y controles de celular
+  js/game.js      Todo el juego: datos de equipos, audio, motor 3D, canchas, IA, fisica, HUD y controles
+
+Como abrirlo:
+  1. Abre la carpeta "super-gol" en VS Code.
+  2. Clic derecho en index.html > "Open with Live Server" (extension Live Server).
+     Tambien puedes abrir index.html con doble clic en el navegador.
+  3. Necesitas internet la primera vez: el motor 3D (Three.js r128) y las fuentes se cargan desde la web.
+
+Controles en PC:
+  Jugador 1: WASD mover, C pase, V tiro, B truco, X poder, Z combo
+  Jugador 2: Flechas mover, K pase, L tiro, Ñ truco, O poder, U combo
+  Pausa: Esc o P
+En celular aparecen los controles tactiles automaticamente.

@@ -1,0 +1,23 @@
+/* Layout: gabinete arcade de una pantalla — canvas centrado, mando táctil debajo en móviles */
+:root{
+  --void:#04050d; --panel:#0b0e22; --ink:#e9ecff; --cyan:#4fe3ff; --red:#ff3b5c; --edge:#1f2758;
+  --font:'Silkscreen','Courier New',monospace;
+  color-scheme:dark;
+}
+html{height:100%;box-sizing:border-box;background:var(--void)}
+*,*::before,*::after{box-sizing:inherit}
+body{height:100%;margin:0;background:var(--void);color:var(--ink);font-family:var(--font);
+  display:flex;flex-direction:column;gap:10px;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px;
+  touch-action:none;user-select:none;-webkit-user-select:none}
+#stage{flex:1;min-height:0;display:grid;place-items:center}
+canvas{display:block;image-rendering:pixelated;background:#000;border:2px solid var(--edge);border-radius:4px;
+  box-shadow:0 0 0 1px #000,0 0 48px rgba(79,227,255,.12)}
+#pad{display:none;gap:10px;max-width:520px;width:100%;margin:0 auto}
+@media (pointer:coarse){#pad{display:flex}}
+.pbtn{font:700 18px var(--font);color:var(--ink);background:var(--panel);border:2px solid var(--edge);
+  border-radius:10px;padding-block:16px;flex:1;touch-action:none;-webkit-tap-highlight-color:transparent}
+.pbtn.fire{flex:1.7;color:#140008;background:var(--red);border-color:#ff8aa0}
+.pbtn.sm{flex:0 0 54px;font-size:13px}
+.pbtn.on{filter:brightness(1.5)}
+.pbtn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}

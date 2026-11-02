@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juegos — Juan Ramírez</title>
+  <meta name="description" content="Videojuegos creados por Juan Ramírez: elige un disco, enciende la consola y juega.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/consola.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<!--
+  CÓMO PERSONALIZAR ESTA PÁGINA
+  1. Cada juego tiene DOS bloques:
+     a) un disco  <li class="disc" ...>  dentro del <ul class="ring">
+     b) una ficha <article class="card game game-info" id="info-NOMBRE">
+        con la descripción y los controles.
+     El nombre (data-game="van-helsing") del disco debe coincidir con el
+     id de la ficha ("info-van-helsing").
+  2. La portada de cada disco es una imagen de imagenes/portadas/ (la
+     pantalla de inicio del juego). Para cambiarla, reemplaza el archivo
+     o edita .disc[data-game="..."] en css/consola.css.
+  3. La carpeta de cada juego está en Juegos/nombre-del-juego/. Si cambias
+     el nombre de una carpeta, cambia el href de su ficha.
+  4. Para agregar un juego nuevo: copia un disco y una ficha completos,
+     cambia los nombres y pega la carpeta del juego en Juegos/. El
+     carrusel reparte los discos solo (con 6 a 8 se ve mejor).
+-->
+
+  <header>
+    <nav class="navbar navbar-expand-md border-bottom">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="blog.html">Bitácora</a></li>
+            <li class="nav-item"><a class="nav-link" href="postproduccion.html">Postproducción</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="juegos.html">Juegos</a></li>
+            <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="py-5">
+      <div class="container">
+        <div class="mb-4">
+          <h2>Juegos</h2>
+          <p>Elige un disco, enciende la consola y juega sin salir de la página.</p>
+        </div>
+
+        <div class="stage" id="stage" data-phase="select">
+
+          <div class="scene" id="scene" role="group" aria-label="Carrusel de discos sobre la consola">
+            <span class="bg" aria-hidden="true">
+                <span class="stars"></span>
+                <span class="poster left"></span>
+                <span class="poster right"></span>
+                <span class="orb o1"></span>
+                <span class="orb o2"></span>
+                <span class="orb o3"></span>
+                <span class="towers">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </span>
+                <span class="case c2"></span>
+                <span class="case c1"></span>
+                <span class="case c3"></span>
+                <span class="start-text">PRESIONA START</span>
+              </span>
+
+            <div class="world">
+              <span class="floor" aria-hidden="true"></span>
+              <span class="floor-shadow" aria-hidden="true"></span>
+                <span aria-hidden="true" class="pad"><span class="gl"></span><span class="gr"></span><span class="dp"></span><span class="bt"></span><span class="st s1"></span><span class="st s2"></span></span>
+                <span aria-hidden="true" class="memcard"></span>
+
+              <span class="ps2" aria-hidden="true">
+                <span class="ps2-top">
+                  <span class="well"></span>
+                  <span class="glow"></span>
+                  <span class="vents"></span>
+                  <span class="lid">
+                    <span class="lid-top"><span class="logo">JR·STATION<b>2</b></span></span>
+                    <span class="lid-under"></span>
+                  </span>
+                </span>
+                <span class="ps2-front">
+                  <span class="pwr"></span>
+                  <span class="led"></span>
+                  <span class="rst"></span>
+                  <span class="tray"><span></span></span>
+                  <span class="eject"></span>
+                  <span class="mem m1"></span>
+                  <span class="mem m2"></span>
+                  <span class="port p1"></span>
+                  <span class="port p2"></span>
+                </span>
+              </span>
+
+          <ul class="ring">
+            <li class="disc" data-game="van-helsing" data-title="Van Helsing">
+              <button type="button" class="disc-btn" aria-label="Van Helsing, disco 1 de 6">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+            <li class="disc" data-game="super-gol" data-title="Super Gol">
+              <button type="button" class="disc-btn" aria-label="Super Gol, disco 2 de 6">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+            <li class="disc" data-game="ace-combat" data-title="Ace Combat">
+              <button type="button" class="disc-btn" aria-label="Ace Combat, disco 3 de 6">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+            <li class="disc" data-game="zhuky-pong" data-title="Zhuky Pong">
+              <button type="button" class="disc-btn" aria-label="Zhuky Pong, disco 4 de 6">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+            <li class="disc" data-game="enjambre-galactico" data-title="Enjambre Galáctico">
+              <button type="button" class="disc-btn" aria-label="Enjambre Galáctico, disco 5 de 6">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+            <li class="disc" data-game="taxi-furia" data-title="Taxi Furia">
+              <button type="button" class="disc-btn" aria-label="Taxi Furia, disco 6 de 6">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+          </ul>
+            </div>
+            <span class="crt" aria-hidden="true"></span>
+          </div>
+
+          <p class="stage-title" id="stageTitle"></p>
+          <p class="stage-status" id="status" aria-live="polite"></p>
+
+          <p class="stage-bar">
+            <button type="button" class="btn btn-outline-primary" id="btnPrev" aria-label="Disco anterior">&lsaquo; Anterior</button>
+            <button type="button" class="btn btn-primary" id="btnInsert">Insertar disco</button>
+            <button type="button" class="btn btn-outline-primary" id="btnNext" aria-label="Disco siguiente">Siguiente &rsaquo;</button>
+            <button type="button" class="btn btn-outline-primary" id="btnMute" aria-pressed="false">Sonido: encendido</button>
+            <button type="button" class="btn btn-outline-primary" id="btnSkip" hidden>Saltar animación</button>
+          </p>
+
+          <div class="screen" id="screen" role="region" aria-label="Pantalla del juego" hidden>
+            <div class="screen-bar">
+              <p class="screen-name" id="screenName"></p>
+              <p class="screen-tools">
+                <button type="button" class="btn btn-primary" id="btnBack">&lsaquo; Elegir otro juego</button>
+                <button type="button" class="btn btn-outline-primary" id="btnFull">Pantalla completa</button>
+                <a class="btn btn-outline-primary" id="linkNew" href="juegos.html" target="_blank" rel="noopener">Pestaña nueva</a>
+              </p>
+            </div>
+            <div class="screen-frame">
+              <iframe id="gameFrame" title="Juego seleccionado" allow="fullscreen; autoplay; gamepad; accelerometer; gyroscope" allowfullscreen></iframe>
+            </div>
+            <p class="screen-hint">Para jugar mejor, gira el celular en horizontal y toca «Pantalla completa».</p>
+          </div>
+        </div>
+
+        <div class="row justify-content-center g-4 mt-2">
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-van-helsing">
+            <div class="card-body">
+              <p class="card-tag">Acción · Shooter 3D</p>
+              <h3 class="h4">Van Helsing</h3>
+              <p class="card-text">Shooter 3D de cazar monstruos y leyendas. Recorre escenarios como el cementerio, el castillo de Drácula, el Olimpo y el Valle de los Reyes; contra los jefes te transformas en una criatura con poderes propios. Funciona en PC y celular.</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>W A S D</kbd></dt><dd>Moverse</dd>
+                <dt><kbd>Shift / Espacio</kbd></dt><dd>Correr / saltar</dd>
+                <dt><kbd>Ratón</kbd></dt><dd>Apuntar y disparar</dd>
+                <dt><kbd>1 – 8</kbd></dt><dd>Cambiar de arma</dd>
+                <dt><kbd>G</kbd></dt><dd>Poder especial (agua bendita)</dd>
+                <dt><kbd>Q / V / Esc</kbd></dt><dd>Chamán / cámara / pausa</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/van-helsing/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-super-gol">
+            <div class="card-body">
+              <p class="card-tag">Deportes · Fútbol 3D</p>
+              <h3 class="h4">Super Gol</h3>
+              <p class="card-text">Fútbol callejero 3D con menú y música, equipos, poderes y supertiro combo. Se juega de 1 o 2 jugadores, y también en celular con controles táctiles.</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>W A S D</kbd></dt><dd>Jugador 1: moverse</dd>
+                <dt><kbd>C / V / B</kbd></dt><dd>J1: pase / tiro / truco</dd>
+                <dt><kbd>X / Z</kbd></dt><dd>J1: poder / combo</dd>
+                <dt><kbd>Flechas</kbd></dt><dd>Jugador 2: moverse</dd>
+                <dt><kbd>K / L / Ñ</kbd></dt><dd>J2: pase / tiro / truco</dd>
+                <dt><kbd>Esc o P</kbd></dt><dd>Pausa</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/super-gol/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-ace-combat">
+            <div class="card-body">
+              <p class="card-tag">Acción · Combate aéreo</p>
+              <h3 class="h4">Ace Combat</h3>
+              <p class="card-text">Combate aéreo en 3D: elige tu avión en el hangar, despega de la base o del portaaviones y derriba enemigos en misiones de campaña, con épocas modernas y de hélice. Control fácil o avanzado.</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>W / S</kbd></dt><dd>Subir y bajar</dd>
+                <dt><kbd>A / D</kbd></dt><dd>Girar</dd>
+                <dt><kbd>Clic o Espacio</kbd></dt><dd>Disparar</dd>
+                <dt><kbd>1 2 3 / R</kbd></dt><dd>Cambiar arma / recargar</dd>
+                <dt><kbd>G / V</kbd></dt><dd>Escudo / overdrive</dd>
+                <dt><kbd>C / P</kbd></dt><dd>Cabina / pausa</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/ace-combat/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-zhuky-pong">
+            <div class="card-body">
+              <p class="card-tag">Arcade · Pong playero</p>
+              <h3 class="h4">Zhuky Pong</h3>
+              <p class="card-text">Ping pong con tema de playa y mar, donde Zhuky, una máquina burlona que casi nunca falla, te desafía. Modos de 1 jugador, 2 jugadores y 2 vs 2 máquinas. Cuidado con los remolinos y los objetos de piscina.</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>Ratón</kbd></dt><dd>Mover la paleta (1 jugador)</dd>
+                <dt><kbd>W / S</kbd></dt><dd>Jugador 1</dd>
+                <dt><kbd>↑ / ↓</kbd></dt><dd>Jugador 2</dd>
+                <dt><kbd>1 2 3 / R</kbd></dt><dd>Responderle a Zhuky</dd>
+                <dt><kbd>P / M</kbd></dt><dd>Pausa / sonido</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/zhuky-pong/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-enjambre-galactico">
+            <div class="card-body">
+              <p class="card-tag">Arcade · Espacio</p>
+              <h3 class="h4">Enjambre Galáctico</h3>
+              <p class="card-text">Shooter arcade estilo Galaga: defiende la galaxia de oleadas de enemigos hasta enfrentar a la Nave Madre. Hecho sin librerías, solo HTML, CSS y JavaScript.</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>← → o A / D</kbd></dt><dd>Mover la nave</dd>
+                <dt><kbd>Espacio o Z</kbd></dt><dd>Disparar</dd>
+                <dt><kbd>P o Esc</kbd></dt><dd>Pausa</dd>
+                <dt><kbd>M</kbd></dt><dd>Sonido</dd>
+                <dt><kbd>↑ ↓ + Enter</kbd></dt><dd>Elegir en el menú</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/enjambre-galactico/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-taxi-furia">
+            <div class="card-body">
+              <p class="card-tag">Acción · Shooter 3D</p>
+              <h3 class="h4">Taxi Furia</h3>
+              <p class="card-text">«Te chocaron el taxi. Hoy nadie se salva.» Sobrevive a oleadas infinitas con un jefe gigante cada 3 oleadas, recoge munición y poderes, invoca compañeros y sube al taxi entre oleadas. Funciona en PC y celular.</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>W A S D</kbd></dt><dd>Moverse</dd>
+                <dt><kbd>Ratón / clic</kbd></dt><dd>Apuntar / disparar</dd>
+                <dt><kbd>1 – 7 / R</kbd></dt><dd>Arma / recargar</dd>
+                <dt><kbd>F / H</kbd></dt><dd>Subir al taxi / claxon</dd>
+                <dt><kbd>E</kbd></dt><dd>Invocar compañeros</dd>
+                <dt><kbd>V / Esc</kbd></dt><dd>Cámara / pausa</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/taxi-furia/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-top py-4">
+    <div class="container d-flex justify-content-between flex-wrap gap-2">
+      <span class="text-secondary-emphasis">© 2026 Juan Ramírez. Ingeniería Multimedia.</span>
+      <a href="contacto.html">Escríbeme</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/consola.js" defer></script>
+</body>
+</html>

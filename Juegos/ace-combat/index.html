@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ace Combat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div id="stage"></div>
+<canvas id="hud"></canvas>
+<div id="vignette"></div>
+
+<div id="ui" hidden>
+  <div id="tl">
+    <div id="topbar" class="panel">
+      <div class="stat"><span class="k" id="lWave">OLEADA</span><b id="sWave">1</b></div>
+      <div class="stat"><span class="k">PUNTOS</span><b id="sScore">0</b></div>
+      <div class="stat"><span class="k">DERRIBOS</span><b id="sKills">0</b></div>
+      <div class="stat"><span class="k">HOSTILES</span><b id="sHost">0</b></div>
+    </div>
+    <div id="obj" class="panel" hidden><span class="k" id="oCode"></span><b id="oTxt"></b></div>
+  </div>
+  <div id="tr">
+    <div id="topbtns">
+      <button class="tbtn" id="bCam" type="button"><span class="full">CÁMARA · C</span><span class="short">CÁM</span></button>
+      <button class="tbtn" id="bMute" type="button"><span class="full">SONIDO: SÍ</span><span class="short">♪</span></button>
+      <button class="tbtn" id="bPause" type="button"><span class="full">PAUSA</span><span class="short">II</span></button>
+    </div>
+    <div id="feed"></div>
+  </div>
+  <div id="radio" hidden><span id="rWho"></span><p id="rTxt"></p></div>
+  <div id="vitals" class="panel">
+    <div class="row"><span class="k">CASCO</span><b id="hpNum">1000</b><span class="dim" id="hpMax">/ 1000</span></div>
+    <div class="bar hp" id="hpWrap"><i id="hpBar"></i></div>
+    <div class="row"><span class="k">ACELERADOR</span><span class="thr" id="thrNum">65%</span></div>
+    <div class="bar th" id="thWrap"><i id="thBar"></i><s></s></div>
+    <div class="row"><span class="k" id="lAB">POSTCOMBUSTIÓN</span></div>
+    <div class="bar en"><i id="enBar"></i></div>
+    <div class="chips">
+      <div class="chip" id="cShield">ESCUDO<em>G</em></div>
+      <div class="chip od" id="cOd">OVERDRIVE<em>V</em></div>
+      <div class="chip" id="cFlare">BENGALAS ×3<em>F</em></div>
+    </div>
+  </div>
+  <div id="arsenal">
+    <div id="mode">DISPARO MANUAL · T</div>
+    <div class="slots" id="slots"></div>
+  </div>
+  <canvas id="radar" width="312" height="312"></canvas>
+  <div id="msg"><div id="msgBig"></div><div id="msgSub"></div></div>
+  <div id="mob" class="panel">
+    <div class="mrow"><span class="k">CASCO</span><div class="bar hp" id="mHpWrap"><i id="mHp"></i></div><b id="mHpN">1000</b></div>
+    <div class="mrow"><span id="mW">CAÑÓN</span><b id="mAmmo">250 / 1500</b><span id="mMode">MAN</span></div>
+  </div>
+  <div id="touch" hidden>
+    <div id="joy"><div id="knob"></div></div>
+    <div id="thrPad"><i id="thrFill"></i><s></s><span>ACEL</span></div>
+    <div id="tAct">
+      <button type="button" data-act="weapon">ARMA</button>
+      <button type="button" data-act="reload">RECARGA</button>
+      <button type="button" data-act="auto" id="tAuto">AUTO</button>
+      <button type="button" data-act="shield" id="tShield">ESCUDO</button>
+      <button type="button" data-act="od" id="tOd">OVERDR.</button>
+      <button type="button" data-act="flare" id="tFlare">BENG. 3</button>
+      <button type="button" class="fire" data-act="fire">FUEGO</button>
+    </div>
+  </div>
+</div>
+<div id="rotate"><b>Gira el teléfono</b><span>Ace Combat se juega en horizontal</span></div>
+<div id="film"></div>
+
+<div id="splash" class="screen">
+  <div class="eyebrow">ESCUADRÓN CÓNDOR</div>
+  <h1 class="title">ACE<span>COMBAT</span></h1>
+  <div class="press">PULSA PARA EMPEZAR</div>
+</div>
+
+<div id="menu" class="screen" hidden>
+  <div class="side">
+    <div class="eyebrow">ESCUADRÓN CÓNDOR · CALLSIGN BARBIE 01</div>
+    <h1 class="title sm">ACE<span>COMBAT</span></h1>
+    <div class="menu-list">
+      <button class="mbtn primary" id="bCampaign" type="button">CAMPAÑA<small id="mProg">0/6 COMPLETADAS</small></button>
+      <button class="mbtn" id="bStart" type="button">SUPERVIVENCIA<small>OLEADAS SIN FIN</small></button>
+      <button class="mbtn" id="bEra" type="button">ÉPOCA<small id="mEra">MODERNA</small></button>
+      <button class="mbtn" id="bCtl" type="button">CONTROL<small class="ctlTxt">FÁCIL</small></button>
+      <button class="mbtn" id="bLaunchM" type="button">DESPEGUE<small class="lm">PISTA</small></button>
+      <button class="mbtn" id="bHangar" type="button">HANGAR<small id="mPlane">CÓNDOR F-1</small></button>
+      <button class="mbtn" id="bControls" type="button">CONTROLES<small>VER MANDOS</small></button>
+      <button class="mbtn" id="bSound" type="button">SONIDO<small id="mSound">SÍ</small></button>
+    </div>
+    <label class="opt"><input type="checkbox" id="optInvert"> Invertir eje vertical</label>
+    <p class="np">Seis misiones de campaña con rango S a C, o vuelo libre contra oleadas sin fin.</p>
+  </div>
+</div>
+
+<div id="hangar" class="screen" hidden>
+  <div class="side">
+    <div class="eyebrow" id="hEye">HANGAR · ELIGE TU CAZA</div>
+    <div class="picker"><button class="arrow" id="hPrev" type="button" aria-label="Avión anterior">◀</button><div class="dots" id="hDots"></div><button class="arrow" id="hNext" type="button" aria-label="Avión siguiente">▶</button></div>
+    <div><div class="role" id="hRole"></div><h2 class="plane-name" id="hName"></h2></div>
+    <p class="lede" id="hDesc"></p>
+    <div class="stats" id="hStats"></div>
+    <div class="menu-list">
+      <button class="mbtn primary" id="hFly" type="button">CONFIRMAR<small>ENTER</small></button>
+      <button class="mbtn" id="hBack" type="button">VOLVER<small>ESC</small></button>
+    </div>
+  </div>
+</div>
+
+<div id="controls" class="screen" hidden>
+  <div class="side wide">
+    <div class="eyebrow">MANDOS DE VUELO</div>
+    <div class="ctrls">
+      <div><span>Control fácil: apunta y el avión se inclina solo</span><kbd>MENÚ · CONTROL</kbd></div>
+      <div><span>Subir / bajar</span><kbd>W / S · ratón</kbd></div>
+      <div><span>Alabeo (girar)</span><kbd>A / D · ratón</kbd></div>
+      <div><span>Timón (guiñada)</span><kbd>Q / E</kbd></div>
+      <div><span>Más / menos acelerador</span><kbd>SHIFT / X</kbd></div>
+      <div><span id="cAB">Postcombustión</span><kbd>ACELERADOR &gt; 100%</kbd></div>
+      <div><span>Disparar</span><kbd>CLIC · ESPACIO</kbd></div>
+      <div><span>Cambiar arma</span><kbd>1 2 3 · RUEDA</kbd></div>
+      <div><span>Recargar</span><kbd>R</kbd></div>
+      <div><span>Manual / automático</span><kbd>T</kbd></div>
+      <div><span id="cF">Bengalas antimisil</span><kbd>F</kbd></div>
+      <div><span>Escudo de energía</span><kbd>G</kbd></div>
+      <div><span>Overdrive</span><kbd>V</kbd></div>
+      <div><span>Rodar y despegar</span><kbd>SHIFT · luego W</kbd></div>
+      <div><span>Cabina / vista exterior</span><kbd>C</kbd></div>
+      <div><span>Pausa</span><kbd>P · ESC</kbd></div>
+    </div>
+    <p class="np">En celular: joystick a la izquierda para volar, barra ACEL a su lado para la potencia, FUEGO y armas a la derecha. Juega con el teléfono en horizontal.</p>
+    <div class="menu-list"><button class="mbtn" id="cBack" type="button">VOLVER<small>ESC</small></button></div>
+  </div>
+</div>
+
+<div id="missions" class="screen" hidden>
+  <div class="side wide" style="margin-block:auto">
+    <div class="eyebrow">CAMPAÑA · GUERRA DEL ARCHIPIÉLAGO</div>
+    <h2 class="plane-name">ELIGE TU MISIÓN</h2>
+    <div class="mlist" id="mList"></div>
+    <div class="menu-list"><button class="mbtn" id="mBack" type="button">VOLVER<small>ESC</small></button></div>
+  </div>
+</div>
+
+<div id="brief" class="screen" hidden>
+  <div class="brief">
+    <div class="side">
+      <div class="eyebrow" id="bCode">SESIÓN INFORMATIVA</div>
+      <div><div class="role" id="bArea"></div><h2 class="plane-name" id="bName"></h2></div>
+      <p class="lede" id="bText"></p>
+      <ul class="objs" id="bObj"></ul>
+      <p class="np" id="bInfo"></p>
+      <div class="menu-list">
+        <button class="mbtn primary" id="bLaunch" type="button">DESPEGAR<small>ENTER</small></button>
+        <button class="mbtn" id="bLaunchB" type="button">DESPEGUE<small class="lm">PISTA</small></button>
+        <button class="mbtn" id="bPlane" type="button">CAMBIAR AVIÓN<small id="bPlaneName"></small></button>
+        <button class="mbtn" id="bBriefBack" type="button">VOLVER<small>ESC</small></button>
+      </div>
+    </div>
+    <canvas id="bMap" width="512" height="512" aria-label="Mapa táctico de la misión"></canvas>
+  </div>
+</div>
+
+<div id="result" class="screen" hidden>
+  <div class="card">
+    <div class="eyebrow" id="rCode"></div>
+    <p class="big" id="rTitle">MISIÓN CUMPLIDA</p>
+    <p class="lede" id="rReason"></p>
+    <div class="rankrow">
+      <div><span class="k">RANGO</span><div class="rank" id="rRank">S</div></div>
+      <div class="score">
+        <div><span class="k">PUNTOS</span><b id="rScore">0</b></div>
+        <div><span class="k">TIEMPO</span><b id="rTime">0:00</b></div>
+        <div><span class="k">DERRIBOS</span><b id="rKills">0</b></div>
+        <div><span class="k">DAÑO RECIBIDO</span><b id="rDmg">0</b></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="rNext" type="button">SIGUIENTE MISIÓN</button>
+      <button class="btn ghost" id="rRetry" type="button">REINTENTAR</button>
+      <button class="btn ghost" id="rMenu" type="button">MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<div id="pause" class="screen" hidden>
+  <div class="card">
+    <div class="eyebrow">MISIÓN EN ESPERA</div>
+    <p class="big">PAUSA</p>
+    <div class="actions">
+      <button class="btn" id="bResume" type="button">REANUDAR</button>
+      <button class="btn ghost" id="bRestart" type="button">REINICIAR</button>
+      <button class="btn ghost" id="bCtlP" type="button">CONTROL: <span class="ctlTxt">FÁCIL</span></button>
+      <button class="btn ghost" id="bMenuP" type="button">MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<div id="over" class="screen" hidden>
+  <div class="card">
+    <div class="eyebrow">BARBIE 01 HA CAÍDO</div>
+    <p class="big red">DERRIBADO</p>
+    <div class="score">
+      <div><span class="k">PUNTOS</span><b id="oScore">0</b></div>
+      <div><span class="k">OLEADA</span><b id="oWave">0</b></div>
+      <div><span class="k">DERRIBOS</span><b id="oKills">0</b></div>
+      <div><span class="k">RÉCORD</span><b id="oBest">0</b></div>
+    </div>
+    <div class="actions"><button class="btn" id="bAgain" type="button">VOLVER A VOLAR</button><button class="btn ghost" id="bMenuO" type="button">MENÚ</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/modelos.js"></script>
+<script src="js/efectos.js"></script>
+<script src="js/estado.js"></script>
+<script src="js/jugador.js"></script>
+<script src="js/enemigos.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/musica.js"></script>
+<script src="js/misiones.js"></script>
+<script src="js/despegue.js"></script>
+<script src="js/ww2.js"></script>
+<script src="js/controles.js"></script>
+</body>
+</html>
