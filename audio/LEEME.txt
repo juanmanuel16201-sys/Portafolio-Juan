@@ -1,0 +1,4 @@
+Pon aqui tu musica de fondo (por ejemplo fondo.mp3).
+Luego abre js/ambiente.js y escribe en ARCHIVO_MUSICA la ruta, por ejemplo:
+  var ARCHIVO_MUSICA = 'audio/fondo.mp3';
+Si lo dejas vacio suena la musica creada por codigo.

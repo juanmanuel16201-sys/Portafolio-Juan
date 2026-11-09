@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eye of a Tiger — Boxeo AR</title>
+  <!--
+    ESTA PÁGINA ES TEMPORAL.
+    Cuando tengas el juego terminado, copia todos sus archivos en esta
+    carpeta (Juegos/eye-of-a-tiger/) y deja el principal con el nombre
+    index.html. La consola de juegos lo abrirá automáticamente.
+  -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: grid; place-items: center; padding: 1.5rem; text-align: center; color: #fff4dc;
+      font-family: system-ui, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at 50% 35%, #7a2a08 0%, #2a0d06 55%, #120505 100%); }
+    h1 { margin: .3em 0; font-size: clamp(2rem, 8vw, 4rem); letter-spacing: .06em; color: #ffd45a; text-shadow: 0 4px 0 #5a1a05; }
+    p { max-width: 36rem; margin: .5em auto; line-height: 1.5; font-size: clamp(1rem, 3.4vw, 1.2rem); }
+    .ojo { width: min(60vw, 16rem); height: auto; animation: late 2.4s ease-in-out infinite; }
+    .tag { display: inline-block; padding: .3em 1em; border: 2px dashed #ffd45a; border-radius: 99em; color: #ffd45a; font-weight: 700; }
+    @keyframes late { 50% { transform: scale(1.06); } }
+    @media (prefers-reduced-motion: reduce) { .ojo { animation: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <svg class="ojo" viewBox="0 0 200 100" role="img" aria-label="Ojo de tigre">
+      <ellipse cx="100" cy="50" rx="92" ry="40" fill="#f5be28" stroke="#140808" stroke-width="5"/>
+      <ellipse cx="100" cy="50" rx="34" ry="36" fill="#c83c0a"/>
+      <ellipse cx="100" cy="50" rx="10" ry="36" fill="#0a0505"/>
+      <ellipse cx="86" cy="36" rx="8" ry="10" fill="#fff0c8"/>
+    </svg>
+    <h1>Eye of a Tiger</h1>
+    <p class="tag">Próximamente</p>
+    <p>Juego de boxeo con realidad aumentada: la cámara de tu computador detecta tus movimientos y tú peleas de verdad. Estamos puliendo los últimos detalles.</p>
+  </main>
+</body>
+</html>

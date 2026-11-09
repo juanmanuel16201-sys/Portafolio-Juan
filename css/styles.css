@@ -268,3 +268,14 @@ kbd {
   color: var(--raincoat);
   margin-bottom: 0.6rem;
 }
+
+/* -----------------------------------------------------------
+   8. PROPORCIONES DE IMAGEN EXTRA
+   ----------------------------------------------------------- */
+.ratio-3x2 { --bs-aspect-ratio: 66.6667%; }
+.ratio-3x4 { --bs-aspect-ratio: 133.3333%; }
+
+/* Logotipos: se ven completos, sin recortar */
+.ratio img.img-contain { object-fit: contain; background: #14091f; }
+.ratio img.img-contain-claro { object-fit: contain; background: #ffffff; }
+.ratio video { object-fit: cover; background: #000; }

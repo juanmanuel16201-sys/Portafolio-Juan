@@ -5,10 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juegos — Juan Ramírez</title>
   <meta name="description" content="Videojuegos creados por Juan Ramírez: elige un disco, enciende la consola y juega.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2715%27 fill=%27%23f2c230%27/%3E%3Cg fill=%27%2317102b%27%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2711%27 cy=%2721%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2721%27 r=%273%27/%3E%3C/g%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/consola.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="css/efectos.css">
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      var m = 'auto';
+      try {
+        var t = localStorage.getItem('tema');
+        if (t === 'light' || t === 'dark' || t === 'auto') { m = t; }
+      } catch (e) { /* sin almacenamiento */ }
+      var h = new Date().getHours();
+      d.setAttribute('data-bs-theme', m === 'auto' ? (h >= 6 && h < 18 ? 'light' : 'dark') : m);
+      d.setAttribute('data-modo', m);
+    }());
+  </script>
 </head>
 <body>
 <!--
@@ -33,6 +48,25 @@
     <nav class="navbar navbar-expand-md border-bottom">
       <div class="container">
         <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
+        <div class="herramientas ms-auto ms-md-3 me-2 me-md-0 order-md-last">
+          <div class="tema-wrap">
+            <button type="button" class="tool-btn" id="btnTema" aria-label="Elegir tema" title="Tema" aria-haspopup="true" aria-expanded="false" aria-controls="panelTema">
+              <svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z"/></svg>
+              <svg class="ico-sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-5h2v3h-2zm0 17h2v3h-2zM2 11h3v2H2zm17 0h3v2h-3zM4.2 5.6l1.4-1.4 2.1 2.1-1.4 1.4zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4zm2.1-13.5 1.4 1.4-2.1 2.1-1.4-1.4zM5.6 19.8 4.2 18.4l2.1-2.1 1.4 1.4z"/></svg>
+              <svg class="ico-luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+            </button>
+            <div class="tema-panel" id="panelTema" role="group" aria-label="Tema de la página" hidden>
+            <button type="button" class="tema-op" data-tema="auto" aria-pressed="false"><svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z"/></svg><span>Automático</span></button>
+            <button type="button" class="tema-op" data-tema="light" aria-pressed="false"><svg class="ico-sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-5h2v3h-2zm0 17h2v3h-2zM2 11h3v2H2zm17 0h3v2h-3zM4.2 5.6l1.4-1.4 2.1 2.1-1.4 1.4zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4zm2.1-13.5 1.4 1.4-2.1 2.1-1.4-1.4zM5.6 19.8 4.2 18.4l2.1-2.1 1.4 1.4z"/></svg><span>Claro</span></button>
+            <button type="button" class="tema-op" data-tema="dark" aria-pressed="false"><svg class="ico-luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg><span>Oscuro</span></button>
+              <p class="tema-info" id="temaInfo"></p>
+            </div>
+          </div>
+          <button type="button" class="tool-btn" id="btnMusica" aria-label="Silenciar música y sonidos" title="Silenciar" aria-pressed="true">
+            <svg class="ico-son" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.8l8-1.6v6.4a3.5 3.5 0 1 0 2 3.1V2z"/></svg>
+            <svg class="ico-mudo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.8l4-.8V5l-6 1zm10.3 3.3L3.7 21.9 2.3 20.5 17.9 4.9z"/></svg>
+          </button>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menú">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -109,42 +143,49 @@
 
           <ul class="ring">
             <li class="disc" data-game="van-helsing" data-title="Van Helsing">
-              <button type="button" class="disc-btn" aria-label="Van Helsing, disco 1 de 6">
+              <button type="button" class="disc-btn" aria-label="Van Helsing, disco 1 de 7">
                 <span class="disc-art">
                 </span>
               </button>
               <span class="disc-rear"></span>
             </li>
             <li class="disc" data-game="super-gol" data-title="Super Gol">
-              <button type="button" class="disc-btn" aria-label="Super Gol, disco 2 de 6">
+              <button type="button" class="disc-btn" aria-label="Super Gol, disco 2 de 7">
                 <span class="disc-art">
                 </span>
               </button>
               <span class="disc-rear"></span>
             </li>
             <li class="disc" data-game="ace-combat" data-title="Ace Combat">
-              <button type="button" class="disc-btn" aria-label="Ace Combat, disco 3 de 6">
+              <button type="button" class="disc-btn" aria-label="Ace Combat, disco 3 de 7">
                 <span class="disc-art">
                 </span>
               </button>
               <span class="disc-rear"></span>
             </li>
             <li class="disc" data-game="zhuky-pong" data-title="Zhuky Pong">
-              <button type="button" class="disc-btn" aria-label="Zhuky Pong, disco 4 de 6">
+              <button type="button" class="disc-btn" aria-label="Zhuky Pong, disco 4 de 7">
                 <span class="disc-art">
                 </span>
               </button>
               <span class="disc-rear"></span>
             </li>
             <li class="disc" data-game="enjambre-galactico" data-title="Enjambre Galáctico">
-              <button type="button" class="disc-btn" aria-label="Enjambre Galáctico, disco 5 de 6">
+              <button type="button" class="disc-btn" aria-label="Enjambre Galáctico, disco 5 de 7">
                 <span class="disc-art">
                 </span>
               </button>
               <span class="disc-rear"></span>
             </li>
             <li class="disc" data-game="taxi-furia" data-title="Taxi Furia">
-              <button type="button" class="disc-btn" aria-label="Taxi Furia, disco 6 de 6">
+              <button type="button" class="disc-btn" aria-label="Taxi Furia, disco 6 de 7">
+                <span class="disc-art">
+                </span>
+              </button>
+              <span class="disc-rear"></span>
+            </li>
+            <li class="disc" data-game="eye-of-a-tiger" data-title="Eye of a Tiger">
+              <button type="button" class="disc-btn" aria-label="Eye of a Tiger, disco 7 de 7">
                 <span class="disc-art">
                 </span>
               </button>
@@ -166,7 +207,7 @@
             <button type="button" class="btn btn-outline-primary" id="btnSkip" hidden>Saltar animación</button>
           </p>
 
-          <div class="screen" id="screen" role="region" aria-label="Pantalla del juego" hidden>
+          <section class="screen" id="screen" aria-label="Pantalla del juego" hidden>
             <div class="screen-bar">
               <p class="screen-name" id="screenName"></p>
               <p class="screen-tools">
@@ -179,7 +220,7 @@
               <iframe id="gameFrame" title="Juego seleccionado" allow="fullscreen; autoplay; gamepad; accelerometer; gyroscope" allowfullscreen></iframe>
             </div>
             <p class="screen-hint">Para jugar mejor, gira el celular en horizontal y toca «Pantalla completa».</p>
-          </div>
+          </section>
         </div>
 
         <div class="row justify-content-center g-4 mt-2">
@@ -301,6 +342,22 @@
             </div>
           </article>
         </div>
+
+        <div class="col-lg-8">
+          <article class="card game game-info" id="info-eye-of-a-tiger">
+            <div class="card-body">
+              <p class="card-tag">Deportes · Realidad aumentada</p>
+              <h3 class="h4">Eye of a Tiger</h3>
+              <p class="card-text">Boxeo con realidad aumentada: la cámara web de tu computador escanea tu cuerpo y tus golpes de verdad se convierten en los de tu boxeador. Rounds profesionales, árbitro, knockouts, arenas al aire libre y bajo techo, y modo arcade configurable. Solo para computador; necesita permiso de cámara. (Disponible muy pronto.)</p>
+              <h4 class="controls-title">Controles</h4>
+              <dl class="controls">
+                <dt><kbd>Tu cuerpo</kbd></dt><dd>Golpear y esquivar frente a la cámara</dd>
+                <dt><kbd>Esc</kbd></dt><dd>Pausa</dd>
+              </dl>
+              <a class="btn btn-outline-primary game-link" href="Juegos/eye-of-a-tiger/index.html" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+            </div>
+          </article>
+        </div>
         </div>
       </div>
     </section>
@@ -315,5 +372,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/consola.js" defer></script>
+  <script src="js/ambiente.js" defer></script>
 </body>
 </html>

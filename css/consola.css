@@ -22,6 +22,7 @@
   --cv-zhuky-pong: url("../imagenes/portadas/zhuky-pong.webp");
   --cv-enjambre-galactico: url("../imagenes/portadas/enjambre-galactico.webp");
   --cv-taxi-furia: url("../imagenes/portadas/taxi-furia.webp");
+  --cv-eye-of-a-tiger: url("../imagenes/portadas/eye-of-a-tiger.webp");
 }
 
 /* Sin JavaScript: se oculta la consola y se muestran todas las fichas */
@@ -761,6 +762,7 @@ html.js .game-info:not(.is-current) { display: none; }
 .disc[data-game="zhuky-pong"] .disc-art::before { background-image: var(--cv-zhuky-pong); }
 .disc[data-game="enjambre-galactico"] .disc-art::before { background-image: var(--cv-enjambre-galactico); }
 .disc[data-game="taxi-furia"] .disc-art::before { background-image: var(--cv-taxi-furia); }
+.disc[data-game="eye-of-a-tiger"] .disc-art::before { background-image: var(--cv-eye-of-a-tiger); }
 
 .disc-art::after {
   content: "";

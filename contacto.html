@@ -4,15 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contacto — Juan Ramírez</title>
-  <meta name="description" content="Formulario de contacto de Juan Ramírez, Ingeniero Multimedia.">
+  <meta name="description" content="Formulario de contacto de Juan Ramírez, estudiante de Ingeniería Multimedia.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2715%27 fill=%27%23f2c230%27/%3E%3Cg fill=%27%2317102b%27%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2711%27 cy=%2721%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2721%27 r=%273%27/%3E%3C/g%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/efectos.css">
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      var m = 'auto';
+      try {
+        var t = localStorage.getItem('tema');
+        if (t === 'light' || t === 'dark' || t === 'auto') { m = t; }
+      } catch (e) { /* sin almacenamiento */ }
+      var h = new Date().getHours();
+      d.setAttribute('data-bs-theme', m === 'auto' ? (h >= 6 && h < 18 ? 'light' : 'dark') : m);
+      d.setAttribute('data-modo', m);
+    }());
+  </script>
 </head>
 <body>
 <!--
   CÓMO PERSONALIZAR ESTA PÁGINA
-  1. Reemplaza el correo, la ciudad y la red social por los tuyos
-     (busca los textos entre corchetes [ ]).
+  1. Cambia el correo, la ciudad y la red social en la lista "Otros medios".
+     El correo de destino del formulario se cambia en js/formulario.js.
   2. El formulario usa la rejilla de 12 columnas de Bootstrap
      (row + col-12 col-md-6): cada campo ocupa la mitad del ancho
      en pantallas medianas o más, y el ancho completo en celular.
@@ -22,6 +38,25 @@
     <nav class="navbar navbar-expand-md border-bottom">
       <div class="container">
         <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
+        <div class="herramientas ms-auto ms-md-3 me-2 me-md-0 order-md-last">
+          <div class="tema-wrap">
+            <button type="button" class="tool-btn" id="btnTema" aria-label="Elegir tema" title="Tema" aria-haspopup="true" aria-expanded="false" aria-controls="panelTema">
+              <svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z"/></svg>
+              <svg class="ico-sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-5h2v3h-2zm0 17h2v3h-2zM2 11h3v2H2zm17 0h3v2h-3zM4.2 5.6l1.4-1.4 2.1 2.1-1.4 1.4zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4zm2.1-13.5 1.4 1.4-2.1 2.1-1.4-1.4zM5.6 19.8 4.2 18.4l2.1-2.1 1.4 1.4z"/></svg>
+              <svg class="ico-luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+            </button>
+            <div class="tema-panel" id="panelTema" role="group" aria-label="Tema de la página" hidden>
+            <button type="button" class="tema-op" data-tema="auto" aria-pressed="false"><svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z"/></svg><span>Automático</span></button>
+            <button type="button" class="tema-op" data-tema="light" aria-pressed="false"><svg class="ico-sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-5h2v3h-2zm0 17h2v3h-2zM2 11h3v2H2zm17 0h3v2h-3zM4.2 5.6l1.4-1.4 2.1 2.1-1.4 1.4zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4zm2.1-13.5 1.4 1.4-2.1 2.1-1.4-1.4zM5.6 19.8 4.2 18.4l2.1-2.1 1.4 1.4z"/></svg><span>Claro</span></button>
+            <button type="button" class="tema-op" data-tema="dark" aria-pressed="false"><svg class="ico-luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg><span>Oscuro</span></button>
+              <p class="tema-info" id="temaInfo"></p>
+            </div>
+          </div>
+          <button type="button" class="tool-btn" id="btnMusica" aria-label="Silenciar música y sonidos" title="Silenciar" aria-pressed="true">
+            <svg class="ico-son" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.8l8-1.6v6.4a3.5 3.5 0 1 0 2 3.1V2z"/></svg>
+            <svg class="ico-mudo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.8l4-.8V5l-6 1zm10.3 3.3L3.7 21.9 2.3 20.5 17.9 4.9z"/></svg>
+          </button>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menú">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,21 +92,23 @@
           </aside>
 
           <div class="col-md-7">
-            <form class="row g-3" novalidate>
+            <form class="row g-3" id="formContacto" novalidate>
 
               <div class="col-12 col-md-6">
                 <label for="nombre" class="form-label">Nombre completo</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" required>
+                <div class="invalid-feedback">Escribe tu nombre.</div>
               </div>
 
               <div class="col-12 col-md-6">
                 <label for="correo" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="correo" name="correo" placeholder="tu@correo.com" required>
+                <input type="email" class="form-control" id="correo" name="correo" placeholder="tu@correo.com" autocomplete="email" required>
+                <div class="invalid-feedback">Escribe un correo válido.</div>
               </div>
 
               <div class="col-12 col-md-6">
                 <label for="telefono" class="form-label">Teléfono (opcional)</label>
-                <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+57 300 000 0000">
+                <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+57 300 000 0000" autocomplete="tel">
               </div>
 
               <div class="col-12 col-md-6">
@@ -85,11 +122,13 @@
                   <option value="fotografia">Fotografía</option>
                   <option value="ia">Inteligencia artificial</option>
                 </select>
+                <div class="invalid-feedback">Elige un área.</div>
               </div>
 
               <div class="col-12">
                 <label for="mensaje" class="form-label">Mensaje</label>
                 <textarea class="form-control" id="mensaje" name="mensaje" rows="5" placeholder="Cuéntame sobre tu proyecto" required></textarea>
+                <div class="invalid-feedback">Cuéntame un poco de tu proyecto.</div>
               </div>
 
               <div class="col-12">
@@ -98,11 +137,13 @@
                   <label class="form-check-label" for="acepto">
                     Acepto que mis datos se usen únicamente para responder este mensaje.
                   </label>
+                  <div class="invalid-feedback">Debes aceptar para poder enviar.</div>
                 </div>
               </div>
 
               <div class="col-12">
                 <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                <p class="mt-3 mb-0" id="avisoForm" role="status"></p>
               </div>
 
             </form>
@@ -114,11 +155,13 @@
 
   <footer class="border-top py-4">
     <div class="container d-flex justify-content-between flex-wrap gap-2">
-      <span class="text-secondary-emphasis">© 2026 Juan Ramírez. Ingeniero Multimedia.</span>
-      <a href="mailto:tu-correo@ejemplo.com">juanmanuel16201@gmail.com</a>
+      <span class="text-secondary-emphasis">© 2026 Juan Ramírez. Ingeniería Multimedia.</span>
+      <a href="mailto:juanmanuel16201@gmail.com">juanmanuel16201@gmail.com</a>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/ambiente.js" defer></script>
+  <script src="js/formulario.js" defer></script>
 </body>
 </html>

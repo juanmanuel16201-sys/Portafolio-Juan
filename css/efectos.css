@@ -1,0 +1,461 @@
+/* ============================================================
+   Efectos del portafolio: tema automático/claro/oscuro, paisaje
+   "Neo-Tokio" (atardecer japonés + ciudad cyberpunk) con hojas
+   cayendo, y animaciones de botones y letras.
+   Los colores del paisaje se cambian en los bloques :root.
+   ============================================================ */
+
+/* -----------------------------------------------------------
+   1. COLORES — modo oscuro (noche de neón)
+   ----------------------------------------------------------- */
+:root {
+  --cielo-a: #07021a;
+  --cielo-b: #2b0b66;
+  --cielo-c: #c4107f;
+  --cielo-d: #ff7a2f;
+  --sol-1: #ffe14d;
+  --sol-2: #ff2e88;
+  --sol-brillo: rgba(255, 46, 136, 0.55);
+  --monte-3: #3a1470;
+  --monte-2: #230b4d;
+  --ciudad-lejos: #2a0f5c;
+  --ciudad-cerca: #0f0526;
+  --ven-1: #19f0ff;
+  --ven-2: #ff2e88;
+  --ven-3: #ffe14d;
+  --niebla: rgba(255, 60, 200, 0.2);
+  --rej-linea: #19f0ff;
+  --rej-fondo: rgba(10, 4, 32, 0.92);
+  --torii: #ff2e5e;
+  --panel: rgba(10, 4, 32, 0.88);
+  --sombra-texto: rgba(5, 0, 15, 0.85);
+  --neon: #19f0ff;
+  --neon-2: #ff2e88;
+}
+
+/* -----------------------------------------------------------
+   2. MODO CLARO (día de neón: cielo celeste y rosa)
+   ----------------------------------------------------------- */
+:root[data-bs-theme="light"] {
+  --ink: #fff7ee;
+  --ink-2: #ffffff;
+  --cream: #2b1d2a;
+  --raincoat: #a35d00;
+  --cheshire: #c21a78;
+  --turquoise: #07726c;
+  --queen: #b3202f;
+
+  --bs-link-color: #07726c;
+  --bs-link-color-rgb: 7, 114, 108;
+  --bs-link-hover-color: #054f4b;
+  --bs-body-bg: #fff7ee;
+  --bs-body-color: #2b1d2a;
+  --bs-secondary-bg: #ffffff;
+  --bs-tertiary-bg: #ffffff;
+  --bs-border-color: #cdb8d8;
+  --bs-secondary-color: #5b4658;
+  --bs-tertiary-color: #5b4658;
+
+  --cielo-a: #7fe3ff;
+  --cielo-b: #c7a6ff;
+  --cielo-c: #ff9fd2;
+  --cielo-d: #ffd08a;
+  --sol-1: #fff6c2;
+  --sol-2: #ff8ad0;
+  --sol-brillo: rgba(255, 255, 255, 0.75);
+  --monte-3: #d9c8fa;
+  --monte-2: #bba5f1;
+  --ciudad-lejos: #c9b6f7;
+  --ciudad-cerca: #a58bec;
+  --ven-1: #ffffff;
+  --ven-2: #ff4fa8;
+  --ven-3: #ffe14d;
+  --niebla: rgba(255, 255, 255, 0.5);
+  --rej-linea: #e0128a;
+  --rej-fondo: rgba(255, 226, 246, 0.92);
+  --torii: #d4144f;
+  --panel: rgba(255, 247, 238, 0.93);
+  --sombra-texto: rgba(255, 247, 238, 0.95);
+  --neon: #0a8f88;
+  --neon-2: #d4147c;
+}
+
+/* Cosas que usaban "ink" como color de texto sobre amarillo/turquesa:
+   en modo claro se fijan oscuras para que sigan leyéndose */
+:root[data-bs-theme="light"] .btn-primary {
+  --bs-btn-color: #17102b;
+  --bs-btn-bg: #f2c230;
+  --bs-btn-border-color: #f2c230;
+  --bs-btn-hover-color: #17102b;
+  --bs-btn-hover-bg: #ffd95a;
+  --bs-btn-hover-border-color: #ffd95a;
+  --bs-btn-active-color: #17102b;
+  --bs-btn-active-bg: #ffd95a;
+  --bs-btn-active-border-color: #ffd95a;
+}
+
+:root[data-bs-theme="light"] .btn-outline-light {
+  --bs-btn-color: #2b1d2a;
+  --bs-btn-border-color: #2b1d2a;
+  --bs-btn-hover-color: #fff7ee;
+  --bs-btn-hover-bg: #2b1d2a;
+  --bs-btn-hover-border-color: #2b1d2a;
+  --bs-btn-active-color: #fff7ee;
+  --bs-btn-active-bg: #2b1d2a;
+}
+
+:root[data-bs-theme="light"] .btn-outline-primary {
+  --bs-btn-color: #07726c;
+  --bs-btn-border-color: #07726c;
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: #07726c;
+  --bs-btn-hover-border-color: #07726c;
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: #07726c;
+}
+
+:root[data-bs-theme="light"] .game-tags li { color: #ffffff; background: #07726c; }
+:root[data-bs-theme="light"] .card-tag { background: #2b1d2a; color: #fff7ee; }
+:root[data-bs-theme="light"] kbd { background: #2b1d2a; color: #fff7ee; border-bottom-color: #f2c230; }
+:root[data-bs-theme="light"] .form-control,
+:root[data-bs-theme="light"] .form-select { background-color: #ffffff; border-color: #cdb8d8; color: #2b1d2a; }
+:root[data-bs-theme="light"] .navbar-toggler-icon { filter: invert(1); }
+
+/* -----------------------------------------------------------
+   3. PAISAJE "NEO-TOKIO" (lo crea js/ambiente.js; sin JavaScript
+      queda el fondo normal de la página)
+   ----------------------------------------------------------- */
+.paisaje {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--cielo-a) 0%, var(--cielo-b) 34%, var(--cielo-c) 66%, var(--cielo-d) 100%);
+}
+
+/* Líneas finas de pantalla (solo se notan en la noche) */
+.paisaje::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 4px);
+  opacity: 0.55;
+}
+:root[data-bs-theme="light"] .paisaje::after { opacity: 0.08; }
+
+/* Sol de neón con franjas, estilo synthwave */
+.paisaje .sol {
+  position: absolute;
+  right: 30%;
+  bottom: 20%;
+  width: clamp(150px, 27vw, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--sol-1) 8%, var(--sol-2) 92%);
+  box-shadow: 0 0 60px 14px var(--sol-brillo);
+  -webkit-mask-image: linear-gradient(#000, #000 50%, transparent 50%), repeating-linear-gradient(180deg, #000 0 7%, transparent 7% 11%);
+  mask-image: linear-gradient(#000, #000 50%, transparent 50%), repeating-linear-gradient(180deg, #000 0 7%, transparent 7% 11%);
+  animation: sol-respira 7s ease-in-out infinite;
+}
+
+.paisaje .montes {
+  position: absolute;
+  left: 0;
+  bottom: 8vh;
+  width: 100%;
+  height: 26vh;
+}
+.paisaje .m3 { fill: var(--monte-3); }
+.paisaje .m2 { fill: var(--monte-2); }
+
+.paisaje .niebla {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 22vh;
+  background:
+    radial-gradient(ellipse 18% 55% at 12% 60%, var(--niebla), transparent 70%),
+    radial-gradient(ellipse 22% 45% at 38% 40%, var(--niebla), transparent 70%),
+    radial-gradient(ellipse 16% 60% at 62% 55%, var(--niebla), transparent 70%),
+    radial-gradient(ellipse 24% 50% at 88% 45%, var(--niebla), transparent 70%);
+}
+.paisaje .n1 { bottom: 7vh; animation: niebla-pasa 70s linear infinite; }
+.paisaje .n2 { bottom: 14vh; opacity: 0.7; animation: niebla-pasa 110s linear infinite reverse; }
+
+/* Ciudad futurista: dos capas con ventanas de neón */
+.paisaje .ciudad {
+  position: absolute;
+  left: 0;
+  bottom: 4vh;
+  width: 100%;
+  height: 24vh;
+}
+.paisaje .c-lejos { fill: var(--ciudad-lejos); opacity: 0.9; height: 31vh; bottom: 5vh; }
+.paisaje .c-cerca .edif { fill: var(--ciudad-cerca); }
+.paisaje .w1 { fill: var(--ven-1); animation: ventana 5s steps(1) infinite; }
+.paisaje .w2 { fill: var(--ven-2); animation: ventana 7s steps(1) infinite 1.3s; }
+.paisaje .w3 { fill: var(--ven-3); animation: ventana 9s steps(1) infinite 2.6s; }
+.paisaje .carteles { filter: drop-shadow(0 0 5px var(--ven-2)); }
+.paisaje .s1 { fill: var(--ven-2); animation: neon-parpadea 4s infinite; }
+.paisaje .s2 { fill: var(--ven-1); animation: neon-parpadea 6s infinite 1s; }
+
+.paisaje .torii {
+  position: absolute;
+  left: 8%;
+  bottom: 7vh;
+  width: clamp(40px, 7.5vw, 92px);
+  fill: var(--torii);
+  filter: drop-shadow(0 0 7px var(--torii));
+}
+
+/* Suelo de rejilla de neón que avanza */
+.paisaje .rejilla {
+  position: absolute;
+  left: -40%;
+  bottom: 0;
+  width: 180%;
+  height: 18vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, transparent 0%, var(--rej-fondo) 55%);
+  transform: perspective(260px) rotateX(58deg);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
+  mask-image: linear-gradient(to top, #000 55%, transparent);
+}
+.paisaje .rejilla::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: -50px;
+  height: calc(100% + 50px);
+  background:
+    repeating-linear-gradient(90deg, var(--rej-linea) 0 2px, transparent 2px 64px),
+    repeating-linear-gradient(0deg, var(--rej-linea) 0 2px, transparent 2px 50px);
+  opacity: 0.8;
+  animation: rejilla-avanza 2.4s linear infinite;
+}
+
+@keyframes sol-respira { 0%, 100% { scale: 1; filter: brightness(1); } 50% { scale: 1.05; filter: brightness(1.12); } }
+@keyframes niebla-pasa { from { translate: 0 0; } to { translate: -50% 0; } }
+@keyframes ventana { 0%, 100% { opacity: 1; } 45% { opacity: 0.25; } 55% { opacity: 1; } }
+@keyframes neon-parpadea { 0%, 100% { opacity: 1; } 47% { opacity: 1; } 50% { opacity: 0.2; } 53% { opacity: 1; } 80% { opacity: 0.6; } }
+@keyframes rejilla-avanza { from { translate: 0 0; } to { translate: 0 50px; } }
+
+.hojas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* Sombra suave en el texto para que se lea sobre el paisaje */
+main { text-shadow: 0 1px 8px var(--sombra-texto); }
+
+/* Panel translúcido con filo de neón */
+.navbar,
+footer {
+  background: var(--panel);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.navbar {
+  --bs-navbar-color: var(--cream);
+  z-index: 50;
+  box-shadow: 0 4px 24px -6px var(--neon-2);
+}
+.navbar::after { background: repeating-conic-gradient(var(--cream) 0 25%, var(--ink) 0 50%) 0 0 / 16px 16px; }
+footer { border-top-color: var(--neon) !important; box-shadow: 0 -4px 24px -8px var(--neon); }
+
+/* Brillo de neón en el texto de acento (solo de noche) */
+:root[data-bs-theme="dark"] .accent { text-shadow: 0 0 14px rgba(242, 194, 48, 0.6); }
+:root[data-bs-theme="dark"] .navbar-brand .accent { animation: neon-parpadea 7s infinite; }
+:root[data-bs-theme="dark"] .card { box-shadow: 5px 5px 0 rgba(224, 68, 155, 0.35), 0 0 26px rgba(224, 68, 155, 0.22); }
+:root[data-bs-theme="dark"] .card:hover { box-shadow: 8px 8px 0 rgba(25, 240, 255, 0.4), 0 0 30px rgba(25, 240, 255, 0.35); }
+:root[data-bs-theme="dark"] .btn-primary { animation: boton-neon 3.2s ease-in-out infinite; }
+@keyframes boton-neon { 0%, 100% { box-shadow: 0 0 6px rgba(242, 194, 48, 0.35); } 50% { box-shadow: 0 0 20px rgba(242, 194, 48, 0.75); } }
+
+/* -----------------------------------------------------------
+   3b. SELECTOR DE TEMA (Automático / Claro / Oscuro)
+   ----------------------------------------------------------- */
+.tema-wrap { position: relative; }
+
+.tema-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.7rem);
+  z-index: 70;
+  width: min(16rem, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.8rem;
+  border: 2px dashed var(--neon);
+  border-radius: 0.9rem;
+  background: var(--ink-2);
+  color: var(--cream);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 22px -4px var(--neon);
+  text-shadow: none;
+}
+
+.tema-op {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border: 2px solid transparent;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.tema-op svg { width: 1.2rem; height: 1.2rem; fill: currentColor; flex: none; }
+.tema-op:hover { background: rgba(127, 127, 127, 0.18); transform: translateX(3px); }
+.tema-op[aria-pressed="true"] { border-color: var(--neon-2); background: rgba(224, 68, 155, 0.16); }
+.tema-op[aria-pressed="true"]::after { content: "✓"; margin-left: auto; color: var(--neon-2); }
+
+.tema-info { margin: 0.2rem 0 0; font-size: 0.82rem; line-height: 1.35; color: var(--bs-secondary-color); }
+
+/* -----------------------------------------------------------
+   4. BOTONES DE HERRAMIENTAS (tema y sonido)
+   ----------------------------------------------------------- */
+.tool-btn {
+  position: relative;
+  overflow: hidden;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 2px dashed var(--raincoat);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.tool-btn svg { width: 1.2rem; height: 1.2rem; fill: currentColor; transition: rotate 0.4s ease; }
+.tool-btn:hover { background: var(--raincoat); color: #17102b; transform: translateY(-2px) scale(1.06); }
+.tool-btn:hover svg { rotate: 20deg; }
+.tool-btn:active { transform: scale(0.92); }
+
+.herramientas { display: flex; align-items: center; gap: 0.5rem; }
+html:not(.js) .herramientas { display: none; }
+
+/* Icono que se muestra según el modo elegido */
+#btnTema svg { display: none; }
+html[data-modo="auto"] #btnTema .ico-auto,
+html[data-modo="light"] #btnTema .ico-sol,
+html[data-modo="dark"] #btnTema .ico-luna { display: block; }
+#btnMusica .ico-mudo { display: none; }
+#btnMusica.silenciado .ico-son { display: none; }
+#btnMusica.silenciado .ico-mudo { display: block; }
+
+@media (pointer: coarse) {
+  .tool-btn { width: 2.75rem; height: 2.75rem; }
+}
+
+/* -----------------------------------------------------------
+   5. ANIMACIONES DE INTERFAZ
+   ----------------------------------------------------------- */
+/* Botones: se elevan, brilla un destello y hacen onda al pulsar */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+  translate: -130% 0;
+  transition: translate 0.7s ease;
+  pointer-events: none;
+}
+
+.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3); }
+.btn:hover::before { translate: 130% 0; }
+.btn:active { transform: translateY(0) scale(0.97); box-shadow: none; }
+
+.onda {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  translate: -50% -50%;
+  pointer-events: none;
+  animation: onda 0.65s ease-out forwards;
+}
+
+@keyframes onda { to { scale: 30; opacity: 0; } }
+
+/* Menú: línea que se dibuja bajo el enlace */
+.nav-link { position: relative; }
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: var(--bs-nav-link-padding-x, 0.5rem);
+  right: var(--bs-nav-link-padding-x, 0.5rem);
+  bottom: 0.2rem;
+  height: 2px;
+  background: var(--raincoat);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale 0.3s ease;
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after { scale: 1 1; }
+.nav-link.active::after { display: none; }
+
+/* Marca: el botón de Coraline gira */
+.navbar-brand::before { transition: rotate 0.6s ease; }
+.navbar-brand:hover::before { rotate: 360deg; }
+
+/* Teclas: se hunden al pasar el cursor */
+kbd { transition: translate 0.15s ease, border-bottom-width 0.15s ease; }
+kbd:hover { translate: 0 2px; border-bottom-width: 1px; }
+
+/* Letras de los títulos: suben una a una y saltan al pasar el cursor */
+.palabra { display: inline-block; white-space: nowrap; }
+.letra { display: inline-block; transition: transform 0.25s ease, color 0.25s ease; }
+.anim-letras .letra { opacity: 0; translate: 0 0.6em; }
+.anim-letras.visto .letra {
+  animation: letra-entra 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 32ms);
+}
+.letra:hover { transform: translateY(-0.14em) rotate(-5deg); color: var(--raincoat); }
+
+@keyframes letra-entra {
+  from { opacity: 0; translate: 0 0.6em; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* Tarjetas: aparecen al llegar con el scroll */
+html.js .reveal {
+  opacity: 0;
+  translate: 0 26px;
+  transition: opacity 0.6s ease, translate 0.6s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+html.js .reveal.visto { opacity: 1; translate: 0 0; }
+
+/* Cambio suave de tema */
+body, .card, .navbar, footer { transition-property: background-color, color, border-color, box-shadow, transform, translate, opacity; transition-duration: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .paisaje .sol, .paisaje .niebla, .paisaje .hierba { animation: none; }
+  .btn, .btn::before, .tool-btn, .nav-link::after, kbd, .letra { transition: none; }
+  .btn:hover, .tool-btn:hover { transform: none; }
+  .reveal { opacity: 1; translate: 0 0; }
+}
