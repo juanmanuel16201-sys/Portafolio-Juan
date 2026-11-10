@@ -1,0 +1,40 @@
+EYE OF A TIGER — Boxeo en realidad aumentada
+Autor: Juan Manuel Ramírez Jaimes · Ingeniería Multimedia
+
+Cómo jugar
+- Abre index.html desde GitHub Pages (https) o con Live Server en VS Code.
+  La cámara solo funciona en https o localhost.
+- Necesita internet: carga Three.js, MediaPipe Pose y PeerJS desde CDN.
+- Párate a 1,5–2 m de la cámara, con buena luz, y ponte en guardia para calibrar.
+
+Modos
+- Un jugador: pelea profesional contra 4 rivales de la CPU.
+- Arcade: configura rounds, tiempo, vida, daño, IA, reglas y escenario.
+- Al terminar una pelea: Revancha, Elegir otro luchador (sin volver a escanear) o Menú.
+- Multijugador: un PC crea la sala y comparte el código de 5 letras.
+
+Controles de teclado (siempre activos)
+J jab · K directo · U/I ganchos · N/M uppercuts · H/O al cuerpo
+Espacio guardia · A/D esquivar · S agacharse · W hacia atrás · Esc/P pausa
+Al ganar: 1-4 poses, 5 saludo, Espacio salto, A/D baile, J/K golpes al aire (o hazlo con tu cuerpo frente a la cámara)
+
+Tu cara en el ring
+- La cabeza del rival (o la tuya) se cambia por una foto recortada, como cabeza de cartón.
+- Ajustes: sube 3 fotos JPG/PNG (normal, feliz, sorpresa); feliz y sorpresa son opcionales
+  (si faltan, la foto normal se anima: sonrisa y boca abierta). Arrastra, zoom y giro para encuadrar.
+- O escanéala con la cámara al final del escaneo: cara normal, sonrisa y sorpresa.
+- Las fotos se guardan como JPG solo en este navegador.
+
+Combinaciones (golpes con menos de 1 s entre ellos pegan más y llenan la barra dorada)
+Uno-dos · Doble jab y directo · Uno-dos-tres · Uno-dos-tres-dos · Dos-tres-dos
+Uno-dos-uppercut · Cuerpo y cabeza · Gancho-uppercut · Uppercut-gancho
+Jab, cuerpo y gancho · Doble al cuerpo y gancho · Combinación de campeón (jab, directo, cuerpo, gancho)
+
+Canción del menú
+- Ajustes > "Elegir canción": elige un MP3/M4A/OGG de tu computador (por ejemplo tu copia de Eye of the Tiger)
+  y sonará en el menú principal. Se guarda solo en este navegador. "Quitar" vuelve a la música original.
+
+Brazos al revés
+- Si la cámara entrega la imagen en espejo (DroidCam, OBS, algunas webcams), el juego lo detecta al calibrar
+  (paso "Lanza jabs": usa solo la mano de adelante) y corrige izquierda/derecha.
+- También en Ajustes > "Lados izquierda / derecha": Automático, Normales o Invertidos.
