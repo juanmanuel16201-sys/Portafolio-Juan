@@ -8,14 +8,23 @@ Cómo jugar
 - Párate a 1,5–2 m de la cámara, con buena luz, y ponte en guardia para calibrar.
 
 Modos
-- Un jugador: pelea profesional contra 4 rivales de la CPU.
+- Un jugador: pelea profesional contra 10 rivales de la CPU (El Rey del Ring se desbloquea en la Torre Leyenda).
+- Torre clásica: elige una torre de 4, 7 o 10 pisos y vence a un rival por piso, cada uno más duro.
+  Cada piso es un round de 90 s (el último dura dos). Tienes 3 continues.
 - Arcade: configura rounds, tiempo, vida, daño, IA, reglas y escenario.
 - Al terminar una pelea: Revancha, Elegir otro luchador (sin volver a escanear) o Menú.
 - Multijugador: un PC crea la sala y comparte el código de 5 letras.
+- Realidad virtual: en el menú elige «Realidad virtual» y abre el juego en el navegador de tus gafas
+  (Meta Quest, Pico, Wolvic) o en Chrome/Edge con SteamVR o Windows Mixed Reality.
+  Golpea con los controles o con tus manos y esquiva moviendo la cabeza. Gatillo: saltar o salir.
 
 Controles de teclado (siempre activos)
 J jab · K directo · U/I ganchos · N/M uppercuts · H/O al cuerpo
 Espacio guardia · A/D esquivar · S agacharse · W hacia atrás · Esc/P pausa
+Control de consola (gamepad)
+A jab · B directo · X gancho · Y uppercut · RB al cuerpo · LB/LT guardia
+Stick izquierdo esquivar y agacharse · Start pausa
+
 Al ganar: 1-4 poses, 5 saludo, Espacio salto, A/D baile, J/K golpes al aire (o hazlo con tu cuerpo frente a la cámara)
 
 Tu cara en el ring
