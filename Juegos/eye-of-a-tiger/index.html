@@ -104,6 +104,37 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .sw.on{border-color:var(--bone);box-shadow:0 0 0 2px var(--ink)}
 
 /* Tarjetas de rivales (estilo cartel) */
+.tw-panel{width:min(1100px,100%)}
+.mode-sel{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-top:1rem}
+.mode-lbl{font-family:var(--cond);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;color:var(--steel)}
+#vrNote{flex-basis:100%;color:var(--steel);font-size:.82rem;line-height:1.35;max-width:46ch}
+.tw-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.4rem;align-items:start}
+@media (max-width:820px){.tw-body{grid-template-columns:1fr}}
+.tw-side{display:flex;flex-direction:column;gap:1rem;min-width:0}
+.tw-pick{display:grid;gap:.6rem}
+.tw-card{text-align:left;background:var(--ink2);border:1px solid var(--line);padding:.8rem 1rem;color:var(--paper);cursor:pointer;display:grid;gap:.2rem;font:inherit}
+.tw-card b{font-family:var(--display);font-size:1.5rem;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.tw-card span{color:var(--steel);font-size:.88rem}
+.tw-card em{font-style:normal;color:var(--gold);font-family:var(--cond);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.78rem}
+.tw-card.on{border-color:var(--gold);box-shadow:inset 4px 0 0 var(--gold)}
+.tw-card:disabled{opacity:.45;cursor:default}
+.tw-msg{margin:0;color:var(--steel);min-height:1.2em}
+.tw-msg.win{color:var(--gold);font-family:var(--display);font-size:1.8rem;text-transform:uppercase;line-height:1.1}
+.tw-msg.lose{color:#ff6a5c}
+.tw-cont{font-family:var(--cond);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.tw-col{display:flex;flex-direction:column;gap:.35rem;max-height:min(62vh,640px);overflow:auto;padding:.4rem;background:linear-gradient(180deg,#1a1210,#0c0908);border:1px solid var(--line);position:relative}
+.tw-fl{display:grid;grid-template-columns:2.2rem 2.6rem minmax(0,1fr) auto;align-items:center;gap:.6rem;padding:.45rem .6rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);transition:transform .3s,background .3s}
+.tw-fl .n{font-family:var(--display);font-size:1.3rem;color:var(--steel);text-align:center}
+.tw-fl .sw{width:2.6rem;height:2.6rem;border-radius:50%;border:2px solid rgba(255,255,255,.2);display:grid;place-items:center;font-family:var(--display);font-size:1rem;color:#fff;text-shadow:0 1px 2px #000}
+.tw-fl .who{min-width:0}.tw-fl .who b{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tw-fl .who span{font-size:.78rem;color:var(--steel)}
+.tw-fl .tag{font-family:var(--cond);font-weight:700;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
+.tw-fl.done{opacity:.5}.tw-fl.done .tag{color:#7fd07f}
+.tw-fl.cur{background:rgba(255,215,106,.12);border-color:var(--gold);transform:scale(1.03);box-shadow:0 0 24px rgba(255,215,106,.25)}
+.tw-fl.cur .tag{color:var(--gold)}
+.tw-fl.boss .who b{color:var(--gold)}
+.tw-fl.boss{border-color:rgba(255,215,106,.35)}
+.fcard.locked{opacity:.55;cursor:default}
 .roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
 .fcard{text-align:left;background:linear-gradient(180deg,var(--ink3),var(--ink2));border:1px solid var(--line);padding:1rem 1rem .9rem;display:flex;flex-direction:column;gap:.45rem;position:relative;transition:border-color .15s,transform .15s}
 .fcard:hover{transform:translateY(-3px)}
@@ -267,6 +298,8 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 
 /* Descanso y resultados */
 .rest-card,.res-card{width:min(760px,100%)}
+.rest-bar{height:6px;background:var(--ink3);overflow:hidden}.rest-bar i{display:block;height:100%;background:var(--gold);width:100%;transition:width .2s linear}
+.rest-skip{font-size:.85rem;color:var(--steel);margin:0}
 .rest-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem}
 .rest-timer{font-family:var(--display);font-size:3.4rem;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
 table.tbl{width:100%;border-collapse:collapse;font-family:var(--cond);font-size:1.05rem;font-variant-numeric:tabular-nums}
@@ -309,9 +342,16 @@ table.tbl{width:100%;border-collapse:collapse;font-family:var(--cond);font-size:
       <div class="eyebrow">Boxeo profesional · Realidad aumentada</div>
       <h1 class="logo" style="margin-top:.6rem"><span class="pre">Eye of a</span>TIGER<span class="ar">AR</span></h1>
       <p class="tag">Tu cuerpo es el control. Lanza jabs, esquiva ganchos y levántate antes del diez.</p>
+      <div class="mode-sel" role="group" aria-label="Modo de juego">
+      <span class="mode-lbl">Jugar en</span>
+      <button class="chip" type="button" data-pm="normal">Pantalla (normal)</button>
+      <button class="chip" type="button" data-pm="vr">Realidad virtual</button>
+      <small id="vrNote"></small>
+    </div>
     </div>
     <nav class="menu-list">
       <button class="mbtn" data-go="sp"><span class="t">Un jugador</span><span class="s">Pelea profesional contra la CPU</span></button>
+      <button class="mbtn" data-go="tower"><span class="t">Torre clásica</span><span class="s">Sube piso por piso hasta el campeón invicto</span></button>
       <button class="mbtn" data-go="arcade"><span class="t">Modo arcade</span><span class="s">Configura tiempo, vida, reglas y escenario</span></button>
       <button class="mbtn" data-go="mp"><span class="t">Multijugador</span><span class="s">Dos computadores, cada uno con su cámara</span></button>
       <button class="mbtn" data-go="settings"><span class="t">Ajustes</span><span class="s">Gráficos, cámara, sensibilidad y audio</span></button>
@@ -329,12 +369,28 @@ table.tbl{width:100%;border-collapse:collapse;font-family:var(--cond);font-size:
     <div class="panel-body">
       <div><h3 class="sec-title">Elige a tu rival</h3><div class="roster" id="spRoster"></div></div>
       <div class="groups">
-        <div><h3 class="sec-title">Rounds de 3 minutos</h3><div class="chips" id="spRounds"></div></div>
+        <div><h3 class="sec-title">Rounds de 2 minutos</h3><div class="chips" id="spRounds"></div></div>
         <div><h3 class="sec-title">Dificultad</h3><div class="chips" id="spDiff"></div></div>
         <div><h3 class="sec-title">Escenario</h3><div class="chips" id="spArena"></div></div>
       </div>
     </div>
     <div class="panel-foot"><button class="btn" data-back>Volver</button><div class="right"><button class="btn primary" id="spGo">A pelear</button></div></div>
+  </div>
+</section>
+
+<!-- TORRE -->
+<section id="scr-tower" class="screen panel-wrap" hidden>
+  <div class="panel tw-panel">
+    <div class="panel-head"><div><div class="eyebrow">Modo torre</div><h2 id="twTitle">Elige tu torre</h2></div><div class="tw-cont" id="twCont"></div></div>
+    <div class="panel-body tw-body">
+      <div class="tw-side">
+        <div class="tw-pick" id="twPick"></div>
+        <p class="tw-msg" id="twMsg"></p>
+        <div class="groups"><div><h3 class="sec-title">Dificultad base</h3><div class="chips" id="twDiff"></div></div></div>
+      </div>
+      <div class="tw-col" id="twCol"></div>
+    </div>
+    <div class="panel-foot"><button class="btn" id="twBack">Volver</button><div class="right"><button class="btn" id="twQuit" hidden>Abandonar torre</button><button class="btn primary" id="twGo">Subir a la torre</button></div></div>
   </div>
 </section>
 
@@ -414,6 +470,10 @@ table.tbl{width:100%;border-collapse:collapse;font-family:var(--cond);font-size:
         <div class="move"><b>Guardia</b><span>Ambos guantes arriba, cerca de la cara. Bloquea golpes a la cabeza.</span></div>
         <div class="move"><b>Esquiva</b><span>Inclina el torso a un lado para esquivar rectos y uppercuts. Agáchate para pasar bajo los ganchos. Echa la cabeza y el torso hacia atrás para sacarle el cuerpo a rectos y uppercuts.</span></div>
         <div class="move"><b>Tu cara en el ring</b><span>La cabeza del rival (o la de tu boxeador) se cambia por una foto recortada, como una cabeza de cartón. Sube tus fotos en Ajustes (normal, feliz y sorpresa) o escanéalas con la cámara al final del escaneo. Sonríe cuando conecta y pone cara de sorpresa cuando recibe un golpe fuerte; si no subiste esas fotos, la foto normal se anima sola.</span></div>
+        <div class="move"><b>Realidad virtual</b><span>En el menú elige «Realidad virtual» y abre el juego en el navegador de tus gafas (Meta Quest, Pico, Wolvic) o en Chrome/Edge con SteamVR o Windows Mixed Reality. Golpea con los controles o con tus manos (seguimiento de manos): recto al frente = jab/directo, de lado = gancho, de abajo hacia arriba = uppercut, bajo = al cuerpo. Esquivas moviendo la cabeza, y la guardia es con las dos manos frente a la cara. Gatillo: saltar intro o descanso y salir al terminar. Si tus gafas no tienen controles, toca la pantalla o el botón para lanzar golpes.</span></div>
+        <div class="move"><b>Control (gamepad)</b><span>A jab · B directo · X gancho · Y uppercut · RB al cuerpo · LB/LT guardia · stick izquierdo para esquivar y agacharte · Start pausa.</span></div>
+        <div class="move"><b>Torre clásica</b><span>Elige una torre (4, 7 o 10 pisos) y vence a un rival por piso, cada uno más duro. Cada piso es un round de 90 s y el último dura dos. Tienes 3 continues. En la cima de la Torre Leyenda espera El Rey del Ring, y al vencerlo lo desbloqueas en Un jugador.</span></div>
+        <div class="move"><b>Lee al rival</b><span>El rival baja la guardia cuando se cansa, cuando está herido, justo después de su combinación y cuando te provoca. Ese es tu momento: pega más fuerte y es más fácil el crítico. Entre rounds hay descanso; sáltalo con Espacio o manteniendo la guardia 2 s.</span></div>
         <div class="move"><b>Combinaciones</b><span>Encadena golpes con menos de un segundo entre ellos y cada golpe de la combinación pega más fuerte y llena la barra dorada: <b>uno-dos</b> (jab, directo), <b>doble jab y directo</b>, <b>uno-dos-tres</b> (jab, directo, gancho), <b>uno-dos-tres-dos</b>, <b>dos-tres-dos</b>, <b>uno-dos-uppercut</b>, <b>cuerpo y cabeza</b> (al cuerpo, gancho), <b>gancho-uppercut</b>, <b>uppercut-gancho</b>, <b>jab, cuerpo y gancho</b>, <b>doble al cuerpo y gancho</b> y la <b>combinación de campeón</b> (jab, directo, al cuerpo, gancho).</span></div>
         <div class="move"><b>Golpe estrella</b><span>Conecta golpes, bloquea y esquiva para llenar la barra dorada. Cuando brilla, tu siguiente directo, gancho o uppercut hace más del doble de daño y atraviesa la guardia. Ojo: la CPU también tiene uno y sus guantes brillan antes de lanzarlo.</span></div>
         <div class="move"><b>Esquiva perfecta</b><span>Si esquivas un golpe, el tiempo se frena un instante y tu siguiente golpe en menos de un segundo es un contragolpe más fuerte.</span></div>
@@ -547,9 +607,11 @@ table.tbl{width:100%;border-collapse:collapse;font-family:var(--cond);font-size:
 <section id="scr-rest" class="screen modal" hidden style="background:rgba(0,0,0,.45)">
   <div class="card rest-card">
     <div class="rest-head"><div><div class="eyebrow">En la esquina</div><h2 id="restT">Fin del round 1</h2></div><div class="rest-timer" id="restClock">0:20</div></div>
+    <div class="rest-bar"><i id="restBar"></i></div>
     <p id="restTip">Respira. Tu esquinero te limpia la cara y recuperas energía.</p>
     <div class="tbl-wrap"><table class="tbl" id="restTbl"></table></div>
-    <button class="btn primary" id="restGo">Listo para el siguiente round</button>
+    <button class="btn primary" id="restGo">Saltar descanso · siguiente round</button>
+    <p class="rest-skip">Pulsa <b>Espacio</b> o mantén la <b>guardia arriba 2 segundos</b> para saltar el descanso.</p>
   </div>
 </section>
 
@@ -561,7 +623,7 @@ table.tbl{width:100%;border-collapse:collapse;font-family:var(--cond);font-size:
     <p id="resP"></p>
     <div class="tbl-wrap"><table class="tbl" id="resTbl"></table></div>
     <div class="tbl-wrap"><table class="tbl" id="resCards"></table></div>
-    <div class="res-actions"><button class="btn primary" id="resAgain">Revancha</button><button class="btn gold" id="resPick">Elegir otro luchador</button><button class="btn" id="resMenu">Menú principal</button></div>
+    <div class="res-actions"><button class="btn primary" id="resAgain">Revancha</button><button class="btn gold" id="resPick">Elegir otro luchador</button><button class="btn primary" id="resTower" hidden>Siguiente piso</button><button class="btn" id="resMenu">Menú principal</button></div>
   </div>
 </section>
 
@@ -616,12 +678,36 @@ const ROSTER = [
   { id: 'zurdo', sur: 'Vargas', first: 'Diego', nick: 'El Zurdo', from: 'Cúcuta, CO', record: '24-2-1 · 15 KO', style: 'Contragolpeador zurdo',
     skin: '#8a5a3b', hair: '#0b0807', hairStyle: 'mohawk', beard: true, trunks: '#e0a93b', trim: '#0d0b0a', gloves: '#e0a93b', build: 1.02,
     power: 1, speed: 1.12, defense: 1.05, chin: 1, aggression: .95, southpaw: true },
+  { id: 'pantera', sur: 'Reed', first: 'Marcus', nick: 'La Pantera', from: 'Detroit, US', record: '22-1-0 · 12 KO', style: 'Guardia baja y hombro (estilista)',
+    skin: '#5a3722', hair: '#0a0706', hairStyle: 'buzz', beard: true, trunks: '#0d0b0a', trim: '#6a2c91', gloves: '#6a2c91', build: 1,
+    power: .98, speed: 1.22, defense: 1.18, chin: .95, aggression: .9, southpaw: false, gLow: .42 },
+  { id: 'martillo', sur: 'Keller', first: 'Hans', nick: 'El Martillo', from: 'Hamburgo, DE', record: '26-5-0 · 23 KO', style: 'Pegador lento y pesado',
+    skin: '#efcdb0', hair: '#d8b47a', hairStyle: 'short', beard: false, trunks: '#c4161c', trim: '#151515', gloves: '#151515', build: 1.22,
+    power: 1.38, speed: .76, defense: .9, chin: 1.2, aggression: 1.05, southpaw: false, gLow: .12 },
+  { id: 'cobra', sur: 'Mehta', first: 'Arjun', nick: 'La Cobra', from: 'Mumbai, IN', record: '18-2-0 · 8 KO', style: 'Contragolpeador de distancia',
+    skin: '#a8714a', hair: '#0e0a08', hairStyle: 'short', beard: true, trunks: '#1f7a43', trim: '#e0a93b', gloves: '#1f7a43', build: .96,
+    power: .92, speed: 1.2, defense: 1.2, chin: .95, aggression: .82, southpaw: false, gLow: .25 },
+  { id: 'huracan', sur: 'Rojas', first: 'Mateo', nick: 'Huracán', from: 'San Juan, PR', record: '21-3-0 · 14 KO', style: 'Volumen sin pausa',
+    skin: '#c8915f', hair: '#1a110b', hairStyle: 'mohawk', beard: false, trunks: '#2463c9', trim: '#f1e8d6', gloves: '#c4161c', build: .98,
+    power: .86, speed: 1.15, defense: .88, chin: 1.02, aggression: 1.45, southpaw: false, gLow: .18 },
+  { id: 'oso', sur: 'Larsen', first: 'Bjørn', nick: 'El Oso', from: 'Oslo, NO', record: '29-6-1 · 20 KO', style: 'Peso pesado que todo lo aguanta',
+    skin: '#f2cfb0', hair: '#8a4b22', hairStyle: 'short', beard: true, trunks: '#f1e8d6', trim: '#2463c9', gloves: '#2463c9', build: 1.28,
+    power: 1.18, speed: .8, defense: .95, chin: 1.45, aggression: 1, southpaw: false, gLow: .2 },
+  { id: 'fantasma', sur: 'Mensah', first: 'Kwame', nick: 'El Fantasma', from: 'Accra, GH', record: '20-0-1 · 10 KO', style: 'Esquivador escurridizo',
+    skin: '#4f301d', hair: '#070505', hairStyle: 'bald', beard: false, trunks: '#e2620f', trim: '#151515', gloves: '#f1e8d6', build: .94,
+    power: .9, speed: 1.28, defense: 1.38, chin: .9, aggression: .92, southpaw: true, gLow: .35 },
+  { id: 'rey', sur: 'Draven', first: 'Viktor', nick: 'El Rey del Ring', from: 'Sin patria', record: '40-0-0 · 34 KO', style: 'Campeón invicto · jefe de la torre',
+    skin: '#c69a74', hair: '#0b0909', hairStyle: 'buzz', beard: true, trunks: '#0d0b0a', trim: '#ffd76a', gloves: '#ffd76a', build: 1.16,
+    power: 1.3, speed: 1.15, defense: 1.25, chin: 1.35, aggression: 1.2, southpaw: false, gLow: .1, boss: true },
 ];
+const towerRec = () => { try { return JSON.parse(localStorage.getItem(STORE + '.tower') || '{}'); } catch (e) { return {}; } };
+const bossOpen = () => !!towerRec().leyenda;
+const rosterFor = () => ROSTER.filter(r => !r.boss || bossOpen());
 const DIFF = {
-  novato:   { name: 'Novato',      wind: .48, every: 2.1,  block: .24, dodge: .1,  dmg: .7,   combo: 2, counter: .2 },
-  amateur:  { name: 'Amateur',     wind: .38, every: 1.6,  block: .4,  dodge: .18, dmg: .9,   combo: 3, counter: .4 },
-  pro:      { name: 'Profesional', wind: .3,  every: 1.25, block: .54, dodge: .27, dmg: 1.05, combo: 4, counter: .6 },
-  campeon:  { name: 'Campeón',     wind: .23, every: .95,  block: .68, dodge: .37, dmg: 1.2,  combo: 5, counter: .8 },
+  novato:   { name: 'Novato',      wind: .42, every: 1.55, block: .34, dodge: .16, dmg: .55, combo: 3, counter: .4,  read: .35 },
+  amateur:  { name: 'Amateur',     wind: .32, every: 1.1,  block: .5,  dodge: .25, dmg: .68, combo: 4, counter: .65, read: .6 },
+  pro:      { name: 'Profesional', wind: .25, every: .82,  block: .62, dodge: .33, dmg: .8,  combo: 5, counter: .85, read: .85 },
+  campeon:  { name: 'Campeón',     wind: .19, every: .64,  block: .74, dodge: .42, dmg: .92, combo: 5, counter: 1,   read: 1.1 },
 };
 const PUNCH = {
   jab:   { dmg: 4.5, sta: 3, name: 'Jab' },
@@ -634,9 +720,9 @@ const SKINS = ['#f2cfb0', '#e3b48c', '#c8915f', '#a36c45', '#7a4b2e', '#4f301d']
 const TRUNKS = ['#c4161c', '#2463c9', '#e0a93b', '#151515', '#f1e8d6', '#1f7a43', '#6a2c91', '#e2620f'];
 
 const RULES_PRO = {
-  rounds: 3, roundTime: 180, restTime: 30, arena: 'coliseo',
+  rounds: 3, roundTime: 120, restTime: 25, arena: 'coliseo',
   playerHp: 1, playerDmg: 1, stamina: true, regen: .25, regenFight: false,
-  opponent: 'toro', difficulty: 'amateur', cpuAgg: 1, cpuHp: 1, cpuDmg: 1, cpuSpeed: 1,
+  opponent: 'toro', difficulty: 'amateur', cpuAgg: 1, cpuHp: 1.6, cpuDmg: 1, cpuSpeed: 1,
   kdEnabled: true, maxKd: 3, critChance: .08, bigHead: false, slowmo: true,
 };
 
@@ -645,7 +731,7 @@ const DEFAULTS = {
   quality: 'alto', style: 'hd', cfgV: 2, viewMode: 'arena', fov: 62, shake: true, gore: 'alto', dynRes: true, showFps: false,
   cameraId: '', trackModel: 'full', punchSens: 1, dodgeSens: 1, stance: 'ortodoxa', mirror: true, showSkeleton: true, camFlip: 'auto', autoFlip: false,
   master: .8, sfx: .9, music: .5, voice: true,
-  faceTarget: 'rival', playerName: 'JUAN', playerColor: '#2463c9', playerSkin: '#c8915f',
+  faceTarget: 'rival', faceMode: 'head', playMode: 'normal', playerName: 'JUAN', playerColor: '#2463c9', playerSkin: '#c8915f',
 };
 const STORE = 'nocautar.v1';
 let S = (() => { try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(STORE) || '{}') }; } catch (e) { return { ...DEFAULTS }; } })();
@@ -1287,6 +1373,17 @@ function applyView() {
 //  BOXEADOR PROCEDURAL (cuerpo con IK, cara pintable, heridas)
 // ================================================================
 const UP = new V3(0, 1, 0), FWD = new V3(0, 0, 1);
+// orienta un objeto con su eje Z hacia dir y su eje Y lo más cerca posible de upRef (sin giros aleatorios)
+const _bx = new V3(), _by = new V3(), _bz = new V3(), _bm = new THREE.Matrix4();
+function orientZ(obj, dir, upRef) {
+  _bz.copy(dir).normalize(); _bx.crossVectors(upRef, _bz);
+  if (_bx.lengthSq() < 1e-4) _bx.crossVectors(FWD, _bz); if (_bx.lengthSq() < 1e-4) _bx.set(1, 0, 0);
+  _bx.normalize(); _by.crossVectors(_bz, _bx); _bm.makeBasis(_bx, _by, _bz); obj.quaternion.setFromRotationMatrix(_bm);
+}
+function orientY(obj, dir, fwdRef) {
+  _by.copy(dir).normalize(); _bz.copy(fwdRef).addScaledVector(_by, -fwdRef.dot(_by));
+  if (_bz.lengthSq() < 1e-4) _bz.set(0, 1, 0).addScaledVector(_by, -_by.y); _bz.normalize(); _bx.crossVectors(_by, _bz); _bm.makeBasis(_bx, _by, _bz); obj.quaternion.setFromRotationMatrix(_bm);
+}
 const _d = new V3(), _ia = new V3(), _ib = new V3();
 function limbMesh(r, len, mat) { const g = new THREE.CapsuleGeometry(r, len, 4, 14); g.translate(0, len / 2, 0); return mesh(g, mat); }
 // Extremidad con perfil muscular (bíceps, antebrazo, cuádriceps, pantorrilla) torneada alrededor del hueso
@@ -1298,7 +1395,7 @@ function muscleLimb(len, radii, mat) {
   for (let i = 0; i <= NC; i++) { const a = Math.PI / 2 + i / NC * Math.PI / 2; pts.push(new THREE.Vector2(Math.max(.0004, r1 * Math.sin(a)), len - r1 * Math.cos(a) * .75)); }
   return mesh(new THREE.LatheGeometry(pts, lp(26, 8)), mat);
 }
-function placeLimb(m, A, B) { m.position.copy(A); _d.subVectors(B, A).normalize(); m.quaternion.setFromUnitVectors(UP, _d); }
+function placeLimb(m, A, B) { m.position.copy(A); _d.subVectors(B, A).normalize(); orientY(m, _d, FWD); }
 function ik2(S, T, a, b, pole, E, Tc) {
   _ia.subVectors(T, S); let d = _ia.length(); if (d < 1e-5) { _ia.set(0, 0, 1); d = 1e-5; } _ia.divideScalar(d);
   const dd = clamp(d, Math.abs(a - b) + .01, a + b - .002); Tc.copy(S).addScaledVector(_ia, dd);
@@ -1404,36 +1501,84 @@ const EXPR_FS = `{
   float et = (1. - smoothstep(.5, 1., dot(esm, esm))) * smoothstep(.55, 1., uSmile);
   diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.93, .9, .84), et * .85);
 }`;
-// deformación de la cabeza de foto cuando no hay foto propia de esa expresión
-const PH_VS = `{
-  vec2 q = uv; float ax = abs(q.x - .5);
-  float cS = exp(-pow((ax - .075) / .045, 2.) - pow((q.y - uMv) / .035, 2.));
-  float ck = exp(-pow((ax - .14) / .06, 2.) - pow((q.y - (uMv + .08)) / .05, 2.));
-  transformed.y += uWs * uSmile * (.011 * cS + .005 * ck);
-  float jaw = (1. - smoothstep(uMv - .03, uMv - .004, q.y)) * (1. - smoothstep(.17, .3, ax));
-  transformed.y -= uWp * uSurp * .028 * jaw;
-  float br = exp(-pow((ax - .135) / .08, 2.) - pow((q.y - .645) / .035, 2.));
-  transformed.y += uWp * uSurp * .009 * br;
-  float ey = exp(-pow((ax - .137) / .05, 2.) - pow((q.y - .57) / .03, 2.));
-  transformed.y += uWp * uSurp * .004 * ey * sign(q.y - .57);
-}`;
-const PH_FS = `{
-  vec2 mo = (vMapUv - vec2(.5, uMv - .013)) / vec2(.055, .003 + .015 * uSurp);
-  float o = (1. - smoothstep(.55, 1., dot(mo, mo))) * clamp(uSurp * 1.6, 0., 1.) * uWp;
-  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.1, .02, .02), o);
-}`;
-let PH_GEO = null, PH_MASK = null;
+// cabeza de foto en 3D: un elipsoide con forma de cabeza; la foto se proyecta de frente y
+// los lados, la nuca y la coronilla toman el color de piel y de pelo sacados de la misma foto
+const PH_K = .000697, PH_Y = -.005;   // metros por píxel de la foto y altura de su centro
+const PH_VS = `
+  vec3 p0 = position;
+  vPUv = vec2(.5 + p0.x / (512. * PH_K), 1. - (250. - (p0.y - PH_Y) / PH_K) / 512.);
+  vFront = mix(smoothstep(.05, .6, normal.z), 1., uFlat);
+  vHair = smoothstep(-.005, .05, p0.y) * (1. - smoothstep(.25, .7, normal.z)) + smoothstep(.09, .14, p0.y) * .6;
+  vHair = clamp(vHair, 0., 1.);
+  {
+    vec2 q = vPUv; float ax = abs(q.x - .5), wF = vFront;
+    float cS = exp(-pow((ax - .075) / .045, 2.) - pow((q.y - uMv) / .035, 2.));
+    float ck = exp(-pow((ax - .14) / .06, 2.) - pow((q.y - (uMv + .08)) / .05, 2.));
+    transformed.y += wF * uWs * uSmile * (.01 * cS + .005 * ck);
+    transformed.z += wF * uWs * uSmile * .004 * ck;
+    float jaw = (1. - smoothstep(uMv - .03, uMv - .004, q.y)) * (1. - smoothstep(.17, .32, ax));
+    transformed.y -= uWp * uSurp * .026 * jaw * smoothstep(-.3, .3, normal.z);
+    float br = exp(-pow((ax - .135) / .08, 2.) - pow((q.y - .645) / .035, 2.));
+    transformed.y += wF * uWp * uSurp * .008 * br;
+    float ey = exp(-pow((ax - .137) / .05, 2.) - pow((q.y - .57) / .03, 2.));
+    transformed.y += wF * uWp * uSurp * .004 * ey * sign(q.y - .57);
+  }`.replace(/PH_K/g, PH_K.toFixed(6)).replace(/PH_Y/g, PH_Y.toFixed(4));
+const PH_FS = `
+  vec4 pc = texture2D(uPhoto, vPUv);
+  float inb = step(0., vPUv.x) * step(vPUv.x, 1.) * step(0., vPUv.y) * step(vPUv.y, 1.);
+  if (uFlat > .5 && pc.a * inb < .4) discard;
+  float fa = pc.a * vFront * inb;
+  {
+    vec2 mo = (vPUv - vec2(.5, uMv - .013)) / vec2(.055, .003 + .015 * uSurp);
+    float o = (1. - smoothstep(.55, 1., dot(mo, mo))) * clamp(uSurp * 1.6, 0., 1.) * uWp;
+    pc.rgb = mix(pc.rgb, vec3(.06, .01, .01), o);
+  }
+  diffuseColor.rgb = mix(mix(uSkinC, uHairC, vHair), pc.rgb, fa);
+  if (uFlat > .5 && !gl_FrontFacing) { diffuseColor.rgb = vec3(.86, .82, .76); fa = 0.; }`;
+// la foto se ve con su brillo real (casi sin sombras), así no se oscurece
+const PH_OUT = `outgoingLight = mix(outgoingLight, pc.rgb * 1.28 * mix(.84, 1., vFront), fa * .9);`;
+let PH_FEATHER = null;
+function photoFeather() {
+  if (PH_FEATHER) return PH_FEATHER;
+  const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d');
+  g.save(); g.translate(256, 252); g.scale(.82, 1); const gr = g.createRadialGradient(0, 0, 150, 0, 0, 212); gr.addColorStop(0, '#000'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.beginPath(); g.arc(0, 0, 212, 0, 7); g.fill(); g.restore();
+  return PH_FEATHER = c;
+}
+// color del pelo: zona alta de la foto (si es muy clara o parecida al fondo, se usa piel oscurecida)
+function photoHair(c, skin) {
+  try {
+    const d = c.getContext('2d').getImageData(206, 52, 100, 34).data; let r = 0, g = 0, b = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
+    r /= n; g /= n; b /= n; const lum = (r * .3 + g * .59 + b * .11) / 255;
+    if (lum < .55) return '#' + [r, g, b].map(x => Math.round(x * .85).toString(16).padStart(2, '0')).join('');
+  } catch (e) {}
+  const k = new THREE.Color(skin); k.multiplyScalar(.35); return '#' + k.getHexString();
+}
+// recorte plano (ligeramente curvo) del tamaño de la foto
+let PH_FLAT = null;
+function photoFlatGeo() {
+  if (PH_FLAT) return PH_FLAT;
+  const W = 512 * PH_K, R = .24, g = new THREE.PlaneGeometry(W, W, 36, 36), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) { const x = p.getX(i), a = x / R; p.setXYZ(i, R * Math.sin(a), p.getY(i) + PH_Y - 6 * PH_K, R * Math.cos(a) - R + .1); }
+  g.computeVertexNormals(); g.userData.keep = true; return PH_FLAT = g;
+}
+// tono de piel: el de la foto, acercado a la paleta de pieles del juego para que el cuerpo se vea natural
+function skinTone(hex) {
+  const c = new THREE.Color(hex), L = x => { const k = new THREE.Color(x); return k.r * .3 + k.g * .59 + k.b * .11; }, l = L(hex);
+  let best = SKINS[0], bd = 9; for (const t of SKINS) { const d = Math.abs(L(t) - l); if (d < bd) { bd = d; best = t; } }
+  c.lerp(new THREE.Color(best), .45); return '#' + c.getHexString();
+}
+let PH_GEO = null;
 function photoHeadGeo() {
   if (PH_GEO) return PH_GEO;
-  const W = .4, R = .24, g = new THREE.PlaneGeometry(W, W, 36, 36), p = g.attributes.position;
-  for (let i = 0; i < p.count; i++) { const a = p.getX(i) / R; p.setXYZ(i, R * Math.sin(a), p.getY(i), R * Math.cos(a) - R + .105); }
+  const g = new THREE.SphereGeometry(1, 56, 40), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    let x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+    // mandíbula más estrecha abajo y nuca algo más llena: forma de cabeza, no de huevo
+    const jaw = y < 0 ? 1 - .22 * Math.min(1, -y * 1.3) : 1;
+    p.setXYZ(i, x * .125 * jaw, y * .16, z * .135 * (z < 0 ? 1.05 : 1) * (y < -.4 ? .92 : 1));
+  }
   g.computeVertexNormals(); g.userData.keep = true; return PH_GEO = g;
-}
-function photoMaskTex() {
-  if (PH_MASK) return PH_MASK;
-  const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
-  g.fillStyle = '#000'; g.fillRect(0, 0, 256, 256); g.fillStyle = '#fff'; g.beginPath(); g.ellipse(128, 125, 86.5, 106.5, 0, 0, Math.PI * 2); g.fill();
-  return PH_MASK = new THREE.CanvasTexture(c);
 }
 const EYE_U = [.25 + 55 / 1024, .25 - 55 / 1024], EYE_V = 1 - 236 / 512;
 function headBaseSDF(x, y, z) {
@@ -1554,11 +1699,13 @@ class Boxer {
       const foot = mesh(new THREE.SphereGeometry(.06, lp(20), lp(12, 4)), shoeM); foot.scale.set(.95, .62, 2.15); foot.position.set(0, .04, .055); shoe.add(foot);
       const sole = mesh(new THREE.CylinderGeometry(.058, .058, .016, lp(20, 6)), std(o.ref ? '#111' : '#efefe9', .7)); sole.scale.set(1.02, 1, 2.3); sole.position.set(0, .008, .055); shoe.add(sole);
       if (!o.ref) {
-        const boot = mesh(new THREE.CylinderGeometry(.066, .072, .25, lp(22, 6)), shoeM); boot.position.y = .14; shoe.add(boot);
+        const shaft = new THREE.Group(); shaft.position.y = .1; shoe.add(shaft); shoe.userData.shaft = shaft;
+        const heel = mesh(new THREE.SphereGeometry(.068, lp(18), lp(12, 4)), shoeM); heel.scale.set(1, .9, 1.05); heel.position.y = -.035; shaft.add(heel);
+        const boot = mesh(new THREE.CylinderGeometry(.064, .07, .22, lp(22, 6)), shoeM); boot.position.y = .05; shaft.add(boot);
         const laceM = std('#f4f4f4', .8);
-        const tongue = mesh(new THREE.BoxGeometry(.03, .2, .012), shoeM); tongue.position.set(0, .15, .068); shoe.add(tongue);
-        for (let i = 0; i < 6; i++) [-1, 1].forEach(d => { const l = mesh(new THREE.BoxGeometry(.05, .006, .006), laceM, false, false); l.position.set(0, .07 + i * .03, .074); l.rotation.z = d * .5; shoe.add(l); });
-        const sock = mesh(new THREE.CylinderGeometry(.069, .069, .045, lp(18, 6)), std('#f4f4f4', .95)); sock.position.y = .285; shoe.add(sock);
+        const tongue = mesh(new THREE.BoxGeometry(.03, .19, .012), shoeM); tongue.position.set(0, .05, .066); shaft.add(tongue);
+        for (let i = 0; i < 6; i++) [-1, 1].forEach(d => { const l = mesh(new THREE.BoxGeometry(.05, .006, .006), laceM, false, false); l.position.set(0, -.025 + i * .029, .072); l.rotation.z = d * .5; shaft.add(l); });
+        const sock = mesh(new THREE.CylinderGeometry(.067, .067, .04, lp(18, 6)), std('#f4f4f4', .95)); sock.position.y = .175; shaft.add(sock);
       } else { const ank = mesh(new THREE.CylinderGeometry(.056, .06, .09, lp(16, 6)), shoeM); ank.position.y = .07; shoe.add(ank); }
       root.add(shoe); this.shoe[k] = shoe;
     }
@@ -1584,7 +1731,9 @@ class Boxer {
     const s = h === 'L' ? 1 : -1;
     if (this.o.ref) return out.set(s * .27, -.03, .06);
     if (this.guardHigh > .5) return out.set(s * .08, .58, .21);
-    return h === this.lead ? out.set(s * .13, .5, .33) : out.set(s * .1, .52, .22);
+    // gLow: 0 = guardia cerrada frente a la cara, 1 = manos abajo (cansado, provocando o recuperándose)
+    const g = this.gLow || 0;
+    return h === this.lead ? out.set(s * (.13 + .09 * g), .5 - .2 * g, .33 - .04 * g) : out.set(s * (.1 + .09 * g), .52 - .18 * g, .22 - .04 * g);
   }
   // ---- cara y cuerpo pintados ----
   drawFace() {
@@ -1609,44 +1758,50 @@ class Boxer {
   }
   setPhoto(f) {
     this.photo = f && f.canvas ? { c: f.canvas, h: f.hap || null, s: f.sur || null, emd: f.emd || 150 } : null;
-    this.o.skin = this.photo && f.skin ? f.skin : this.skin0; this.skinM.color.set(this.o.skin);
+    // el cuerpo toma el tono de piel de la foto (claro, moreno u oscuro)
+    this.o.skin = this.photo && f.skin ? skinTone(f.skin) : this.skin0; this.skinM.color.set(this.o.skin);
     if (this.photo && !this.pHead) this.buildPhotoHead();
     this.headReal.visible = !this.photo; if (this.pHead) this.pHead.visible = !!this.photo;
     if (this.photo) {
       const u = this.pU; u.uMv.value = 1 - (220 + this.photo.emd) / 512; u.uWs.value = this.photo.h ? 0 : 1; u.uWp.value = this.photo.s ? 0 : 1;
+      u.uSkinC.value.set(this.o.skin); u.uHairC.value.set(photoHair(this.photo.c, this.o.skin));
+      const flat = S.faceMode === 'flat'; u.uFlat.value = flat ? 1 : 0; this.pMesh.geometry = flat ? photoFlatGeo() : photoHeadGeo();
       this.pKey = 'n'; this.composeP();
     }
     this.drawFace(); this.drawBody();
   }
-  // cabeza de foto: un recorte curvo (como cabeza de cartón) con borde blanco; la foto cambia o se deforma según la expresión
+  // cabeza de foto: reemplaza toda la cabeza del boxeador; la foto cambia o se deforma según la expresión
   buildPhotoHead() {
     const cv = this.pc = document.createElement('canvas'); cv.width = cv.height = 512; this.pcg = cv.getContext('2d');
     const dc = this.dcv = document.createElement('canvas'); dc.width = 1024; dc.height = 512; this.dg = dc.getContext('2d');
     this.pTex = new THREE.CanvasTexture(cv); this.pTex.colorSpace = THREE.SRGBColorSpace; this.pTex.anisotropy = 4;
-    const exU = this.exU, pU = this.pU = { uWs: { value: 1 }, uWp: { value: 1 }, uMv: { value: .45 } };
-    const fm = new THREE.MeshStandardMaterial({ map: this.pTex, roughness: .7, metalness: 0, alphaTest: .5, emissive: new THREE.Color('#ffffff'), emissiveMap: this.pTex, emissiveIntensity: .22 });
+    const exU = this.exU, pU = this.pU = { uWs: { value: 1 }, uWp: { value: 1 }, uMv: { value: .45 }, uPhoto: { value: this.pTex }, uFlat: { value: 0 }, uSkinC: { value: new THREE.Color(this.o.skin) }, uHairC: { value: new THREE.Color('#1a1410') } };
+    const fm = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .62, metalness: 0 });
     fm.onBeforeCompile = sh => {
       Object.assign(sh.uniforms, exU, pU);
-      sh.vertexShader = 'uniform float uSmile, uSurp, uWs, uWp, uMv;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n' + PH_VS);
-      sh.fragmentShader = 'uniform float uSmile, uSurp, uWs, uWp, uMv;\n' + sh.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n' + PH_FS);
+      sh.vertexShader = 'uniform float uSmile, uSurp, uWs, uWp, uMv, uFlat;\nvarying vec2 vPUv; varying float vFront, vHair;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n' + PH_VS);
+      sh.fragmentShader = 'uniform float uSmile, uSurp, uWs, uWp, uMv, uFlat; uniform sampler2D uPhoto; uniform vec3 uSkinC, uHairC;\nvarying vec2 vPUv; varying float vFront, vHair;\n'
+        + sh.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n' + PH_FS).replace('#include <opaque_fragment>', PH_OUT + '\n#include <opaque_fragment>');
     };
-    fm.customProgramCacheKey = () => 'photoHead';
-    const bm = new THREE.MeshStandardMaterial({ color: '#d9d0c0', roughness: .95, alphaMap: photoMaskTex(), alphaTest: .5, side: THREE.BackSide });
-    const G = this.pHead = new THREE.Group(); G.position.set(0, .03, 0);
-    G.add(new THREE.Mesh(photoHeadGeo(), fm), new THREE.Mesh(photoHeadGeo(), bm)); this.head.add(G);
+    fm.customProgramCacheKey = () => 'photoHead3d'; fm.side = THREE.DoubleSide;
+    const G = this.pHead = new THREE.Group(); G.position.set(0, .035, .005);
+    const m = this.pMesh = new THREE.Mesh(photoHeadGeo(), fm); m.castShadow = true; G.add(m); this.head.add(G);
     this.pPop = 0; this.pDT = 0; this.pKey = 'n'; this.pDirty = true;
   }
   composeP() {
     const ph = this.photo; if (!ph || !this.pcg) return; const g = this.pcg, k = this.pKey || 'n';
     const src = (k === 'h' && ph.h) || (k === 's' && ph.s) || ph.c;
-    g.clearRect(0, 0, 512, 512);
-    g.fillStyle = '#f7f3ea'; g.beginPath(); g.ellipse(256, 250, 173, 213, 0, 0, Math.PI * 2); g.fill();
-    g.save(); g.beginPath(); g.ellipse(256, 250, 165, 205, 0, 0, Math.PI * 2); g.clip();
-    g.fillStyle = this.o.skin; g.fillRect(0, 0, 512, 512); g.drawImage(src, 0, 0, 512, 512);
+    const flat = S.faceMode === 'flat';
+    g.clearRect(0, 0, 512, 512); g.globalCompositeOperation = 'source-over'; g.save();
+    if (flat) { g.fillStyle = '#f7f3ea'; g.beginPath(); g.ellipse(256, 250, 173, 213, 0, 0, Math.PI * 2); g.fill(); g.beginPath(); g.ellipse(256, 250, 165, 205, 0, 0, Math.PI * 2); g.clip(); }
+    g.drawImage(src, 0, 0, 512, 512);
     // golpes, cortes y sangre (pintados en coordenadas de la cara) encima de la foto
     if (this.dcv) { g.save(); g.translate(256, 220); g.scale(140 / 110, ph.emd / 90); g.translate(-256, -236); g.drawImage(this.dcv, 0, 0); g.restore(); }
     if (this.koFace) { g.strokeStyle = 'rgba(25,10,8,.92)'; g.lineWidth = 9; g.lineCap = 'round'; for (const x of [186, 326]) { g.beginPath(); g.moveTo(x - 18, 204); g.lineTo(x + 18, 236); g.moveTo(x + 18, 204); g.lineTo(x - 18, 236); g.stroke(); } }
-    g.restore(); this.pTex.needsUpdate = true; this.pDirty = false;
+    g.restore();
+    // borde suave: la foto se funde con la piel de la cabeza
+    if (!flat) { g.globalCompositeOperation = 'destination-in'; g.drawImage(photoFeather(), 0, 0); g.globalCompositeOperation = 'source-over'; }
+    this.pTex.needsUpdate = true; this.pDirty = false;
   }
   drawBody() {
     const g = this.bg; g.fillStyle = this.o.skin; g.fillRect(0, 0, 512, 256);
@@ -1797,7 +1952,7 @@ class Boxer {
       const Sh = this.sh[k], Tg = k === 'L' ? C.hL : C.hR;
       ik2(Sh, Tg, .29, .3, this._p.set(s * .9, -1, -.45), this._E, this._Tc);
       placeLimb(this.up[k], Sh, this._E); placeLimb(this.fore[k], this._E, this._Tc);
-      const gl = this.glove[k]; gl.position.copy(this._Tc); _d.subVectors(this._Tc, this._E).normalize(); gl.quaternion.setFromUnitVectors(FWD, _d);
+      const gl = this.glove[k]; _d.subVectors(this._Tc, this._E).normalize(); gl.position.copy(this._Tc).addScaledVector(_d, .015); orientZ(gl, _d, UP);
     }
     // piernas (IK en espacio raíz)
     const step = this.moving * Math.sin(this.t * 11) * .07;
@@ -1807,7 +1962,10 @@ class Boxer {
       ik2(hip, ank, .44, .44, this._p.set(s * .15, 0, 1), this._K, this._Tc);
       placeLimb(this.thigh[k], hip, this._K); placeLimb(this.shin[k], this._K, this._Tc);
       this.shoe[k].position.set(this._Tc.x, 0, this._Tc.z - .02);
+      const sf = this.shoe[k].userData.shaft; if (sf) { _d.subVectors(this._K, this._Tc).normalize(); orientY(sf, _d, FWD); }
     }
+    // altura de la guardia (con foto en la cara las manos van un poco más abajo para que se vea)
+    { const gt = Math.max(this.gLowT || 0, this.photo ? .34 : 0); this.gLow = (this.gLow || 0) + (gt - (this.gLow || 0)) * (1 - Math.exp(-5 * dt)); }
     // expresión facial (sonrisa / sorpresa) que se desvanece sola
     const ex = this.ex;
     if (ex) {
@@ -2182,7 +2340,7 @@ self.onmessage = async (e) => {
           const d = e.data;
           if (d.type === 'ready') { if (!settled) { settled = true; clearTimeout(to); this.wReady = true; done(true); } }
           else if (d.type === 'error') fail(d.msg);
-          else if (d.type === 'res') { this.wBusy = false; if (d.lm) { this.lm = d.lm; this.wlm = d.wlm; this.fresh = true; this.lost = 0; this.tracking = true; } }
+          else if (d.type === 'res') { this.wBusy = false; this.lat = this.lat ? this.lat * .9 + (performance.now() - this.wSent) * .1 : performance.now() - this.wSent; if (d.lm) { this.lm = d.lm; this.wlm = d.wlm; this.fresh = true; this.lost = 0; this.tracking = true; } }
         };
         w.onerror = e => { e.preventDefault && e.preventDefault(); fail('error del worker'); };
         this.worker = w;
@@ -2210,7 +2368,9 @@ self.onmessage = async (e) => {
     if (this.wReady && this.worker) {
       const now = performance.now(); if (this.wBusy && now - this.wSent < 800) return;
       this.lastT = v.currentTime; this.wBusy = true; this.wSent = now;
-      createImageBitmap(v).then(bmp => { if (this.worker) this.worker.postMessage({ type: 'frame', bmp, ts: performance.now() }, [bmp]); else bmp.close(); }).catch(() => { this.wBusy = false; });
+      // se envía una imagen reducida (el modelo trabaja a 256 px): menos memoria y menos retraso
+      const vw = v.videoWidth || 640, vh = v.videoHeight || 480, k = Math.min(1, 640 / vw);
+      (k < 1 ? createImageBitmap(v, { resizeWidth: Math.round(vw * k), resizeHeight: Math.round(vh * k), resizeQuality: 'medium' }) : createImageBitmap(v)).then(bmp => { if (this.worker) this.worker.postMessage({ type: 'frame', bmp, ts: performance.now() }, [bmp]); else bmp.close(); }).catch(() => { this.wBusy = false; });
       return;
     }
     if (!this.model) return;
@@ -2220,6 +2380,8 @@ self.onmessage = async (e) => {
   update(dt) {
     this.cool.L = Math.max(0, this.cool.L - dt); this.cool.R = Math.max(0, this.cool.R - dt);
     this.lost += dt; if (this.lost > .6) { this.tracking = false; this.out.ok = false; }
+    // si el PC no da abasto con el modelo preciso, pasa solo al rápido
+    if (this.wReady && S.trackModel === 'full' && this.lat > 75) { this.slowT = (this.slowT || 0) + dt; if (this.slowT > 5) { this.slowT = 0; S.trackModel = 'lite'; saveAll(); this.lat = 0; this.loadModel(); if (M.active) callout('Rastreo rápido activado para ir más fluido'); } } else this.slowT = 0;
     this.detect(); if (!this.fresh) return; this.fresh = false; this.process();
   },
   adapt: { L: 1, R: 1 }, nm: { L: 0, R: 0 }, nmX: { L: false, R: false },
@@ -2268,10 +2430,15 @@ self.onmessage = async (e) => {
       (h === 'L' ? this.out.gL : this.out.gR).set(clamp(-relX * .3, -.45, .45), clamp(-.28 - relY * .26, -.66, .2), -.4 - clamp(ext, 0, .6) * .7);
       // manos del avatar en modo espejo para las poses de victoria (espacio del torso)
       (h === 'L' ? this.out.vR : this.out.vL).set(clamp(-relX * .4, -.75, .75), clamp(.42 - relY * .4, -.25, 1.2), clamp(.14 + ext * .6, -.1, .5));
-      let old = null; for (let i = Hh.length - 1; i >= 0; i--) if (t - Hh[i].t >= .07) { old = Hh[i]; break; }
+      let old = null, old2 = null; for (let i = Hh.length - 1; i >= 0; i--) { const d = t - Hh[i].t; if (!old2 && d >= .04) old2 = Hh[i]; if (d >= .07) { old = Hh[i]; break; } }
       if (!old) continue;
       const thh = th * this.adapt[h];
-      const dtw = t - old.t, vx = (relX - old.relX) / dtw, vy = (relY - old.relY) / dtw, ve = (ext - old.ext) / dtw, va = (ang - old.ang) / dtw;
+      let dtw = t - old.t, vx = (relX - old.relX) / dtw, vy = (relY - old.relY) / dtw, ve = (ext - old.ext) / dtw, va = (ang - old.ang) / dtw;
+      // ventana corta: capta antes los golpes rápidos (si es claramente más veloz que la larga)
+      if (old2 && old2 !== old) {
+        const d2 = t - old2.t, vx2 = (relX - old2.relX) / d2, vy2 = (relY - old2.relY) / d2, ve2 = (ext - old2.ext) / d2;
+        if (Math.hypot(vx2, vy2) + Math.abs(ve2) * 4 > (Math.hypot(vx, vy) + Math.abs(ve) * 4) * 1.25) { vx = vx2 * .9; vy = vy2 * .9; ve = ve2 * .9; va = (ang - old2.ang) / d2 * .9; dtw = d2; }
+      }
       arm += Math.hypot(vx, vy) * .09 + Math.abs(ve) * .2;
       // puntajes normalizados (1 = umbral)
       const straight = W3 ? Math.max(ve / (1.3 * thh), (ang > 2.1 ? va / (7 * thh) : 0)) : Math.hypot(vx, vy) / (12 * thh);
@@ -2290,9 +2457,12 @@ self.onmessage = async (e) => {
       else if (best < .3 && this.nm[h] > 0) { if (this.nm[h] > .7 && this.nmX[h]) this.adapt[h] = Math.max(.8, this.adapt[h] - .03); this.nm[h] = 0; this.nmX[h] = false; }
       if (best < 1 || (prev < .5 && best < 1.8) || e.v < .3) continue;
       this.nm[h] = 0; this.nmX[h] = false;
-      if (upper === best && Math.abs(vy) > Math.abs(vx)) { type = 'upper'; pw = upper; }
-      else if (hook === best && Math.abs(vx) > Math.abs(vy) * .8) { type = 'hook'; pw = hook; }
-      else if (straight === best) { type = relY > .5 ? 'body' : (h === lead ? 'jab' : 'cross'); pw = straight; }
+      // el codo decide: doblado = gancho/uppercut, estirado = recto
+      const bent = W3 && ang < 1.95, straightArm = W3 && ang > 2.55;
+      if (upper === best && Math.abs(vy) > Math.abs(vx) && !(straightArm && ve > 0 && relY < 0)) { type = 'upper'; pw = upper; }
+      else if (hook === best && Math.abs(vx) > Math.abs(vy) * .8 && !(straightArm && ve > Math.abs(vx) * .15)) { type = 'hook'; pw = hook; }
+      else if (straight === best && bent && Math.abs(vx) > Math.abs(vy) && hook > .6) { type = 'hook'; pw = Math.max(hook, straight * .9); }
+      else if (straight === best || (straightArm && straight > .8)) { type = relY > .5 ? 'body' : (h === lead ? 'jab' : 'cross'); pw = Math.max(straight, 1); }
       if (type && pw > 1.9) this.adapt[h] = Math.min(1.08, this.adapt[h] + .012);
       if (type) { this.events.push({ type, hand: h, power: clamp(.75 + (pw - 1) * .35, .6, 1.5) }); this.armed[h] = false; this.lastHit[h] = t; this.peakE[h] = ext; this.label = `${PUNCH[type].name} ${h === 'L' ? 'izq.' : 'der.'}`; this.labelT = t; }
     }
@@ -2300,7 +2470,16 @@ self.onmessage = async (e) => {
     // esquivas: lateral (cabeza respecto a la cadera), agacharse y echarse atrás
     const off = hips && c.hasHips ? (nose.x - hips.x) / sw - c.leanBase : (nose.x - c.noseX) / SW;
     const leanR = c.leanR || .5;
+    // si te quedas inclinado o agachado más de 1,2 s (te acomodaste en otra posición), esa pasa a ser tu centro
+    const fdt = Math.min(.1, t - (this.lastT || t)); this.lastT = t;
+    const dOff = Math.abs(off - (this.pOff ?? off)); this.pOff = off;
+    this.lHold = dOff < .02 ? (this.lHold || 0) + fdt : 0;
+    if (this.lHold > 1.2 && Math.abs(off) > .04) { const k = Math.min(1, fdt * 2.2); if (hips && c.hasHips) c.leanBase += off * k; else c.noseX += off * SW * k; }
+    const dy = (nose.y - c.noseY) / sw, dDy = Math.abs(dy - (this.pDy ?? dy)); this.pDy = dy;
+    this.dHold = dDy < .02 ? (this.dHold || 0) + fdt : 0;
+    if (this.dHold > 1.4 && Math.abs(dy) > .05) c.noseY += dy * sw * Math.min(1, fdt * 1.8);
     this.out.leanX = clamp(-off / leanR * S.dodgeSens, -1, 1);
+    if (Math.abs(this.out.leanX) < .12) this.out.leanX = 0;
     this.out.duck = clamp(((nose.y - c.noseY) / sw) / .5 * S.dodgeSens, 0, 1);
     this.out.jump = this.calib ? clamp(((c.noseY - nose.y) / sw - .12) / .35, 0, 1) : 0;
     this.out.back = W3 ? clamp((nz - c.noseZ) / .13 * S.dodgeSens, 0, 1) : 0;
@@ -2344,7 +2523,7 @@ self.onmessage = async (e) => {
     if (!S.showSkeleton) return;
     g.lineWidth = Math.max(2, W / 160); g.strokeStyle = 'rgba(224,169,59,.9)';
     for (const [a, b] of BONES) { const A = this.lm[a], B = this.lm[b]; if ((A.visibility ?? 1) < .3 || (B.visibility ?? 1) < .3) continue; const [x1, y1] = toXY(A.x, A.y), [x2, y2] = toXY(B.x, B.y); g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }
-    for (const i of [15, 16]) { const p = this.lm[i]; const [x, y] = toXY(p.x, p.y); g.fillStyle = (i === 15) !== this.flipOn() ? '#2463c9' : '#c4161c'; g.beginPath(); g.arc(x, y, W / 36, 0, 7); g.fill(); g.strokeStyle = '#fff'; g.lineWidth = 2; g.stroke(); }
+    for (const i of [15, 16]) { const p = this.lm[i]; const [x, y] = toXY(p.x, p.y); const isL = (i === 15) !== this.flipOn(); g.fillStyle = isL ? '#2463c9' : '#c4161c'; g.beginPath(); g.arc(x, y, W / 36, 0, 7); g.fill(); g.strokeStyle = '#fff'; g.lineWidth = 2; g.stroke(); g.fillStyle = '#fff'; g.font = `700 ${Math.round(W / 34)}px "Barlow Condensed", sans-serif`; g.textAlign = 'center'; g.fillText(isL ? 'IZQ' : 'DER', x, y - W / 26); }
   },
 };
 
@@ -2356,6 +2535,7 @@ addEventListener('keydown', e => {
   if (M.active && [' ', 'arrowleft', 'arrowright', 'arrowdown', 'arrowup'].includes(k)) e.preventDefault();
   if (k === 'escape' || k === 'p') { if (!$('#scr-confirm').hidden) return closeConfirm(); if (M.active && $('#scr-settings').hidden && $('#scr-calib').hidden) togglePause(); return; }
   if ((k === 'enter' || k === ' ') && M.active && M.phase === 'intro') { M.skip = true; }
+  if ((k === 'enter' || k === ' ') && M.active && M.phase === 'rest' && !M.restReady.me && !$('#scr-rest').hidden) { e.preventDefault(); $('#restGo').click(); }
   if (k === 'enter' && M.active && M.phase === 'replay' && M.authority) M.repDone = true;
   if (e.repeat) return; Keys.held.add(k);
   if (!M.active || M.paused) return;
@@ -2379,11 +2559,13 @@ function flipPose(a, img) { return FLIP_IDX.map(j => { const p = a[j]; return { 
 const Inp = { guard: false, leanX: 0, duck: 0, back: 0, gL: new V3(), gR: new V3(), cam: false, events: [] };
 let keyboardOnly = false;
 function readInput(dt) {
+  GP.poll();
+  if (XR.on) { XR.input(dt); return; }
   const kb = Keys.held, useCam = !keyboardOnly && Pose.out.ok && Pose.tracking;
   Inp.cam = useCam;
-  const kl = (kb.has('a') || kb.has('arrowleft')) ? -1 : (kb.has('d') || kb.has('arrowright')) ? 1 : 0;
-  const kd = kb.has('s') || kb.has('arrowdown') ? 1 : 0;
-  const kg = kb.has(' ') || kb.has('l');
+  const kl = (kb.has('a') || kb.has('arrowleft')) ? -1 : (kb.has('d') || kb.has('arrowright')) ? 1 : GP.lean;
+  const kd = kb.has('s') || kb.has('arrowdown') ? 1 : GP.duck;
+  const kg = kb.has(' ') || kb.has('l') || GP.guard;
   const tl = useCam ? Pose.out.leanX : 0, td = useCam ? Pose.out.duck : 0;
   Inp.leanX = lerp(Inp.leanX, kl || tl, 1 - Math.exp(-14 * dt));
   Inp.duck = lerp(Inp.duck, kd || td, 1 - Math.exp(-14 * dt));
@@ -2395,6 +2577,206 @@ function readInput(dt) {
   Inp.events = Keys.events.splice(0);
   if (!keyboardOnly) Inp.events.push(...Pose.events.splice(0)); else Pose.events.length = 0;
 }
+
+// ================================================================
+//  CONTROL (GAMEPAD ESTÁNDAR: Xbox, PlayStation, genéricos)
+// ================================================================
+const GP = {
+  lean: 0, duck: 0, guard: false, prev: [],
+  init() { addEventListener('gamepadconnected', e => { if (e.gamepad.mapping === 'standard') toast('Control conectado: A jab · B directo · X gancho · Y uppercut'); }); },
+  poll() {
+    this.lean = 0; this.duck = 0; this.guard = false;
+    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    for (const p of pads) {
+      if (!p || p.mapping !== 'standard') continue;
+      const b = i => p.buttons[i] && p.buttons[i].pressed, was = this.prev[p.index] || [], ax = p.axes;
+      const lx = Math.abs(ax[0]) > .3 ? ax[0] : 0, ly = ax[1] > .45 ? 1 : 0;
+      this.lean = this.lean || lx; this.duck = this.duck || ly; this.guard = this.guard || b(4) || b(6);
+      const lead = S.stance === 'zurda' ? 'R' : 'L', rear = lead === 'L' ? 'R' : 'L';
+      const map = [[0, 'jab', lead], [1, 'cross', rear], [2, 'hook', lead], [3, 'upper', rear], [5, 'body', rear]];
+      for (const [i, type, hand] of map) if (b(i) && !was[i]) {
+        if (M.active && M.phase === 'intro') { M.skip = true; continue; }
+        if (M.active && M.phase === 'rest' && !M.restReady.me) { $('#restGo').click(); continue; }
+        if (M.active && !M.paused) { Keys.events.push({ type, hand, power: 1 }); Keys.mash++; }
+      }
+      if (b(9) && !was[9] && M.active) togglePause();
+      this.prev[p.index] = p.buttons.map(x => x.pressed);
+    }
+  },
+};
+function toast(t) { try { callout(t); } catch (e) {} }
+
+// ================================================================
+//  REALIDAD VIRTUAL (WebXR): gafas con controles, seguimiento de manos o sin controles
+// ================================================================
+const XR = {
+  on: false, supported: false, session: null, rig: new THREE.Group(), src: [null, null], gloves: {}, hist: { L: [], R: [] }, armed: { L: true, R: true },
+  events: [], h0: null, head: new V3(), still: 0, pHead: null, saved: null, hud: null, msg: '', msgT: 0, big: '', bigT: 0, hudT: 0, wired: false, alt: 0,
+  async check() {
+    try { this.supported = !!(navigator.xr && await navigator.xr.isSessionSupported('immersive-vr')); } catch (e) { this.supported = false; }
+    this.ui();
+  },
+  ui() {
+    const vr = S.playMode === 'vr';
+    $$('.mode-sel .chip').forEach(c => c.classList.toggle('on', c.dataset.pm === (vr ? 'vr' : 'normal')));
+    $('#vrNote').textContent = !vr ? '' : this.supported ? 'Al pulsar «A pelear» entrarás en las gafas. Golpea con los controles o con tus manos y esquiva moviendo la cabeza.'
+      : 'No se detectan gafas VR en este navegador. Abre el juego en el navegador de tus gafas (Meta Quest, Pico, Wolvic) o en Chrome/Edge con SteamVR o Windows Mixed Reality conectado. Mientras tanto se juega normal.';
+  },
+  // se llama dentro del clic del jugador (el navegador lo exige)
+  enter(onStart) {
+    if (this.on) { onStart && onStart(); return true; }
+    if (!navigator.xr || !this.supported) return false;
+    navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking'] }).then(async ses => {
+      renderer.xr.setReferenceSpaceType('local-floor'); renderer.xr.setFramebufferScaleFactor(DYN && DYN.scale < .8 ? .8 : 1);
+      await renderer.xr.setSession(ses); this.session = ses; this.on = true;
+      ses.addEventListener('end', () => this.onEnd());
+      this.setup(); onStart && onStart();
+    }).catch(e => { this.on = false; openConfirm('No se pudo entrar en VR', 'Las gafas no aceptaron la sesión (' + (e && e.message || e) + '). Se juega en pantalla.', null, 'Entendido'); onStart && onStart(); });
+    return true;
+  },
+  exit() { if (this.session) this.session.end().catch(() => {}); },
+  setup() {
+    if (!this.wired) {
+      this.wired = true;
+      for (let i = 0; i < 2; i++) {
+        const ctl = renderer.xr.getController(i), grip = renderer.xr.getControllerGrip(i), hand = renderer.xr.getHand(i);
+        this.rig.add(ctl, grip, hand);
+        ctl.addEventListener('connected', e => { this.src[i] = { h: e.data.handedness === 'left' ? 'L' : 'R', in: e.data, gp: e.data.gamepad, grip, hand, tracked: e.data.targetRayMode === 'tracked-pointer' }; });
+        ctl.addEventListener('disconnected', () => { this.src[i] = null; });
+        ctl.addEventListener('selectstart', () => this.select(i));
+      }
+    }
+    scene.add(this.rig); this.saved = Cam.base.clone();
+    this.saved.mode = Cam.mode; this.rig.add(camera); camera.position.set(0, 0, 0); camera.rotation.set(0, 0, 0);
+    FP.g.visible = false; if (M.meB) M.meB.root.visible = false;
+    for (const k of ['L', 'R']) { if (this.gloves[k]) { disposeTree(this.gloves[k]); this.gloves[k].removeFromParent(); } const g = makeGlove(M.meB ? M.meB.o.gloves : '#c4161c', k === 'L' ? 1 : -1); g.scale.setScalar(.9); g.visible = false; this.rig.add(g); this.gloves[k] = g; }
+    this.buildHud(); this.h0 = null; this.place();
+  },
+  // el jugador queda en su esquina mirando al rival
+  place() {
+    const b = this.saved || Cam.base, o = M.oppB ? M.oppB.root.position : new V3(0, 0, -.45);
+    this.rig.position.set(b.x, 0, b.z); this.rig.rotation.set(0, Math.atan2(-(o.x - b.x), -(o.z - b.z)), 0); this.h0 = null;
+  },
+  onEnd() {
+    this.on = false; this.session = null; scene.add(camera); camera.position.copy(Cam.cur); camera.quaternion.identity();
+    if (this.saved) { Cam.base.copy(this.saved); }
+    for (const k in this.gloves) this.gloves[k].visible = false; if (this.hud) this.hud.visible = false;
+    if (M.active && M.phase === 'fight' && !M.paused) togglePause(true);
+    resize();
+  },
+  select(i) {
+    const s = this.src[i];
+    if (!M.active) return;
+    if (M.phase === 'intro') { M.skip = true; return; }
+    if (M.phase === 'rest' && !M.restReady.me) { $('#restGo').click(); return; }
+    if (M.phase === 'result' || M.phase === 'victory') { this.exit(); return; }
+    if (M.phase === 'replay' && M.authority) { M.repDone = true; return; }
+    // gafas sin controles con seguimiento (Cardboard, toque de pantalla): cada toque es un golpe
+    if (!this.src.some(x => x && x.tracked)) {
+      const lead = S.stance === 'zurda' ? 'R' : 'L', rear = lead === 'L' ? 'R' : 'L';
+      this.alt ^= 1; this.events.push({ type: this.alt ? 'jab' : 'cross', hand: this.alt ? lead : rear, power: 1 }); Keys.mash += 2;
+    }
+  },
+  buzz(hand, amt = .6, ms = 60) {
+    for (const s of this.src) { if (!s || (hand !== 'both' && s.h !== hand)) continue; const h = s.gp && s.gp.hapticActuators && s.gp.hapticActuators[0]; try { h && h.pulse && h.pulse(amt, ms); } catch (e) {} }
+  },
+  // posición (en el espacio del rig) de cada mano: muñeca si hay seguimiento de manos, si no el control
+  handPos(s, out) {
+    if (s.in.hand && s.hand.joints && s.hand.joints.wrist) { const w = s.hand.joints.wrist; out.copy(w.position); return w; }
+    out.copy(s.grip.position); return s.grip;
+  },
+  frame(dt) {
+    // cabeza del jugador en el espacio del rig
+    camera.updateMatrixWorld(); camera.getWorldPosition(this.head); this.rig.worldToLocal(this.head);
+    const hw = camera.getWorldPosition(new V3()); Cam.base.copy(hw); Cam.mode = 'fp';
+    FP.g.visible = false; if (M.meB) M.meB.root.visible = false;
+    const tmp = new V3(), now = performance.now() / 1000;
+    for (const k of ['L', 'R']) this.gloves[k].visible = false;
+    for (const s of this.src) {
+      if (!s || !s.tracked && !s.in.hand) continue;
+      const node = this.handPos(s, tmp), g = this.gloves[s.h];
+      g.visible = true; g.position.copy(tmp); g.quaternion.copy(node.quaternion); g.rotateY(Math.PI); g.translateZ(.03);
+      const rel = tmp.clone().sub(this.head), H = this.hist[s.h]; H.push({ t: now, p: rel }); while (H.length > 24) H.shift();
+    }
+    this.hudT += dt; if (this.hudT > .1) { this.hudT = 0; this.drawHud(); }
+  },
+  input(dt) {
+    const now = performance.now() / 1000, head = this.head;
+    if (!this.h0 || (M.active && M.phase === 'roundStart')) this.h0 = head.clone();
+    const d = head.clone().sub(this.h0);
+    // si te quedas quieto en otra posición, esa pasa a ser tu centro
+    const mv = this.pHead ? head.distanceTo(this.pHead) : 0; this.pHead = head.clone();
+    this.still = mv < .004 ? this.still + dt : 0; if (this.still > 1.5) this.h0.lerp(head, Math.min(1, dt * 1.5));
+    const dz = x => Math.abs(x) < .05 ? 0 : x;
+    Inp.cam = false;
+    const kb = Keys.held, kl = (kb.has('a') || kb.has('arrowleft')) ? -1 : (kb.has('d') || kb.has('arrowright')) ? 1 : GP.lean;
+    Inp.leanX = lerp(Inp.leanX, kl || clamp(dz(d.x) / .17, -1, 1), 1 - Math.exp(-16 * dt));
+    Inp.duck = lerp(Inp.duck, clamp(-dz(d.y) / .2, 0, 1) || GP.duck, 1 - Math.exp(-16 * dt));
+    Inp.back = lerp(Inp.back, clamp(dz(d.z) / .2, 0, 1), 1 - Math.exp(-16 * dt));
+    // golpes con controles o manos
+    const lead = S.stance === 'zurda' ? 'R' : 'L', thr = 1.6 / (S.punchSens || 1);
+    let guardN = 0, nHands = 0;
+    for (const h of ['L', 'R']) {
+      const H = this.hist[h]; if (H.length < 2) continue; const cur = H[H.length - 1]; if (now - cur.t > .25) continue;
+      nHands++; const p = cur.p, reach = -p.z;
+      if (reach < .42 && Math.abs(p.x) < .3 && p.y > -.28) guardN++;
+      (h === 'L' ? Inp.gL : Inp.gR).set(p.x, p.y, p.z);
+      let old = null; for (let i = H.length - 2; i >= 0; i--) if (cur.t - H[i].t >= .06) { old = H[i]; break; } if (!old) continue;
+      const k = 1 / (cur.t - old.t), vx = (p.x - old.p.x) * k, vy = (p.y - old.p.y) * k, vz = (p.z - old.p.z) * k, sp = Math.hypot(vx, vy, vz);
+      if (M.active && M.phase === 'knockdown') Keys.mash += sp * dt * 1.4;
+      if (!this.armed[h]) { if (reach < .3 && sp < 1.1) this.armed[h] = true; continue; }
+      const fwd = -vz, inward = h === 'L' ? vx : -vx;
+      const sStr = reach > .18 ? fwd / thr : 0, sHook = inward > 0 && Math.abs(vx) > fwd * .8 ? Math.abs(vx) / (thr * .9) : 0, sUp = vy > fwd * .8 && p.y < .08 ? vy / (thr * .9) : 0;
+      const best = Math.max(sStr, sHook, sUp); if (best < 1) continue;
+      let type = best === sUp ? 'upper' : best === sHook ? 'hook' : (p.y < -.36 ? 'body' : h === lead ? 'jab' : 'cross');
+      this.events.push({ type, hand: h, power: clamp(.72 + (best - 1) * .4, .6, 1.5) }); this.armed[h] = false; Keys.mash++;
+    }
+    Inp.guard = (nHands === 2 && guardN === 2) || kb.has(' ') || GP.guard;
+    Inp.events = Keys.events.splice(0).concat(this.events.splice(0)); Pose.events.length = 0;
+  },
+  // marcador flotante dentro de las gafas
+  buildHud() {
+    if (!this.hud) {
+      const c = this.hc = document.createElement('canvas'); c.width = 1024; c.height = 300; this.hg = c.getContext('2d');
+      this.htex = new THREE.CanvasTexture(c); this.htex.colorSpace = THREE.SRGBColorSpace;
+      this.hud = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5 * 300 / 1024), new THREE.MeshBasicMaterial({ map: this.htex, transparent: true, depthTest: false, toneMapped: false }));
+      this.hud.renderOrder = 999;
+    }
+    this.rig.add(this.hud); this.hud.position.set(0, 2.32, -2.1); this.hud.rotation.set(.12, 0, 0); this.hud.visible = true;
+  },
+  drawHud() {
+    if (!this.hud) return; const g = this.hg, W = 1024; g.clearRect(0, 0, W, 300);
+    g.fillStyle = 'rgba(12,9,8,.78)'; g.beginPath(); g.roundRect ? g.roundRect(8, 8, W - 16, 284, 18) : g.rect(8, 8, W - 16, 284); g.fill();
+    const font = (w, px) => `${w} ${px}px "Barlow Condensed", Arial, sans-serif`;
+    if (M.active && M.me && M.opp) {
+      const bar = (x, w, f, col, right) => { g.fillStyle = 'rgba(255,255,255,.12)'; g.fillRect(x, 0, w, 0); };
+      const side = (F, x, right) => {
+        const w = 360, hp = clamp(F.hp / F.maxHp, 0, 1), st = clamp((F.sta ?? 100) / 100, 0, 1);
+        g.fillStyle = '#f1e8d6'; g.font = font(700, 34); g.textAlign = right ? 'right' : 'left'; g.fillText((F.name || '').slice(0, 18), right ? x + w : x, 58);
+        g.fillStyle = 'rgba(255,255,255,.12)'; g.fillRect(x, 74, w, 30); g.fillRect(x, 112, w, 10);
+        g.fillStyle = hp > .5 ? '#3fbf5f' : hp > .25 ? '#e0a93b' : '#e0402f'; g.fillRect(right ? x + w * (1 - hp) : x, 74, w * hp, 30);
+        g.fillStyle = '#ffd76a'; g.fillRect(right ? x + w * (1 - st) : x, 112, w * st, 10);
+      };
+      side(M.me, 36, false); side(M.opp, W - 36 - 360, true);
+      g.textAlign = 'center'; g.fillStyle = '#ffd76a'; g.font = font(700, 30); g.fillText(`ROUND ${M.round || 1}`, W / 2, 56);
+      g.fillStyle = '#fff'; g.font = font(700, 64); g.fillText(fmtTime(Math.max(0, Math.ceil(M.clock || 0))), W / 2, 118);
+    }
+    const now = performance.now();
+    let line = '';
+    if (!M.active) line = 'Eye of a Tiger';
+    else if (M.phase === 'result' || M.phase === 'victory') line = (M.result && M.result.winner === 'me' ? '¡GANASTE! ' : M.result && M.result.winner === 'draw' ? 'EMPATE · ' : 'PERDISTE · ') + 'Gatillo: salir de VR';
+    else if (M.phase === 'intro') line = 'Gatillo para empezar';
+    else if (M.phase === 'rest') line = `Descanso ${fmtTime(Math.max(0, Math.ceil(M.rules.restTime - M.pt)))} · gatillo para seguir`;
+    else if (M.phase === 'knockdown' && M.countWho === 'me') line = `¡Levántate! Mueve los brazos · ${M.count || ''}`;
+    else if (M.phase === 'knockdown') line = `Cuenta: ${M.count || ''}`;
+    else if (now - this.bigT < 1800) line = this.big;
+    else if (now - this.msgT < 1400) line = this.msg;
+    if (M.paused) line = 'Pausa · quítate las gafas para continuar';
+    g.textAlign = 'center'; g.fillStyle = '#fff'; g.font = font(700, 56); g.fillText(line, W / 2, 228, W - 60);
+    this.htex.needsUpdate = true;
+  },
+};
+$$('.mode-sel .chip').forEach(c => c.onclick = () => { S.playMode = c.dataset.pm; saveAll(); XR.ui(); Snd.ui(); });
 
 // ================================================================
 //  GUANTES EN PRIMERA PERSONA
@@ -2432,6 +2814,15 @@ const FP = {
   },
 };
 
+// separa a los boxeadores (y al árbitro) para que nunca se atraviesen
+function separate() {
+  const a = M.meB, b = M.oppB; if (!a || !b) return;
+  const push = (p, q, min, w) => { const dx = q.x - p.x, dz = q.z - p.z, d = Math.hypot(dx, dz); if (d < min && d > 1e-4) { const k = (min - d) / d; q.x += dx * k * w; q.z += dz * k * w; p.x -= dx * k * (1 - w); p.z -= dz * k * (1 - w); } };
+  const fp = Cam.mode === 'fp';
+  push(a.root.position, b.root.position, .66, fp ? 1 : .6);
+  if (fp) push(Cam.base, b.root.position, .8, 1);
+  if (Ref.b) { push(a.root.position, Ref.b.root.position, .6, 1); push(b.root.position, Ref.b.root.position, .6, 1); }
+}
 // ================================================================
 //  CÁMARA
 // ================================================================
@@ -2449,7 +2840,7 @@ const Cam = {
       const opp = M.oppB; const ox = opp ? opp.root.position.x : 0;
       const p = this.cur.set(this.base.x + Inp.leanX * .27 + n(), this.base.y - Inp.duck * .32 - Inp.back * .04 + Math.sin(this.t * 7) * .006 + n(), this.base.z + Inp.back * .2);
       camera.position.copy(p);
-      camera.rotation.set(-.04 + this.sp.pitch.x - Inp.duck * .08 + Inp.back * .1 + n(), Math.atan2(-(ox - p.x), 1.1) * .6 + this.sp.yaw.x, -Inp.leanX * .1 + this.sp.roll.x + n());
+      camera.rotation.set(-.04 + this.sp.pitch.x - Inp.duck * .08 + Inp.back * .1 + n(), Math.atan2(-(ox - p.x), 1.1) * .6 + this.sp.yaw.x, -Inp.leanX * .05 + this.sp.roll.x + n());
       return;
     }
     let pos, look;
@@ -2505,7 +2896,7 @@ const M = { active: false, mode: 'cpu', authority: true, paused: false, phase: '
 const REF_IDLE = new V3(1.25, 0, -1.35);
 const NUMS = ['', 'Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis', 'Siete', 'Ocho', 'Nueve', 'Diez'];
 const other = w => w === 'me' ? 'opp' : w === 'opp' ? 'me' : w;
-const BASE_HP = 125;
+const BASE_HP = 165;
 // combinaciones con nombre que reconoce el juego (las más largas ganan)
 const PCOMBOS = [
   { s: ['jab', 'cross'], n: 'Uno-dos' },
@@ -2584,7 +2975,9 @@ function enterPhase(p, d = {}) {
       M.clock = R.roundTime; M.belled = false;
       for (const F of [M.me, M.opp]) Object.assign(F, { kdR: 0, dmgR: 0, landedR: 0, thrownR: 0, down: false });
       M.meB.resetPose(); M.oppB.resetPose(); M.oppB.base.x = 0; AI.reset(); M.restReady = {};
-      big(`Round ${M.round}`, `de ${R.rounds}`, 1.9); Cam.mode = 'fp'; Ref.go('box', new V3(1, 0, -.75));
+      const tw = M.cfg && M.cfg.from === 'tower' && Tower.run;
+      if (XR.on && M.round === 1) XR.place();
+      big(`Round ${M.round}`, tw ? `Piso ${Tower.run.floor + 1} de ${Tower.run.opps.length}${M.prof.boss ? ' · ¡el jefe!' : ''}` : `de ${R.rounds}`, 1.9); Cam.mode = 'fp'; Ref.go('box', new V3(1, 0, -.75));
       Snd.say(`Round ${M.round}`, 1.05, true);
       break;
     }
@@ -2706,7 +3099,9 @@ function updateMatch(dt) {
       break;
     }
     case 'roundEnd': if (M.pt > 3.2) { if (M.round >= R.rounds) decide(); else enterPhase('rest'); } break;
-    case 'rest': if (M.pt > R.restTime || (M.restReady.me && (M.mode === 'cpu' || M.restReady.opp))) { M.round++; enterPhase('roundStart'); } break;
+    case 'rest':
+      if (!M.restReady.me && Inp.cam && Pose.out.guard) { M.restG = (M.restG || 0) + dt; if (M.restG > 2) $('#restGo').click(); } else M.restG = 0;
+      if (M.pt > R.restTime || (M.restReady.me && (M.mode === 'cpu' || M.restReady.opp))) { M.round++; enterPhase('roundStart'); } break;
     case 'ko': if (M.pt > 4.2) enterPhase(Rep.can() ? 'replay' : M.result.winner !== 'draw' ? 'victory' : 'result', M.result); break;
     case 'replay': if (M.repDone || M.pt > 14) { M.repDone = false; enterPhase(M.result.winner !== 'draw' ? 'victory' : 'result', M.result); } break;
     case 'decision': if (M.pt > 4.6) enterPhase(M.result.winner !== 'draw' ? 'victory' : 'result', M.result); break;
@@ -2770,18 +3165,25 @@ function resolveOnCPU(type, hand, power, star = false, cnt = false) {
   if (F.down || B.isDown()) return;
   const counter = (AI.st === 'attack' && AI.windup) || cnt;
   let res = 'hit';
+  const gl = AI.gl || 0, rd = D.read || .5, seen = AI.seen;
+  let tot = 0; for (const k in seen) tot += seen[k];
+  const pred = tot > 2 ? (seen[type] || 0) / tot : 0;
+  AI.streak = AI.lastType === type ? AI.streak + 1 : 1; AI.lastType = type;
+  for (const k in seen) seen[k] *= .88; seen[type] = (seen[type] || 0) + 1;
+  const readB = rd * (.32 * pred + (AI.streak >= 3 ? .18 : 0));
+  if (AI.taunt > 0) { AI.taunt = 0; AI.tauntCd = rand(12, 20); }
   if (AI.st === 'block') res = (type === 'hook' && Math.random() < .3) || (type === 'body' && Math.random() < .55) ? 'hit' : 'block';
   else if (AI.st === 'slip' && type !== 'body') res = 'miss';
   else if (!counter && !B.busy()) {
-    const stf = F.sta / 200 + .5, bl = D.block * P.defense * stf, dg = D.dodge * P.defense * stf, r = Math.random();
-    if (r < bl) { res = type === 'body' && Math.random() < .5 ? 'hit' : 'block'; if (res === 'block') { B.block(.5); AI.st = 'block'; AI.timer = .5; } }
+    const stf = F.sta / 200 + .5, bl = Math.min(.9, D.block * P.defense * stf * (1 - .8 * gl) + readB), dg = D.dodge * P.defense * stf * (AI.dz < -.07 ? 1.5 : 1) + readB * .5, r = Math.random();
+    if (r < bl) { res = type === 'body' && Math.random() < .5 ? 'hit' : 'block'; if (res === 'block') { B.block(.5); AI.st = 'block'; AI.timer = .5; if (AI.streak >= 3 && readB > .15 && Math.random() < .5) callout('¡Te leyó! Varía tus golpes', 'red'); } }
     else if (r < bl + dg && type !== 'body') { res = 'miss'; if (type === 'hook') B.duckAct(); else B.slip(Math.random() < .5 ? 1 : -1); AI.st = 'slip'; AI.timer = .5; }
   }
   let dmg = 0, crit = false;
   if (res !== 'miss') {
     if (star && res === 'block' && Math.random() < .6) res = 'hit';
-    dmg = PUNCH[type].dmg * power * M.rules.playerDmg / P.chin * (counter ? 1.4 : 1) * (star ? 2.2 : 1);
-    if (res === 'hit' && !star && /hook|upper/.test(type) && Math.random() < M.rules.critChance) { crit = true; dmg *= 1.8; }
+    dmg = PUNCH[type].dmg * power * M.rules.playerDmg / P.chin * (counter ? 1.4 : 1) * (star ? 2.2 : 1) * (1 + .25 * gl);
+    if (res === 'hit' && !star && /hook|upper/.test(type) && Math.random() < M.rules.critChance + .12 * gl) { crit = true; dmg *= 1.8; }
     if (res === 'block') { dmg *= .15; F.sta = Math.max(0, F.sta - 3); }
   }
   oppVisual(res, type, hand, power, dmg, zoneFor(type, hand), crit, counter, star);
@@ -2807,6 +3209,7 @@ function oppVisual(res, type, hand, power, dmg, zone, crit, counter, star = fals
     else if (pc && !crit) { callout('¡' + pc.n + '!', 'gold'); Snd.cheer(.6 + pc.s.length * .25); if (pc.s.length >= 3) Snd.say(pc.n, 1.1); }
     else callout(crit ? '¡Crítico!' : counter ? '¡Contragolpe!' : PUNCH[type].name, crit ? 'gold' : counter ? 'gold' : '');
     if (M.meB) M.meB.feel('happy', crit || star ? 1 : .7, 1.1);
+    if (XR.on) XR.buzz('both', crit || star ? 1 : .5, crit || star ? 110 : 50);
     if (crit || star || p > 1.3) B.feel('surprise', 1, 1);
   } else if (res === 'block') {
     if (!B.busy()) B.block(.45); Snd.block(power); M.pendCombo = null; me.dmgR += dmg; me.dmgT += dmg; addStar(me, 1.5);
@@ -2831,7 +3234,7 @@ function startKnockdown(who) {
   if (!M.rules.kdEnabled) return finish('KO', other(who));
   if (F.kdR >= M.rules.maxKd) return finish('KOT', other(who));
   if (who === 'opp' && M.mode === 'cpu') {
-    const p = clamp(.95 - .22 * (F.kdT - 1) - (M.rules.difficulty === 'novato' ? .15 : 0) + (M.prof.chin - 1) * .5, .08, .95);
+    const p = clamp(1 - .18 * (F.kdT - 1) - (M.rules.difficulty === 'novato' ? .15 : 0) + (M.prof.chin - 1) * .5, .1, .97);
     M.riseAt = Math.random() < p ? Math.floor(rand(4, 9.5)) : 99;
   }
   enterPhase('knockdown', { who, kdR: F.kdR, kdT: F.kdT });
@@ -2869,7 +3272,7 @@ function meVisual(res, type, hand, dmg, zone, crit) {
     Cam.kick(type === 'hook' ? from * .3 * p : rand(-.06, .06), type === 'hook' ? -from * .14 * p : rand(-.06, .06), type === 'upper' ? .3 * p : type === 'body' ? -.12 : .14 * p, p);
     Screen.hit(clamp(.25 + p * .25, 0, .85)); if (dmg > 7) Screen.splat(p); if (p > 1.15 || crit) Screen.zoom = Math.min(1, p * .55); PlayerFace.add(zone, p);
     type === 'body' ? Snd.body(p) : Snd.punch(p); Snd.cheer(p * .7); M.excite = Math.min(1.4, M.excite + dmg * .05);
-    M.hitstop = crit ? .12 : .05; M.combo = 0; M.meB.hurt(type, -from, p); if (M.oppB) M.oppB.feel('happy', crit ? 1 : .75, 1.2);
+    M.hitstop = crit ? .12 : .05; M.combo = 0; M.meB.hurt(type, -from, p); if (M.oppB) M.oppB.feel('happy', crit ? 1 : .75, 1.2); if (XR.on) XR.buzz('both', .9, crit ? 200 : 120);
     if (dmg > 8 && S.gore !== 'off') { const f = new V3(0, 0, -.25).applyQuaternion(camera.quaternion).add(camera.position); FX.blood(f, new V3(rand(-.5, .5), .3, .4), 10, 1.2); }
     callout(crit ? '¡Te conectó fuerte!' : '¡Te pegó!', 'red');
   } else if (res === 'block') { Snd.block(); Cam.kick(0, 0, .05, .3); Screen.hit(.14, '120,170,255'); callout('¡Bloqueo!', 'blue'); }
@@ -2878,46 +3281,82 @@ function meVisual(res, type, hand, dmg, zone, crit) {
 
 // --- IA de la CPU ---
 const AI = {
-  st: 'idle', timer: 1.2, queue: [], windup: false, moveT: 0, tx: 0,
-  reset() { this.st = 'idle'; this.timer = 1.3; this.queue.length = 0; this.windup = false; this.counterNext = false; if (M.oppB) for (const k of ['L', 'R']) { const m = M.oppB.glove[k].userData.mat; if (m) m.emissive.setRGB(0, 0, 0); } },
+  st: 'idle', timer: 1.2, queue: [], windup: false, moveT: 0, tx: 0, seen: {}, streak: 0, lastType: '', antT: 0, z0: null, dz: 0, dzT: 0, taunt: 0, tauntCd: 10, recover: 0, gl: 0, feintT: 0,
+  reset() {
+    if (this.z0 != null && M.oppB) M.oppB.base.z = this.z0;
+    Object.assign(this, { st: 'idle', timer: 1.3, windup: false, counterNext: false, z0: null, dz: 0, dzT: 0, taunt: 0, tauntCd: rand(8, 14), recover: 0, gl: 0, feintT: 0, antT: 0 }); this.queue.length = 0; if (M.phase === 'intro' || M.round === 1) { this.seen = {}; this.streak = 0; }
+    if (M.oppB) { M.oppB.gLowT = 0; for (const k of ['L', 'R']) { const m = M.oppB.glove[k].userData.mat; if (m) m.emissive.setRGB(0, 0, 0); } }
+  },
   update(dt) {
     const B = M.oppB, F = M.opp, D = DIFF[M.rules.difficulty], P = M.prof;
-    if (F.down || B.isDown() || (B.act && B.act.kind === 'getup')) { this.windup = false; this.st = 'idle'; return; }
-    this.moveT -= dt; if (this.moveT <= 0) { this.tx = rand(-.3, .3); this.moveT = rand(1.2, 3); }
-    const bx = B.base.x; B.base.x = lerp(bx, this.tx, 1 - Math.exp(-1.6 * dt)); B.moving = Math.min(1, Math.abs(this.tx - bx) * 4);
-    this.timer -= dt;
+    if (this.z0 == null) this.z0 = B.base.z;
+    if (F.down || B.isDown() || (B.act && B.act.kind === 'getup')) { this.windup = false; this.st = 'idle'; B.gLowT = .7; return; }
+    const tired = M.rules.stamina && F.sta < 30, hurt = F.hp < F.maxHp * .3, meHurt = M.me.hp < M.me.maxHp * .3;
+    // --- guardia: cerrada al acercarse, baja cuando se cansa, cuando está herido, al terminar su combinación o cuando provoca ---
+    this.recover = Math.max(0, this.recover - dt); this.tauntCd -= dt;
+    if (this.taunt > 0) this.taunt -= dt;
+    else if (this.tauntCd <= 0) {
+      if (!tired && !hurt && this.st === 'idle' && F.hp >= M.me.hp && Math.random() < .55 + (P.gLow || 0)) {
+        this.taunt = rand(1.4, 2.4); B.feel('happy', .9, this.taunt); callout(pick(['¡Te está provocando!', '¡Bajó la guardia!', '¡Castígalo!']), 'gold'); Snd.cheer(.5);
+      }
+      this.tauntCd = rand(11, 20);
+    }
+    let low = P.gLow || .08;
+    if (tired) low += .35; if (hurt) low += .22; if (this.recover > 0) low = Math.max(low, .55); if (this.taunt > 0) low = .95;
+    if (this.st === 'block' || (this.st === 'attack' && !this.windup)) low *= .3;
+    B.gLowT = clamp(low, 0, 1); this.gl = B.gLow || 0;
+    // --- juego de piernas: entra para atacar, sale después, se mueve en círculo con ritmo ---
+    const toward = Math.sign(Cam.base.z - this.z0) || 1;
+    this.dzT = this.st === 'attack' ? .08 : this.recover > 0 ? -.13 : this.taunt > 0 ? -.1 : tired ? -.12 : (Math.sin(performance.now() / 900) * .04);
+    this.dz += (this.dzT - this.dz) * (1 - Math.exp(-3.2 * dt)); B.base.z = this.z0 + toward * this.dz;
+    this.moveT -= dt; if (this.moveT <= 0) { this.tx = clamp(B.base.x + rand(-.38, .38), -.42, .42); this.moveT = rand(.8, 2) / (P.speed || 1); }
+    const bx = B.base.x; B.base.x = lerp(bx, this.tx, 1 - Math.exp(-2.2 * dt));
+    B.moving = Math.min(1, Math.abs(this.tx - bx) * 4 + Math.abs(this.dzT - this.dz) * 3 + (this.taunt > 0 ? .9 : 0));
+    this.timer -= dt; this.feintT -= dt;
     if (this.st === 'attack') {
       if (!B.act || B.act.kind !== 'punch') {
         if (this.queue.length && Math.random() < .92) this.throw(this.queue.shift(), true);
-        else { this.st = 'idle'; this.windup = false; this.timer = D.every * rand(.6, 1.25) / (P.aggression * M.rules.cpuAgg); }
+        else {
+          this.st = 'idle'; this.windup = false;
+          this.recover = rand(.28, .6) * (tired ? 1.7 : 1) / (P.speed || 1);
+          this.timer = D.every * rand(.6, 1.25) / (P.aggression * M.rules.cpuAgg);
+        }
       } else this.windup = B.act.t < B.act.w;
       return;
     }
     if (this.st === 'block' || this.st === 'slip') {
       if (this.timer <= 0) {
         this.st = 'idle'; this.timer = rand(.15, .5);
-        // contragolpe: si fallaste, la CPU castiga enseguida
         if (this.counterNext && !B.busy() && Math.random() < (D.counter || .4)) { this.counterNext = false; this.queue = pick([['cross'], ['hook'], ['cross', 'hook'], ['upper', 'hook'], ['hook', 'cross']]).slice(0, D.combo); this.throw(this.queue.shift(), true); }
         this.counterNext = false;
       }
       return;
     }
-    if (B.busy() || this.timer > 0) return;
-    const tired = M.rules.stamina && F.sta < 25 ? .55 : 1, hurt = F.hp < F.maxHp * .25 ? .75 : 1;
-    const agg = P.aggression * M.rules.cpuAgg * tired * hurt, r = Math.random();
-    if (r < Math.min(.85, .52 * agg + .12)) {
+    this.antT -= dt;
+    if (Inp.cam && this.antT <= 0 && !B.busy() && Pose.out.straight > .55 && Pose.out.straight < 1 && Math.random() < D.dodge * (D.read || .5) * .9) {
+      this.antT = rand(1.2, 2.4); this.st = 'slip'; this.timer = .45; B.slip(Math.random() < .5 ? 1 : -1, .45); return;
+    }
+    // amaga: mueve el hombro como si fuera a pegar para sacarte de ritmo
+    if (this.feintT <= 0 && !B.busy() && Math.random() < .5 * dt * (P.speed || 1)) { this.feintT = rand(2, 4); B.slip(Math.random() < .5 ? .5 : -.5, .3); }
+    if (B.busy() || this.timer > 0 || this.taunt > 0) return;
+    const agg = P.aggression * M.rules.cpuAgg * (tired ? .55 : 1) * (hurt ? .75 : 1) * (meHurt ? 1.3 : 1), r = Math.random();
+    // si te ve con la guardia baja o herido, va a rematar
+    const open = Inp.cam ? !Pose.out.guard : !Inp.guard;
+    if (r < Math.min(.92, .6 * agg + .16 + (open ? .14 : 0))) {
       const combos = [['jab'], ['jab', 'jab'], ['jab', 'cross'], ['jab', 'jab', 'cross'], ['cross', 'hook'], ['jab', 'cross', 'hook'], ['body', 'hook'], ['upper'], ['hook', 'upper'], ['upper', 'hook'], ['jab', 'body'], ['jab', 'upper'], ['hook', 'hook'], ['body', 'upper'], ['cross', 'hook', 'cross'], ['jab', 'cross', 'upper'], ['jab', 'body', 'hook'], ['cross', 'upper', 'hook'], ['body', 'body', 'hook'], ['jab', 'cross', 'hook', 'cross'], ['jab', 'cross', 'body', 'hook'], ['jab', 'jab', 'cross', 'hook'], ['jab', 'cross', 'hook', 'upper', 'cross'], ['body', 'hook', 'upper', 'hook', 'cross']].filter(c => c.length <= D.combo);
       this.queue = pick(combos).slice(); this.throw(this.queue.shift(), false);
-    } else if (r < .86) { this.st = 'block'; this.timer = rand(.7, 1.5); B.block(this.timer); }
+    } else if (r < .87) { this.st = 'block'; this.timer = rand(.6, 1.3) * (hurt ? 1.5 : 1); B.block(this.timer); }
     else { this.st = 'slip'; this.timer = .6; B.slip(Math.random() < .5 ? 1 : -1, .6); }
   },
   throw(type, chained) {
     const B = M.oppB, D = DIFF[M.rules.difficulty], P = M.prof;
     const hand = type === 'jab' ? B.lead : type === 'cross' ? B.rear : pick(['L', 'R']);
     const wind = D.wind / P.speed / M.rules.cpuSpeed * (chained ? .55 : 1) * rand(.85, 1.15);
-    const aimW = Cam.base.clone(); if (type === 'body') aimW.y -= .55;
+    const aimW = Cam.mode === 'fp' || !M.meB ? Cam.base.clone() : M.meB.headWorld().clone();
+    if (Cam.mode !== 'fp' && M.meB) { const tw = B.root.position.clone().sub(aimW); tw.y = 0; aimW.addScaledVector(tw.normalize(), .13); }
+    if (type === 'body') aimW.y -= .5;
     const star = M.opp.star >= 100 && type !== 'jab' && !chained, gm = B.glove[hand].userData.mat;
-    const ok = B.punch(type, hand, { windup: wind * (star ? 1.6 : 1), speed: P.speed * M.rules.cpuSpeed, lunge: /hook|upper/.test(type) ? .2 : .27, aim: B.toTorso(aimW), onImpact: () => { if (gm) gm.emissive.setRGB(0, 0, 0); resolveOnMe(type, hand, P.power * D.dmg * M.rules.cpuDmg * staF(M.opp) * (star ? 1.9 : 1), star); } });
+    const ok = B.punch(type, hand, { windup: wind * (star ? 1.6 : 1), speed: P.speed * M.rules.cpuSpeed, lunge: /hook|upper/.test(type) ? .12 : .17, aim: B.toTorso(aimW), onImpact: () => { if (gm) gm.emissive.setRGB(0, 0, 0); resolveOnMe(type, hand, P.power * D.dmg * M.rules.cpuDmg * staF(M.opp) * (star ? 1.9 : 1), star); } });
     if (ok && star) { M.opp.star = 0; if (gm) gm.emissive.setRGB(1, .65, .1); callout('¡Cuidado! Golpe estrella', 'red'); Snd.whoosh(1.2); }
     if (ok) { this.st = 'attack'; this.windup = true; if (M.rules.stamina) M.opp.sta = Math.max(0, M.opp.sta - PUNCH[type].sta * .8); M.opp.thrown++; M.opp.thrownR++; Snd.whoosh(.45); }
   },
@@ -3025,12 +3464,18 @@ function hudUpdate() {
   setT(H.pipSt, H.pipSt._v);
   H.dGuard.classList.toggle('on', Inp.guard); H.dDuck.classList.toggle('on', Inp.duck > .45);
   H.dLeanL.classList.toggle('on', Inp.leanX < -.45); H.dLeanR.classList.toggle('on', Inp.leanX > .45); H.dBack.classList.toggle('on', Inp.back > .5);
-  if (M.phase === 'rest') setT(restClockEl, fmtTime(M.rules.restTime - M.pt));
+  if (M.phase === 'rest') { setT(restClockEl, fmtTime(M.rules.restTime - M.pt)); const bar = $('#restBar'); if (bar) bar.style.width = clamp(100 * (1 - M.pt / M.rules.restTime), 0, 100) + '%'; }
 }
-function callout(txt, cls = '') { const el = $('#hCall'); el.className = 'callout'; void el.offsetWidth; el.textContent = txt; el.className = 'callout pop ' + cls; }
-function big(l1, l2 = '', dur = 1.6) { $('#hBig1').textContent = l1; $('#hBig2').textContent = l2; $('#hBig').classList.add('on'); clearTimeout(big.t); big.t = setTimeout(() => $('#hBig').classList.remove('on'), dur * 1000); }
+var callout = function (txt, cls = '') { const el = $('#hCall'); el.className = 'callout'; void el.offsetWidth; el.textContent = txt; el.className = 'callout pop ' + cls; }
+var big = function (l1, l2 = '', dur = 1.6) { $('#hBig1').textContent = l1; $('#hBig2').textContent = l2; $('#hBig').classList.add('on'); clearTimeout(big.t); big.t = setTimeout(() => $('#hBig').classList.remove('on'), dur * 1000); }
 function showCount(n) { M.count = n; const el = $('#hCount'); el.textContent = n; el.className = 'count'; void el.offsetWidth; el.className = 'count pop'; Ref.tick(); Snd.say(NUMS[n] || String(n), 1.15, true); Snd.cheer(.4); }
 
+// los mensajes del marcador también se ven dentro de las gafas
+{
+  const _call = callout, _big = big;
+  callout = (t, c) => { XR.msg = t; XR.msgT = performance.now(); return _call(t, c); };
+  big = (a, b, d) => { XR.big = b ? `${a} · ${b}` : a; XR.bigT = performance.now(); return _big(a, b, d); };
+}
 function statRows() {
   const a = M.me, b = M.opp, acc = F => F.thrown ? Math.round(F.landed / F.thrown * 100) + '%' : '0%';
   return `<thead><tr><th></th><th>${a.name}</th><th>${b.name}</th></tr></thead><tbody>
@@ -3044,8 +3489,14 @@ function showRest() {
   $('#restT').textContent = `Fin del round ${M.round}`;
   const log = M.roundLog.map((r, i) => r ? `<tr><td>Juez 1 · round ${i + 1}</td><td>${r[0]}</td><td>${r[1]}</td></tr>` : '').join('');
   $('#restTbl').innerHTML = statRows().replace('</tbody>', log + '</tbody>');
-  $('#restTip').textContent = M.me.hp < M.me.maxHp * .35 ? 'Tu esquina te pide guardia alta y esquivar más. Recuperas parte de la vida.' : 'Respira. Tu esquinero te limpia la cara y recuperas energía.';
-  $('#restGo').disabled = false; $('#restGo').textContent = 'Listo para el siguiente round';
+  const me = M.me, op = M.opp, acc = me.thrownR ? me.landedR / me.thrownR : .5;
+  const tip = me.hp < me.maxHp * .35 ? 'Guardia arriba y muévete: esquiva y contragolpea, no cambies golpe por golpe.'
+    : acc < .35 ? 'Estás fallando mucho: abre con el jab y encadena combinaciones, no lances golpes sueltos.'
+    : op.hp < op.maxHp * .4 ? '¡Lo tienes! Ve al cuerpo para cansarlo y remata con ganchos.'
+    : op.sta < 40 ? 'Está cansado: cuando baje la guardia, castígalo a la cara.'
+    : pick(['Cuando termine su combinación baja la guardia: ¡ese es tu momento para contragolpear!', 'Golpea al cuerpo: le quitas aire y baja las manos.', 'Si te provoca con las manos abajo, entra con un uno-dos.']);
+  $('#restTip').textContent = '🗣 Tu esquina: ' + tip; Snd.say(tip, 1.05);
+  $('#restGo').disabled = false; $('#restGo').textContent = 'Saltar descanso · siguiente round'; M.restG = 0;
   $('#scr-rest').hidden = false;
 }
 function showResult(d) {
@@ -3058,7 +3509,9 @@ function showResult(d) {
   const c = d.cards || M.cards;
   $('#resCards').innerHTML = d.how === 'DEC' && c ? `<thead><tr><th>Tarjetas</th><th>${M.me.name}</th><th>${M.opp.name}</th></tr></thead><tbody>${c.map((r, i) => `<tr><td>Juez ${i + 1}</td><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody>` : '';
   const guest = M.mode === 'online' && !Net.isHost;
+  $('#resTower').hidden = true; $('#resAgain').hidden = false;
   $('#resPick').hidden = M.mode !== 'cpu'; $('#resAgain').disabled = guest; $('#resAgain').textContent = guest ? 'El anfitrión decide la revancha' : 'Revancha';
+  if (M.cfg && M.cfg.from === 'tower') Tower.result(d);
   $('#scr-result').hidden = false;
   if (win) Snd.say('¡Y el ganador es ' + M.me.name + '!', 1, true);
 }
@@ -3066,7 +3519,7 @@ function showResult(d) {
 // ================================================================
 //  INTERFAZ: pantallas, formularios, menús
 // ================================================================
-const PANELS = ['menu', 'sp', 'arcade', 'mp', 'settings', 'howto', 'calib'];
+const PANELS = ['menu', 'sp', 'tower', 'arcade', 'mp', 'settings', 'howto', 'calib'];
 let backTo = 'menu';
 function show(id) { PANELS.forEach(s => $('#scr-' + s).hidden = s !== id); $('#setPrev').hidden = true; }
 function menuCamPill() {
@@ -3114,7 +3567,7 @@ const ARC_FIELDS = [
   { g: 'Tu boxeador', id: 'regen', label: 'Recuperación entre rounds', type: 'range', min: 0, max: 1, step: .05, fmt: pct },
   { g: 'Tu boxeador', id: 'stamina', label: 'Cansancio (resistencia)', type: 'toggle' },
   { g: 'Tu boxeador', id: 'regenFight', label: 'Regenerar vida durante el round', type: 'toggle' },
-  { g: 'CPU', id: 'opponent', label: 'Rival', type: 'select', options: () => ROSTER.map(r => [r.id, `${r.first} "${r.nick}" ${r.sur}`]) },
+  { g: 'CPU', id: 'opponent', label: 'Rival', type: 'select', options: () => rosterFor().map(r => [r.id, `${r.first} "${r.nick}" ${r.sur}`]) },
   { g: 'CPU', id: 'difficulty', label: 'Dificultad', type: 'select', options: () => Object.entries(DIFF).map(([k, v]) => [k, v.name]) },
   { g: 'CPU', id: 'cpuAgg', label: 'Agresividad', type: 'range', min: .4, max: 2.2, step: .1, fmt: mult },
   { g: 'CPU', id: 'cpuSpeed', label: 'Velocidad', type: 'range', min: .5, max: 1.8, step: .1, fmt: mult },
@@ -3157,6 +3610,7 @@ const SET_FIELDS = [
   { g: 'Audio', id: 'music', label: 'Música del menú', type: 'range', min: 0, max: 1, step: .05, fmt: pct },
   { g: 'Audio', id: 'voice', label: 'Voz del árbitro y presentador', type: 'toggle' },
   { g: 'Tu boxeador', id: 'playerName', label: 'Nombre', type: 'text' },
+  { g: 'Tu boxeador', id: 'faceMode', label: 'Cómo se pone tu foto', type: 'select', options: [['head', 'Reemplazar toda la cabeza (3D)'], ['flat', 'Solo la foto (recorte plano)']] },
   { g: 'Tu boxeador', id: 'faceTarget', label: 'Tu cara escaneada', type: 'select', options: [['rival', 'Ponerla en el rival'], ['yo', 'Ponerla en mi boxeador'], ['off', 'No usarla']] },
   { g: 'Tu boxeador', id: 'playerColor', label: 'Pantaloneta y guantes', type: 'swatch', options: TRUNKS },
   { g: 'Tu boxeador', id: 'playerSkin', label: 'Tono de piel', type: 'swatch', options: SKINS },
@@ -3169,7 +3623,7 @@ function onSetting(id) {
   if (id === 'style') { if (!M.active) menuScene(); else buildArena(M.rules.arena); }
   if (id === 'dynRes') { DYN.scale = 1; resize(); if (aoPass) aoPass.enabled = true; }
   if (id === 'showFps') $('#fps').hidden = !S.showFps;
-  if (id === 'faceTarget') applyFaces();
+  if (id === 'faceTarget' || id === 'faceMode') applyFaces();
   if (id === 'fov') resize();
   if (['master', 'sfx', 'music'].includes(id)) Snd.vol();
   if (['viewMode', 'mirror'].includes(id)) applyView();
@@ -3191,7 +3645,8 @@ function chips(el, items, key, obj) {
 }
 function renderSP() {
   const bar = v => `<div class="b"><i style="width:${clamp(v / 1.35 * 100, 5, 100)}%"></i></div>`;
-  $('#spRoster').innerHTML = ROSTER.map(r => `<button class="fcard${SP.opp === r.id ? ' on' : ''}" type="button" data-id="${r.id}">
+  if (!rosterFor().some(r => r.id === SP.opp)) SP.opp = 'toro';
+  $('#spRoster').innerHTML = ROSTER.map(r => r.boss && !bossOpen() ? `<div class="fcard locked"><div class="swatch" style="background:#2a2420"></div><div class="nick">"???"</div><div class="sur">Bloqueado</div><div class="meta">Conquista la Torre Leyenda para pelear contra el campeón invicto.</div></div>` : `<button class="fcard${SP.opp === r.id ? ' on' : ''}" type="button" data-id="${r.id}">
     <div class="swatch" style="background:linear-gradient(90deg,${r.trunks} 0 60%,${r.trim} 60% 80%,${r.gloves} 80%)"></div>
     <div class="nick">"${r.nick}"</div><div class="sur">${r.sur}</div><div class="meta">${r.first} · ${r.from}<br>${r.record} · ${r.style}${r.southpaw ? ' · Zurdo' : ''}</div>
     <div class="stat"><span>Poder</span>${bar(r.power)}</div><div class="stat"><span>Velocidad</span>${bar(r.speed)}</div><div class="stat"><span>Defensa</span>${bar(r.defense)}</div><div class="stat"><span>Mentón</span>${bar(r.chin)}</div></button>`).join('');
@@ -3247,9 +3702,11 @@ const Face = {
     g.save(); g.translate(256, 220); g.rotate(tf.r); g.scale(tf.s, tf.s); g.translate(-tf.cx, -tf.cy); g.drawImage(src, 0, 0, sw, sh); g.restore();
     if (slot === 'n') {
       this.emd = clamp(emd || 150, 90, 220);
-      let r = 0, gg = 0, b = 0, n = 0;
-      for (const sx of [-1, 1]) { const d = g.getImageData(256 + sx * 90 - 10, 220 + this.emd * .55 - 10, 20, 20).data; for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; n++; } }
-      this.skin = n ? '#' + [r, gg, b].map(x => Math.round(x / n).toString(16).padStart(2, '0')).join('') : null;
+      const px = [];
+      for (const [x, y] of [[166, 220 + this.emd * .55], [346, 220 + this.emd * .55], [256, 150], [256, 220 + this.emd * .35]]) { const d = g.getImageData(x - 12, y - 12, 24, 24).data; for (let i = 0; i < d.length; i += 4) px.push([d[i], d[i + 1], d[i + 2], d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11]); }
+      px.sort((p, q) => p[3] - q[3]); const sel = px.slice(Math.floor(px.length * .25), Math.ceil(px.length * .8));
+      const avg = k => sel.reduce((t, p) => t + p[k], 0) / Math.max(1, sel.length);
+      this.skin = sel.length ? '#' + [0, 1, 2].map(k => Math.round(avg(k)).toString(16).padStart(2, '0')).join('') : null;
     }
     let d = null; try { d = c.toDataURL('image/jpeg', .88); } catch (e) {}
     if (slot === 'h') { this.hap = c; this.dh = d; } else if (slot === 's') { this.sur = c; this.ds = d; } else { this.canvas = c; this.data = d; }
@@ -3404,16 +3861,16 @@ const FaceEd = {
 $('#faceScan').onclick = () => { if (!Pose.stream) return; Face.scanning = true; Face.prog = 0; Face.stage = 'n'; Snd.ui(); };
 
 const CAL_STEPS = [
-  { title: 'Encuadre', hint: 'Aléjate hasta que se vean tu cabeza, hombros, codos y cadera. Busca buena luz de frente.' },
+  { title: 'Encuadre', hint: 'Aléjate hasta que se vean tu cabeza, hombros, codos y cadera. Luego levanta tu mano DERECHA por encima de la cabeza: así sabemos cuál es tu izquierda y tu derecha.' },
   { title: 'Ponte en guardia', hint: 'Sube los dos puños a la cara y quédate quieto mientras te escaneamos.' },
-  { title: 'Lanza jabs', hint: 'Lanza 4 jabs rápidos hacia la pantalla SOLO con tu mano de adelante: la IZQUIERDA (la derecha si elegiste guardia zurda). Así medimos tu velocidad y comprobamos que la cámara no vea tus brazos al revés.' },
+  { title: 'Lanza golpes', hint: 'Lanza 4 golpes rápidos hacia la pantalla, como en una pelea. Así medimos tu velocidad.' },
   { title: 'Esquiva', hint: 'Inclina la cabeza y el torso a la izquierda y luego a la derecha, como esquivando un golpe.' },
   { title: 'Tu cara (opcional)', hint: '¿Quieres que la cabeza de un boxeador sea tu foto? Acércate a la cámara, mira de frente y pulsa Escanear: sacamos tu cara normal, sonriendo y sorprendido. Si no, pulsa Pelear.' },
 ];
 const Calib = {
   cb: null, back: null, prog: 0, active: false, step: 0, stepT: 0, scanY: 0,
   setStep(n) {
-    this.step = n; this.prog = 0; this.stepT = 0;
+    this.step = n; this.prog = 0; this.stepT = 0; if (n === 0) this.framed = false;
     $('#calibTitle').textContent = CAL_STEPS[n].title; $('#calibHint').textContent = CAL_STEPS[n].hint;
     $$('#calibSteps li').forEach((li, i) => { li.className = i < n ? 'done' : i === n ? 'on' : ''; });
     $('#calibNow').textContent = n <= 1 ? 'Calibrar ahora' : n === 4 ? '¡A pelear!' : 'Saltar este paso';
@@ -3457,25 +3914,37 @@ const Calib = {
     if (!seen) { if (this.step <= 1) this.prog = Math.max(0, this.prog - dt); st.textContent = 'No te veo completo. Aléjate un poco y busca buena luz.'; }
     else if (this.step === 0) {
       const hips = Pose.now && Pose.now.hips, elbows = Pose.lm && Pose.lm[13].visibility > .5 && Pose.lm[14].visibility > .5;
-      if (elbows) { this.prog += dt / (hips ? .8 : 1.6); st.textContent = hips ? 'Cuerpo detectado: cabeza, brazos y cadera.' : 'Te veo. Si puedes, aléjate un poco más para que se vea la cadera.'; }
-      else st.textContent = 'Muestra los dos codos a la cámara.';
-      if (this.prog >= 1) this.setStep(1);
+      if (!this.framed) {
+        if (elbows) { this.prog += dt / (hips ? .8 : 1.6); st.textContent = hips ? 'Cuerpo detectado: cabeza, brazos y cadera.' : 'Te veo. Si puedes, aléjate un poco más para que se vea la cadera.'; }
+        else st.textContent = 'Muestra los dos codos a la cámara.';
+        if (this.prog >= 1) { this.framed = true; this.sideT = 0; this.sideW = 0; Snd.ui(); }
+      } else {
+        // lados: el jugador levanta su mano DERECHA; si la cámara la ve como izquierda, está en espejo
+        const l = Pose.lm, up = i => (l[i].visibility ?? 1) > .4 && l[i].y < l[0].y - .03, u15 = up(15), u16 = up(16);
+        this.sideT += dt;
+        if (S.camFlip !== 'auto') this.setStep(1);
+        else if (u15 !== u16) {
+          this.sideW += dt; st.textContent = '¡Bien! Mantenla arriba…';
+          if (this.sideW > .5) {
+            const flip = u15; if (flip !== !!S.autoFlip) { S.autoFlip = flip; saveAll(); }
+            this.flipNote = flip ? 'Tu cámara venía en espejo: ya corregimos izquierda y derecha.' : 'Lados correctos.'; Snd.bell(1); this.setStep(1);
+          }
+        } else { this.sideW = 0; st.textContent = u15 && u16 ? 'Solo la mano DERECHA, la otra abajo.' : 'Levanta tu mano DERECHA por encima de la cabeza.'; if (this.sideT > 15) this.setStep(1); }
+        this.prog = .5 + Math.min(.5, this.sideW);
+      }
     } else if (this.step === 1) {
-      if (Pose.out.guard) { this.prog += dt / 1.2; st.textContent = '¡Así! Mantén la guardia…'; } else { this.prog = Math.max(0, this.prog - dt); st.textContent = 'Sube los dos puños a la altura de la cara.'; }
+      if (Pose.out.guard) { this.prog += dt / .9; st.textContent = '¡Así! Mantén la guardia…'; } else { this.prog = Math.max(0, this.prog - dt); st.textContent = 'Sube los dos puños a la altura de la cara.'; }
       if (this.prog >= 1) { Pose.capture(); Snd.ui(); this.setStep(2); }
     } else if (this.step === 2) {
       const n = Pose.calPeaks.length; this.prog = n / 4; st.textContent = n ? `Golpes medidos: ${n} de 4` : '¡Dale! Golpes rápidos hacia la pantalla.';
       if (n >= 4 || (this.stepT > 9 && n >= 2)) {
         const pk = Pose.calPeaks.slice().sort((a, b) => a - b), med = pk[Math.floor(pk.length / 2)];
         Pose.calib.pk = clamp(med * .5, .45, 1.6); Snd.ui();
-        // si los jabs salieron con la otra mano, la cámara está en espejo: se corrige sola
-        const ld = S.stance === 'zurda' ? 'R' : 'L', ot = ld === 'L' ? 'R' : 'L', ch = Pose.calHand;
-        if (S.camFlip === 'auto' && ch[ot] > ch[ld] * 1.6) { S.autoFlip = !S.autoFlip; saveAll(); this.flipNote = 'Tu cámara venía en espejo: ya corregimos izquierda y derecha.'; Snd.bell(1); }
         this.setStep(3);
       } else if (this.stepT > 14) this.setStep(3);
     } else if (this.step === 3) {
       const L = -Pose.calLean.l, R = Pose.calLean.r; this.prog = (Math.min(1, L / .25) + Math.min(1, R / .25)) / 2;
-      st.textContent = (this.flipNote && this.stepT < 4 ? this.flipNote + '  ·  ' : '') + `Izquierda ${L > .2 ? '✓' : '…'}   Derecha ${R > .2 ? '✓' : '…'}`;
+      st.textContent = `Izquierda ${L > .2 ? '✓' : '…'}   Derecha ${R > .2 ? '✓' : '…'}`;
       if ((L > .2 && R > .2 && this.stepT > 1.2) || this.stepT > 12) { if (L > .12 && R > .12) Pose.calib.leanR = clamp(Math.min(L, R) * .65, .18, .9); Pose.calMode = null; this.setStep(4); }
     } else if (this.step === 4) {
       this.prog = Face.canvas ? 1 : Face.prog;
@@ -3528,7 +3997,7 @@ function quitToMenu() {
 
 // --- Descanso / resultado ---
 $('#restGo').onclick = () => { M.restReady.me = true; if (M.mode === 'online' && !Net.isHost) Net.send({ t: 'rdy' }); $('#restGo').disabled = true; $('#restGo').textContent = M.mode === 'online' ? 'Esperando a tu rival…' : 'Saliendo de la esquina…'; };
-$('#resAgain').onclick = () => { if (M.mode === 'online') { if (!Net.isHost) return; Net.send({ t: 'rematch' }); } startMatch(M.cfg); };
+$('#resAgain').onclick = () => { if (M.mode === 'online') { if (!Net.isHost) return; Net.send({ t: 'rematch' }); } if (S.playMode === 'vr' && XR.supported && M.mode !== 'online' && XR.enter(() => startMatch(M.cfg))) return; startMatch(M.cfg); };
 $('#resMenu').onclick = quitToMenu;
 // volver a elegir rival sin repetir el escaneo (ya estás calibrado)
 $('#resPick').onclick = () => {
@@ -3537,6 +4006,7 @@ $('#resPick').onclick = () => {
 };
 const Repick = { on: false };
 const goFight = (cfg, back) => {
+  if (S.playMode === 'vr' && XR.supported && cfg.mode !== 'online') { Repick.on = false; if (XR.enter(() => startMatch(cfg))) return; }
   const quick = Repick.on && (keyboardOnly || Pose.calib); Repick.on = false;
   if (quick) { if (!keyboardOnly && !Pose.stream) { Calib.open(() => startMatch(cfg), back); return; } startMatch(cfg); }
   else Calib.open(() => startMatch(cfg), back);
@@ -3546,6 +4016,7 @@ const goFight = (cfg, back) => {
 $$('[data-go]').forEach(b => b.onclick = () => {
   Snd.init(); Snd.ui(); const go = b.dataset.go;
   if (go === 'sp') { renderSP(); show('sp'); }
+  else if (go === 'tower') { Tower.open(); }
   else if (go === 'arcade') { renderArcade(); show('arcade'); }
   else if (go === 'mp') { renderForm($('#mpForm'), MP_FIELDS, MPR, () => {}); show('mp'); }
   else if (go === 'settings') openSettings('menu');
@@ -3563,9 +4034,81 @@ function renderArcade() {
   $$('#arcPresets .chip').forEach(b => b.onclick = () => { Object.assign(ARC, PRESETS[b.textContent]); saveAll(); renderArcade(); Snd.ui(); });
 }
 $('#spGo').onclick = () => {
-  const rules = { ...RULES_PRO, rounds: SP.rounds, roundTime: 180, restTime: 30, opponent: SP.opp, difficulty: SP.diff, arena: SP.arena };
+  const rules = { ...RULES_PRO, rounds: SP.rounds, roundTime: 120, restTime: 25, opponent: SP.opp, difficulty: SP.diff, arena: SP.arena };
   goFight({ mode: 'cpu', from: 'sp', rules }, () => show('sp'));
 };
+// ---------- Torre: rivales uno tras otro, cada vez más duros, hasta el jefe ----------
+const TOWERS = [
+  { id: 'novato', name: 'Torre Novato', floors: 4, desc: '4 pisos · para aprender', diffs: ['novato', 'novato', 'amateur', 'amateur'] },
+  { id: 'guerrero', name: 'Torre Guerrero', floors: 7, desc: '7 pisos · rivales cada vez más duros', diffs: ['amateur', 'amateur', 'amateur', 'pro', 'pro', 'pro', 'campeon'] },
+  { id: 'leyenda', name: 'Torre Leyenda', floors: 10, desc: '10 pisos · al final espera El Rey del Ring', diffs: ['amateur', 'amateur', 'pro', 'pro', 'pro', 'pro', 'campeon', 'campeon', 'campeon', 'campeon'], boss: true },
+];
+const Tower = {
+  sel: 'guerrero', base: 0, run: null,
+  open() { if (!this.run) this.msg = ''; this.render(); show('tower'); },
+  start() {
+    const T = TOWERS.find(t => t.id === this.sel), pool = ROSTER.filter(r => !r.boss).sort(() => Math.random() - .5);
+    let opps = []; while (opps.length < T.floors - (T.boss ? 1 : 0)) opps.push(pool[opps.length % pool.length]);
+    // los más fuertes arriba
+    const pw = r => r.power + r.chin + r.defense + r.speed; opps.sort((a, b) => pw(a) - pw(b));
+    if (T.boss) opps.push(ROSTER.find(r => r.boss));
+    const shift = this.base, DL = Object.keys(DIFF);
+    this.run = { t: T, opps, floor: 0, cont: 3, t0: performance.now(), diffs: T.diffs.map(d => DL[clamp(DL.indexOf(d) + shift, 0, DL.length - 1)]), done: false, lost: false };
+    this.msg = ''; this.render(); this.fight();
+  },
+  fight() {
+    const R = this.run; if (!R) return; const last = R.floor === R.opps.length - 1, o = R.opps[R.floor];
+    const rules = { ...RULES_PRO, rounds: last ? 2 : 1, roundTime: 90, restTime: 15, regen: .3, opponent: o.id, difficulty: R.diffs[R.floor], arena: ARENAS[R.floor % ARENAS.length].id };
+    Repick.on = R.floor > 0 || R.retry; R.retry = false;
+    goFight({ mode: 'cpu', from: 'tower', rules }, () => show('tower'));
+  },
+  result(d) {
+    const R = this.run; if (!R) return;
+    const win = d.winner === 'me', btn = $('#resTower'); btn.hidden = false; $('#resAgain').hidden = true; $('#resPick').hidden = true;
+    if (win) {
+      R.floor++;
+      if (R.floor >= R.opps.length) {
+        R.done = true; const secs = Math.round((performance.now() - R.t0) / 1000), rec = towerRec(), prev = rec[R.t.id];
+        if (!prev || secs < prev.secs) rec[R.t.id] = { secs, cont: 3 - R.cont }; try { localStorage.setItem(STORE + '.tower', JSON.stringify(rec)); } catch (e) {}
+        this.msg = `¡Conquistaste la ${R.t.name}! Tiempo ${fmtTime(secs)} · continues usados: ${3 - R.cont}${R.t.boss ? ' · El Rey del Ring ya está disponible en Un jugador.' : ''}`;
+        btn.textContent = '¡Ver la cima de la torre!'; $('#resP').textContent = '¡Llegaste a la cima! Eres el nuevo campeón de la torre.';
+      } else { btn.textContent = `Subir al piso ${R.floor + 1} ▲`; this.msg = `Piso ${R.floor} superado. Siguiente: "${R.opps[R.floor].nick}".`; }
+    } else if (R.cont > 0) { btn.textContent = `Continuar (te quedan ${R.cont})`; this.msg = 'Perdiste en este piso. Puedes usar un continue y volver a intentarlo.'; R.lost = true; }
+    else { btn.textContent = 'Fin de la torre'; R.lost = true; R.over = true; this.msg = 'Sin continues. La torre te ganó esta vez.'; }
+  },
+  next() {
+    const R = this.run; quitToMenu();
+    if (!R) return;
+    if (R.done || R.over) { this.show(); if (R.done) { Snd.cheer(2.5); Snd.say('¡Campeón de la torre!', 1, true); } return; }
+    if (R.lost) { R.cont--; R.lost = false; R.retry = true; }
+    this.show(); setTimeout(() => { if (!$("#scr-tower").hidden && this.run === R) this.fight(); }, 2800);
+  },
+  show() { this.render(); show('tower'); const c = $('#twCol .cur'); if (c) c.scrollIntoView({ block: 'center', behavior: 'smooth' }); },
+  quit() { this.run = null; this.msg = ''; this.render(); },
+  render() {
+    const R = this.run, rec = towerRec(), T = R ? R.t : TOWERS.find(t => t.id === this.sel);
+    $('#twTitle').textContent = R ? T.name : 'Elige tu torre';
+    $('#twCont').textContent = R ? (R.done ? 'Torre conquistada' : `Piso ${Math.min(R.floor + 1, R.opps.length)} de ${R.opps.length} · continues ${R.cont}`) : '';
+    $('#twPick').innerHTML = TOWERS.map(t => `<button class="tw-card${t.id === T.id ? ' on' : ''}" type="button" data-t="${t.id}" ${R ? 'disabled' : ''}><b>${t.name}</b><span>${t.desc}</span><em>${rec[t.id] ? `Conquistada · mejor tiempo ${fmtTime(rec[t.id].secs)}` : 'Sin conquistar'}</em></button>`).join('');
+    $$('#twPick .tw-card').forEach(b => b.onclick = () => { this.sel = b.dataset.t; Snd.ui(); this.render(); });
+    chips($('#twDiff'), [[0, 'Normal'], [1, 'Difícil'], [-1, 'Fácil']], 'base', this); $$('#twDiff .chip').forEach(c => c.disabled = !!R);
+    const opps = R ? R.opps : Array.from({ length: T.floors }, (_, i) => T.boss && i === T.floors - 1 ? ROSTER.find(r => r.boss) : null);
+    const DL = Object.keys(DIFF), diffs = R ? R.diffs : T.diffs.map(d => DL[clamp(DL.indexOf(d) + this.base, 0, DL.length - 1)]);
+    $('#twCol').innerHTML = opps.map((o, i) => {
+      const st = R ? (i < R.floor ? 'done' : i === R.floor && !R.done ? 'cur' : '') : '', boss = o && o.boss;
+      const sw = o ? `background:radial-gradient(circle at 50% 35%,${o.skin} 0 38%,${o.trunks} 39% 70%,${o.gloves} 71%)` : 'background:#2a2420';
+      return `<div class="tw-fl ${st}${boss ? ' boss' : ''}"><span class="n">${i + 1}</span><span class="sw" style="${sw}">${o ? '' : '?'}</span><span class="who"><b>${o ? `"${o.nick}"` : (R ? '' : '¿?')}</b><span>${o ? `${o.first} ${o.sur} · ${o.style}` : 'Rival sorpresa'}</span></span><span class="tag">${st === 'done' ? '✓ Vencido' : st === 'cur' ? '▶ Tú' : DIFF[diffs[i]].name}</span></div>`;
+    }).reverse().join('');
+    const m = $('#twMsg'); m.textContent = this.msg || (R ? '' : 'Pelea contra un rival por piso. Cada piso es un round de 90 s (el último, dos). Tienes 3 continues. Tu vida se recupera entre pisos.');
+    m.className = 'tw-msg' + (R && R.done ? ' win' : R && (R.over || R.lost) ? ' lose' : '');
+    $('#twGo').textContent = !R ? 'Subir a la torre' : R.done ? 'Otra torre' : R.over ? 'Intentar de nuevo' : `Pelear piso ${R.floor + 1}`;
+    $('#twQuit').hidden = !R || R.done || R.over;
+  },
+};
+$('#twGo').onclick = () => { Snd.ui(); const R = Tower.run; if (!R || R.done || R.over) { Tower.run = null; Tower.start(); } else Tower.fight(); };
+$('#twBack').onclick = () => { Snd.ui(); show('menu'); };
+$('#twQuit').onclick = () => { Snd.ui(); Tower.quit(); };
+$('#resTower').onclick = () => { Snd.ui(); Tower.next(); };
 $('#arcGo').onclick = () => { saveAll(); goFight({ mode: 'cpu', from: 'arcade', rules: { ...ARC } }, () => show('arcade')); };
 $('#mpHost').onclick = () => {
   $('#mpHostSt').classList.remove('err'); $('#mpHostSt').textContent = 'Creando sala…';
@@ -3590,7 +4133,7 @@ $('#hud').addEventListener('click', () => { if (M.active && M.phase === 'intro')
 const Demo = { a: 1, b: 1.6 };
 function menuScene() {
   M.active = false; buildArena('coliseo');
-  setupBoxers(meLook(), pick(ROSTER), false); M.meB.ext = null;
+  setupBoxers(meLook(), pick(ROSTER.filter(r => !r.boss)), false); M.meB.ext = null;
   Cam.mode = 'menu'; FX.hide(); applyView();
 }
 function demoUpdate(dt) {
@@ -3610,9 +4153,8 @@ $('#ticker').innerHTML = (() => { const s = '<span>Cartelera</span><b>●</b><sp
 const pipCanvas = $('#pipCanvas'), setCanvas = $('#setCanvas');
 let last = performance.now(), stT = 0, clkT = 0, pipF = 0;
 function loop(now) {
-  requestAnimationFrame(loop);
   const rawMs = Math.max(0, now - last), rdt = Math.min(.05, rawMs / 1000); last = now;
-  dynUpdate(rawMs, rdt);
+  if (!XR.on) dynUpdate(rawMs, rdt);
   Pose.update(rdt); readInput(rdt);
   let dt = rdt;
   if (M.active) {
@@ -3621,14 +4163,15 @@ function loop(now) {
     if (M.slowT > 0) { M.slowT -= rdt; dt *= M.slow; }
     if (!M.paused) for (const ev of Inp.events) { if (M.phase === 'victory') Vic.onPunch(ev); else playerPunch(ev); }
     updateMatch(dt);
+    if (M.meB && M.active && M.phase === 'fight') M.meB.moving = Math.min(1, .35 + Math.abs(Inp.leanX) * .6);
     if (M.meB && !(M.phase === 'victory' && Vic.who === 'me')) { const e = M.meB.ext || (M.meB.ext = { hL: new V3(), hR: new V3(), lean: new V3(), duck: 0, guard: false }); e.hL.set(-Inp.gL.x, .7 + Inp.gL.y, -Inp.gL.z - .08); e.hR.set(-Inp.gR.x, .7 + Inp.gR.y, -Inp.gR.z - .08); e.lean.set(-Inp.back * .35, 0, -Inp.leanX * .38); e.duck = Inp.duck * .8; e.guard = Inp.guard; }
   } else demoUpdate(rdt);
-  if (!Rep.on) { M.meB && M.meB.update(dt); M.oppB && M.oppB.update(dt); Ref.update(dt); Ref.b && Ref.b.update(dt); }
+  if (!Rep.on) { M.meB && M.meB.update(dt); M.oppB && M.oppB.update(dt); Ref.update(dt); Ref.b && Ref.b.update(dt); separate(); }
   if (M.active && !M.paused && (M.phase === 'fight' || M.phase === 'ko')) Rec.record(dt);
   FX.update(dt); Confetti.update(rdt);
   const tt = now / 1000, ex = M.active ? M.excite : .3;
   arena.ups.forEach(f => f(dt, tt, ex)); arena.crowd && arena.crowd.update(tt, ex);
-  FP.update(rdt); Cam.update(M.paused ? 0 : rdt);
+  if (XR.on) XR.frame(rdt); else { FP.update(rdt); Cam.update(M.paused ? 0 : rdt); }
   if (M.active) hudUpdate();
   Screen.draw(rdt);
   if (M.active && (pipF ^= 1) && !$('#pip').hidden) Pose.drawTo(pipCanvas);
@@ -3639,7 +4182,8 @@ function loop(now) {
     stT += rdt; if (stT > .05) { stT = 0; Net.send({ t: 'st', gL: [Inp.gL.x, Inp.gL.y, Inp.gL.z].map(r3), gR: [Inp.gR.x, Inp.gR.y, Inp.gR.z].map(r3), lx: r3(Inp.leanX), dk: r3(Inp.duck), bk: r3(Inp.back), gd: Inp.guard, hp: r3(M.me.hp), sta: r3(M.me.sta), ...(M.phase === 'victory' && Vic.who === 'me' ? { vl: Vic.hL.toArray().map(r3), vr: Vic.hR.toArray().map(r3), vj: r3(Vic.jump), vlean: r3(Vic.lean) } : {}) }); }
     if (M.authority && M.phase === 'fight') { clkT += rdt; if (clkT > 1) { clkT = 0; Net.send({ t: 'clk', c: M.clock }); } }
   }
-  if (composer && !arRig.visible) {
+  if (XR.on) renderer.render(scene, camera);
+  else if (composer && !arRig.visible) {
     const u = gradePass.uniforms; u.uTime.value = tt % 100; u.uAb.value = Math.min(1.5, Screen.flash * 3); u.uZoom.value = Screen.zoom = Math.max(0, (Screen.zoom || 0) - rdt * 4.5); u.uRed.value = Screen.low * .55;
     u.uSat.value = 1.08 - Screen.low * .5 - Screen.dark - (Rep.on ? .3 : 0); u.uGrain.value = Rep.on ? .1 : .045; u.uWarm.value = arena.warm || 0;
     bloomPass.strength = .22 + (M.active ? M.excite * .06 : .06);
@@ -3654,7 +4198,7 @@ async function init() {
   resize(); buildComposer();
   try { await Promise.race([Promise.all([document.fonts.load('100px Anton'), document.fonts.load('600 20px "Barlow Condensed"')]), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
   FX.init(); Confetti.init(); menuScene(); menuCamPill(); Face.restore(); Face.drawThumb(); MyMusic.restore(); $('#fps').hidden = !S.showFps;
-  requestAnimationFrame(loop);
+  renderer.xr.enabled = true; renderer.setAnimationLoop(loop); XR.check(); GP.init();
   $('#splashMsg').textContent = 'Boxea con tu cuerpo frente a la cámara';
   $('#splashBtn').hidden = false; $('#splashBtn').focus();
 }
