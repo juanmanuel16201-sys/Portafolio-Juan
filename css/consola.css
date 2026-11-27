@@ -23,6 +23,9 @@
   --cv-enjambre-galactico: url("../imagenes/portadas/enjambre-galactico.webp");
   --cv-taxi-furia: url("../imagenes/portadas/taxi-furia.webp");
   --cv-eye-of-a-tiger: url("../imagenes/portadas/eye-of-a-tiger.webp");
+  --cv-encaja: url("../imagenes/portadas/encaja.webp");
+  --cv-fuego-305: url("../imagenes/portadas/fuego-305.webp");
+  --cv-golazo-ar: url("../imagenes/portadas/golazo-ar.webp");
 }
 
 /* Sin JavaScript: se oculta la consola y se muestran todas las fichas */
@@ -763,6 +766,9 @@ html.js .game-info:not(.is-current) { display: none; }
 .disc[data-game="enjambre-galactico"] .disc-art::before { background-image: var(--cv-enjambre-galactico); }
 .disc[data-game="taxi-furia"] .disc-art::before { background-image: var(--cv-taxi-furia); }
 .disc[data-game="eye-of-a-tiger"] .disc-art::before { background-image: var(--cv-eye-of-a-tiger); }
+.disc[data-game="encaja"] .disc-art::before { background-image: var(--cv-encaja); }
+.disc[data-game="fuego-305"] .disc-art::before { background-image: var(--cv-fuego-305); }
+.disc[data-game="golazo-ar"] .disc-art::before { background-image: var(--cv-golazo-ar); }
 
 .disc-art::after {
   content: "";
