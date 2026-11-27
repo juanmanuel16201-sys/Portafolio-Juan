@@ -250,6 +250,7 @@ function showResult(){
     progress.unlocked=Math.max(progress.unlocked,curMission+2);const ord='CBAS',prev=progress.ranks[curMission];
     if(!prev||ord.indexOf(rank)>ord.indexOf(prev))progress.ranks[curMission]=rank;saveProgress();}
   const last=curMission>=MISSIONS.length-1;
+  if(window.registrarMarcador)registrarMarcador({juego:'Ace Combat',modo:'Misión '+d.code,puntos:score,detalle:d.name+' · rango '+rank+' · '+kills+' derribos',resultado:win?'Misión cumplida':'Misión fallida'});
   $('rCode').textContent=d.code+' · '+d.name;$('rTitle').textContent=win?(last?'CAMPAÑA COMPLETADA':'MISIÓN CUMPLIDA'):'MISIÓN FALLIDA';$('rTitle').classList.toggle('red',!win);
   $('rReason').textContent=MS.reason||'';$('rRank').textContent=rank;$('rRank').classList.toggle('fail',!win);
   $('rScore').textContent=score.toLocaleString('es-CO');$('rTime').textContent=fmtT(d.time-tl);$('rKills').textContent=kills;$('rDmg').textContent=Math.round(MS.dmg);

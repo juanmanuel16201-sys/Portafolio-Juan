@@ -59,10 +59,19 @@ h1, h2, h3, h4, .navbar-brand {
 }
 
 /* Subrayado "cosido" bajo cada título de sección */
-h2 {
+h2,
+h1.h2 {
   display: inline-block;
   padding-bottom: 0.35rem;
   border-bottom: 3px dashed var(--raincoat);
+}
+
+/* Títulos pequeños (h2 con clase h4/h5) sin el subrayado de sección */
+h2.h4,
+h2.h5 {
+  display: block;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 a { text-underline-offset: 3px; }
@@ -279,3 +288,58 @@ kbd {
 .ratio img.img-contain { object-fit: contain; background: #14091f; }
 .ratio img.img-contain-claro { object-fit: contain; background: #ffffff; }
 .ratio video { object-fit: cover; background: #000; }
+
+/* -----------------------------------------------------------
+   9. MARCADORES Y MÉTRICAS (arcade.html y ar-experience.html)
+   ----------------------------------------------------------- */
+.tabla-wrap { overflow-x: auto; }
+.tabla-wrap th { white-space: nowrap; }
+.tabla-wrap td:first-child { white-space: nowrap; }
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+  gap: 1rem;
+  margin: 0 0 1rem;
+}
+.metrica {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--bs-border-color);
+  border-radius: 0.75rem;
+}
+.metrica dd { margin: 0; font-size: 1.6rem; font-weight: 700; color: var(--raincoat); }
+.metrica dt { font-weight: 400; font-size: 0.9rem; opacity: 0.85; }
+
+/* -----------------------------------------------------------
+   10. REALIDAD AUMENTADA (ar-experience.html)
+   ----------------------------------------------------------- */
+.ar-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 80vh;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 2px dashed var(--bs-border-color);
+  background: radial-gradient(circle at 50% 30%, #3b1d6e 0%, #120a24 70%);
+}
+@media (min-width: 768px) { .ar-stage { aspect-ratio: 16 / 9; } }
+.ar-video, .ar-escena, .ar-inicio { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ar-video { object-fit: cover; z-index: 0; }
+.ar-escena { z-index: 1; }
+.ar-escena a-scene { width: 100%; height: 100%; }
+.ar-escena.ar-apuntando { cursor: pointer; }
+.ar-inicio {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+}
+.ar-inicio[hidden] { display: none; }
+.ar-estado { min-height: 1.5em; margin: 0.75rem 0 1rem; }

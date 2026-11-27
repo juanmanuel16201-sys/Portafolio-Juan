@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Postproducción — Juan Ramírez</title>
   <meta name="description" content="Muestra de postproducción de Juan Ramírez, estudiante de Ingeniería Multimedia.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2715%27 fill=%27%23f2c230%27/%3E%3Cg fill=%27%2317102b%27%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2711%27 cy=%2721%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2721%27 r=%273%27/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/efectos.css">
@@ -33,10 +33,10 @@
 -->
 
   <header>
-    <nav class="navbar navbar-expand-md border-bottom">
+    <nav class="navbar navbar-expand-lg border-bottom">
       <div class="container">
         <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
-        <div class="herramientas ms-auto ms-md-3 me-2 me-md-0 order-md-last">
+        <div class="herramientas ms-auto ms-lg-3 me-2 me-lg-0 order-lg-last">
           <div class="tema-wrap">
             <button type="button" class="tool-btn" id="btnTema" aria-label="Elegir tema" title="Tema" aria-haspopup="true" aria-expanded="false" aria-controls="panelTema">
               <svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z"/></svg>
@@ -63,7 +63,8 @@
             <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="blog.html">Bitácora</a></li>
             <li class="nav-item"><a class="nav-link active" aria-current="page" href="postproduccion.html">Postproducción</a></li>
-            <li class="nav-item"><a class="nav-link" href="juegos.html">Juegos</a></li>
+            <li class="nav-item"><a class="nav-link" href="arcade.html">Arcade</a></li>
+            <li class="nav-item"><a class="nav-link" href="ar-experience.html">Realidad aumentada</a></li>
             <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
           </ul>
         </div>
@@ -75,7 +76,7 @@
     <section class="py-5">
       <div class="container">
         <div class="mb-4">
-          <h2>Postproducción</h2>
+          <h1 class="h2">Postproducción</h1>
           <p>Una muestra de mi trabajo de edición, efectos y animación.</p>
         </div>
 
@@ -100,5 +101,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/ambiente.js" defer></script>
+  <script src="js/almacen.js" defer></script>
 </body>
 </html>

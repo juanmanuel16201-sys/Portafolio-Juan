@@ -12,6 +12,7 @@ let dmgFlash=0,incoming=false;
 function killPlayer(){player.alive=false;explode(player.obj.position,2.6);player.obj.visible=false;deadT=0;state='over';
   if(mode==='mission'&&MS){if(!MS.done||MS.result!=='win'){MS.done=true;MS.result='fail';MS.reason='Barbie 01 fue derribado.';}setTimeout(()=>{if(state==='over')showResult();},2200);return;}
   let best=0;try{best=+localStorage.getItem('acecombat-best')||0;if(score>best){best=score;localStorage.setItem('acecombat-best',score);}}catch(e){best=Math.max(best,score);}
+  if(window.registrarMarcador)registrarMarcador({juego:'Ace Combat',modo:'Combate libre',puntos:score,detalle:'Oleada '+wave+' · '+kills+' derribos',resultado:'Derribado'});
   $('oScore').textContent=score.toLocaleString('es-CO');$('oWave').textContent=wave;$('oKills').textContent=kills;$('oBest').textContent=best.toLocaleString('es-CO');
   setTimeout(()=>{if(state==='over'){$('over').hidden=false;musicStart();if(document.pointerLockElement)document.exitPointerLock();}},1900);
 }

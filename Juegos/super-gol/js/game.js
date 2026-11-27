@@ -1607,6 +1607,15 @@ function endMatch(m) {
     if (G !== m) return;
     if (m.demo) { G = newMatch(demoCfg()); return; }
     const [a, b] = m.score, w = a === b ? -1 : a > b ? 0 : 1;
+    if (window.registrarMarcador) {
+      window.registrarMarcador({
+        juego: 'Super Gol',
+        modo: m.cfg.mode === '2p' ? '2 jugadores local' : '1 jugador vs IA',
+        puntos: a,
+        detalle: `${m.teams[0].short} ${a} – ${b} ${m.teams[1].short}`,
+        resultado: w < 0 ? 'Empate' : (m.cfg.mode === '2p' ? `Ganó el jugador ${w + 1}` : (w === 0 ? 'Victoria' : 'Derrota'))
+      });
+    }
     const who = t => m.human[t] ? (m.cfg.mode === '2p' ? `Jugador ${t + 1}` : 'Tú') : 'CPU';
     $('#endTitle').textContent = w < 0 ? 'Empate' : `¡Gana ${m.teams[w].name}!` + (m.cfg.mode === '1p' ? (w === 0 ? ' Bien jugado' : '') : ` · ${who(w)}`);
     $('#endScore').textContent = `${m.teams[0].short} ${a} – ${b} ${m.teams[1].short}`;

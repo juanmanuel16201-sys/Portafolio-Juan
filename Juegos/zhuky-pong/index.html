@@ -156,6 +156,7 @@
 
   <button type="button" class="btn-responder" id="botonResponder">💬 Responder</button>
 
+  <script src="../registro.js"></script>
   <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -1216,6 +1217,15 @@
     }
 
     function terminar(ganador) {
+      if (window.registrarMarcador) {
+        window.registrarMarcador({
+          juego: 'Zhuky Pong',
+          modo: modo === '2p' ? '2 jugadores' : (modo === '2v2' ? '2 vs 2 máquinas' : '1 jugador'),
+          puntos: puntosJugador,
+          detalle: nombreIzq + ' ' + puntosJugador + ' - ' + puntosMaquina + ' ' + nombreDer,
+          resultado: modo === '2p' ? 'Ganó ' + (ganador === 'jugador' ? nombreIzq : nombreDer) : (ganador === 'jugador' ? 'Victoria' : 'Derrota')
+        });
+      }
       corriendo = false;
       pausado = false;
       capaPausa.classList.add('oculta');

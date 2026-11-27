@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Juegos — Juan Ramírez</title>
-  <meta name="description" content="Videojuegos creados por Juan Ramírez: elige un disco, enciende la consola y juega.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2715%27 fill=%27%23f2c230%27/%3E%3Cg fill=%27%2317102b%27%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2711%27 r=%273%27/%3E%3Ccircle cx=%2711%27 cy=%2721%27 r=%273%27/%3E%3Ccircle cx=%2721%27 cy=%2721%27 r=%273%27/%3E%3C/g%3E%3C/svg%3E">
+  <title>Arcade — Juan Ramírez</title>
+  <meta name="description" content="Arcade de Juan Ramírez: videojuegos 2D y 3D con marcadores guardados en el navegador.">
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/consola.css">
@@ -45,10 +45,10 @@
 -->
 
   <header>
-    <nav class="navbar navbar-expand-md border-bottom">
+    <nav class="navbar navbar-expand-lg border-bottom">
       <div class="container">
         <a class="navbar-brand" href="index.html">Juan <span class="accent">Ramírez</span></a>
-        <div class="herramientas ms-auto ms-md-3 me-2 me-md-0 order-md-last">
+        <div class="herramientas ms-auto ms-lg-3 me-2 me-lg-0 order-lg-last">
           <div class="tema-wrap">
             <button type="button" class="tool-btn" id="btnTema" aria-label="Elegir tema" title="Tema" aria-haspopup="true" aria-expanded="false" aria-controls="panelTema">
               <svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z"/></svg>
@@ -75,7 +75,8 @@
             <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="blog.html">Bitácora</a></li>
             <li class="nav-item"><a class="nav-link" href="postproduccion.html">Postproducción</a></li>
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="juegos.html">Juegos</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="arcade.html">Arcade</a></li>
+            <li class="nav-item"><a class="nav-link" href="ar-experience.html">Realidad aumentada</a></li>
             <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
           </ul>
         </div>
@@ -87,8 +88,8 @@
     <section class="py-5">
       <div class="container">
         <div class="mb-4">
-          <h2>Juegos</h2>
-          <p>Elige un disco, enciende la consola y juega sin salir de la página.</p>
+          <h1 class="h2">Arcade</h1>
+          <p>Elige un disco, enciende la consola y juega sin salir de la página. Tus marcadores quedan guardados al final de esta página.</p>
         </div>
 
         <div class="stage" id="stage" data-phase="select">
@@ -213,11 +214,11 @@
               <p class="screen-tools">
                 <button type="button" class="btn btn-primary" id="btnBack">&lsaquo; Elegir otro juego</button>
                 <button type="button" class="btn btn-outline-primary" id="btnFull">Pantalla completa</button>
-                <a class="btn btn-outline-primary" id="linkNew" href="juegos.html" target="_blank" rel="noopener">Pestaña nueva</a>
+                <a class="btn btn-outline-primary" id="linkNew" href="arcade.html" target="_blank" rel="noopener">Pestaña nueva</a>
               </p>
             </div>
             <div class="screen-frame">
-              <iframe id="gameFrame" title="Juego seleccionado" allow="fullscreen; autoplay; gamepad; accelerometer; gyroscope" allowfullscreen></iframe>
+              <iframe id="gameFrame" title="Juego seleccionado" allow="fullscreen; autoplay; gamepad; accelerometer; gyroscope; camera" allowfullscreen></iframe>
             </div>
             <p class="screen-hint">Para jugar mejor, gira el celular en horizontal y toca «Pantalla completa».</p>
           </section>
@@ -229,9 +230,9 @@
           <article class="card game game-info" id="info-van-helsing">
             <div class="card-body">
               <p class="card-tag">Acción · Shooter 3D</p>
-              <h3 class="h4">Van Helsing</h3>
+              <h2 class="h4">Van Helsing</h2>
               <p class="card-text">Shooter 3D de cazar monstruos y leyendas. Recorre escenarios como el cementerio, el castillo de Drácula, el Olimpo y el Valle de los Reyes; contra los jefes te transformas en una criatura con poderes propios. Funciona en PC y celular.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>W A S D</kbd></dt><dd>Moverse</dd>
                 <dt><kbd>Shift / Espacio</kbd></dt><dd>Correr / saltar</dd>
@@ -249,9 +250,9 @@
           <article class="card game game-info" id="info-super-gol">
             <div class="card-body">
               <p class="card-tag">Deportes · Fútbol 3D</p>
-              <h3 class="h4">Super Gol</h3>
+              <h2 class="h4">Super Gol</h2>
               <p class="card-text">Fútbol callejero 3D con menú y música, equipos, poderes y supertiro combo. Se juega de 1 o 2 jugadores, y también en celular con controles táctiles.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>W A S D</kbd></dt><dd>Jugador 1: moverse</dd>
                 <dt><kbd>C / V / B</kbd></dt><dd>J1: pase / tiro / truco</dd>
@@ -269,9 +270,9 @@
           <article class="card game game-info" id="info-ace-combat">
             <div class="card-body">
               <p class="card-tag">Acción · Combate aéreo</p>
-              <h3 class="h4">Ace Combat</h3>
+              <h2 class="h4">Ace Combat</h2>
               <p class="card-text">Combate aéreo en 3D: elige tu avión en el hangar, despega de la base o del portaaviones y derriba enemigos en misiones de campaña, con épocas modernas y de hélice. Control fácil o avanzado.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>W / S</kbd></dt><dd>Subir y bajar</dd>
                 <dt><kbd>A / D</kbd></dt><dd>Girar</dd>
@@ -289,9 +290,9 @@
           <article class="card game game-info" id="info-zhuky-pong">
             <div class="card-body">
               <p class="card-tag">Arcade · Pong playero</p>
-              <h3 class="h4">Zhuky Pong</h3>
+              <h2 class="h4">Zhuky Pong</h2>
               <p class="card-text">Ping pong con tema de playa y mar, donde Zhuky, una máquina burlona que casi nunca falla, te desafía. Modos de 1 jugador, 2 jugadores y 2 vs 2 máquinas. Cuidado con los remolinos y los objetos de piscina.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>Ratón</kbd></dt><dd>Mover la paleta (1 jugador)</dd>
                 <dt><kbd>W / S</kbd></dt><dd>Jugador 1</dd>
@@ -308,9 +309,9 @@
           <article class="card game game-info" id="info-enjambre-galactico">
             <div class="card-body">
               <p class="card-tag">Arcade · Espacio</p>
-              <h3 class="h4">Enjambre Galáctico</h3>
+              <h2 class="h4">Enjambre Galáctico</h2>
               <p class="card-text">Shooter arcade estilo Galaga: defiende la galaxia de oleadas de enemigos hasta enfrentar a la Nave Madre. Hecho sin librerías, solo HTML, CSS y JavaScript.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>← → o A / D</kbd></dt><dd>Mover la nave</dd>
                 <dt><kbd>Espacio o Z</kbd></dt><dd>Disparar</dd>
@@ -327,9 +328,9 @@
           <article class="card game game-info" id="info-taxi-furia">
             <div class="card-body">
               <p class="card-tag">Acción · Shooter 3D</p>
-              <h3 class="h4">Taxi Furia</h3>
+              <h2 class="h4">Taxi Furia</h2>
               <p class="card-text">«Te chocaron el taxi. Hoy nadie se salva.» Sobrevive a oleadas infinitas con un jefe gigante cada 3 oleadas, recoge munición y poderes, invoca compañeros y sube al taxi entre oleadas. Funciona en PC y celular.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>W A S D</kbd></dt><dd>Moverse</dd>
                 <dt><kbd>Ratón / clic</kbd></dt><dd>Apuntar / disparar</dd>
@@ -347,9 +348,9 @@
           <article class="card game game-info" id="info-eye-of-a-tiger">
             <div class="card-body">
               <p class="card-tag">Deportes · Realidad aumentada</p>
-              <h3 class="h4">Eye of a Tiger</h3>
+              <h2 class="h4">Eye of a Tiger</h2>
               <p class="card-text">Boxeo profesional que se juega con el cuerpo: la cámara del PC rastrea tus brazos y torso para lanzar golpes, cubrirte y esquivar. Rounds con árbitro y jueces, nocauts con repetición en cámara lenta, golpe estrella, tu cara escaneada en el rival, celebraciones de victoria con tu cuerpo, modo arcade configurable, Torre clásica hasta el campeón invicto, cinco escenarios, pelea en línea entre dos computadores, realidad virtual y control de consola. Hecho con Three.js y MediaPipe.</p>
-              <h4 class="controls-title">Controles</h4>
+              <h3 class="controls-title">Controles</h3>
               <dl class="controls">
                 <dt><kbd>Cámara</kbd></dt><dd>Golpea hacia la pantalla, guardia con los puños en la cara, inclínate o agáchate para esquivar</dd>
                 <dt><kbd>J / K</kbd></dt><dd>Jab / directo</dd>
@@ -365,6 +366,57 @@
         </div>
       </div>
     </section>
+
+    <section class="py-5 border-top" id="marcadores" aria-labelledby="tituloMarcadores">
+      <div class="container">
+        <div class="mb-4">
+          <h2 id="tituloMarcadores">Marcadores</h2>
+          <p>Cada vez que terminas una partida, el juego guarda el resultado en tu navegador con la API localStorage, en formato JSON. Aquí puedes ver tus récords y el historial.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-xl-5">
+            <article class="card h-100">
+              <div class="card-body">
+                <h3 class="h5">Récords máximos</h3>
+                <div class="tabla-wrap">
+                  <table class="table table-sm align-middle mb-0" id="tablaRecords">
+                    <caption class="visually-hidden">Mejor puntaje de cada juego</caption>
+                    <thead><tr><th scope="col">Juego</th><th scope="col" class="text-end">Puntos</th><th scope="col">Partida</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="col-12 col-xl-7">
+            <article class="card h-100">
+              <div class="card-body">
+                <h3 class="h5">Últimas 10 partidas</h3>
+                <div class="tabla-wrap">
+                  <table class="table table-sm align-middle mb-0" id="tablaHistorial">
+                    <caption class="visually-hidden">Historial de partidas recientes</caption>
+                    <thead><tr><th scope="col">Fecha</th><th scope="col">Juego</th><th scope="col">Modo</th><th scope="col">Marcador</th><th scope="col">Resultado</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="col-12">
+            <article class="card">
+              <div class="card-body">
+                <h3 class="h5">Métricas de interacción</h3>
+                <dl class="metricas" id="metricas"></dl>
+                <p class="d-flex flex-wrap gap-2 mb-0">
+                  <button type="button" class="btn btn-outline-primary btn-sm" id="borrarMarcadores">Borrar marcadores</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" id="borrarMetricas">Reiniciar métricas</button>
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="border-top py-4">
@@ -377,5 +429,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/consola.js" defer></script>
   <script src="js/ambiente.js" defer></script>
+  <script src="js/almacen.js" defer></script>
 </body>
 </html>
